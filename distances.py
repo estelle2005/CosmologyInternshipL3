@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.integrate import quad  # Module d'intégration "quad"
+from scipy.integrate import quad
 
 H_0 = 73.2
 
