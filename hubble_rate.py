@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-H_0 = 73.2 #km s mpc
+H_0 = 73.2 #km/s/mpc
 
 
 def hubble_rate(a, omega_m, omega_r, omega_lambda):
