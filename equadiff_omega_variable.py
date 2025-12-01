@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from scipy.integrate import odeint
 
 # Constantes cosmologiques
-H_0 = 70  # km/s/Mpc
+H_0 = 73.2  # km/s/Mpc
 
 omega_m_list = [0.1, 0.3, 0.7, 0.9]
 
