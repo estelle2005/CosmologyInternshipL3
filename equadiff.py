@@ -16,8 +16,8 @@ def H(a):
     return H_0 *np.sqrt(Omega_m * a**-3 + Omega_Lambda)
 
 def H_prime_over_H(a):
-    #H'/H = dH/dlna /H = dlnH/dlna
-    H_prime = 
+    #H'/H = dH/dlna /H = dlnH/dlna = -3/2*Omega_m(a)
+    return -1.5 * Omega_m_a
 
 def Omega_m_a(a):
     return Omega_m / (Omega_m + Omega_Lambda * a **-3)
@@ -32,6 +32,7 @@ def df_over_dlna(f, ln_a):
 #-- Definition of \"time\" = ln(a)
 a = 10.**np.linspace(-2, 0, 10000) #de 10**-2 à 10**0
 ln_a = np.log(a)
+
 #-- Initial condition pour z bien supérieur à 1 (2)
 f0 = 1
 f = odeint(df_over_dlna, f0, ln_a)
