@@ -51,7 +51,7 @@ plt.legend()
 plt.tight_layout()
 plt.show()
 
-
+"""Pour des valeurs de plus en plus grands de \Omega_m, quand le facteur d'échelle a se rapproche de 1, le taux de croissance f est de plus en plus faible"""
 
 "### 3.3) Challenge (optional): solve and plot the solution for $f(a)$ for a different dark energy model, where its equation-of-state is given by \n",
 "\n",
