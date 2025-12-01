@@ -4,74 +4,52 @@ from scipy.integrate import odeint
 
 # Constantes cosmologiques
 H_0 = 70  # km/s/Mpc
-#Omega_m = 0.3
 
+omega_m_list = [0.1, 0.3, 0.7, 0.9]
 
-# Equation : f \prime + f^2 + \left( 2 + \frac{H\prime}{H} \right) f - \frac{3}{2}\frac{\Omega_m}{\Omega_m + \Omega_\lambda a^3} = 0
-
-def H(a, Omega_m):
-    Omega_Lambda = 1 - Omega_m
-    return H_0 *np.sqrt(Omega_m * a**-3 + Omega_Lambda)
-
-def H_prime_over_H(a, Omega_m):
-    #H'/H = dH/dlna /H = dlnH/dlna = -3/2*Omega_m(a)
-    return -1.5 * Omega_m_a(a, Omega_m)
-
-def Omega_m_a(a, Omega_m):
-    Omega_Lambda = 1 - Omega_m
-    return Omega_m / (Omega_m + Omega_Lambda * a **-3)
-
-def df_over_dlna(f, ln_a):
-    #f' = df/dlna
-    a = np.exp(ln_a)
-    #f' = - f² - \left( 2 + \frac{H\prime}{H} \right) f + \frac{3}{2}\Omega_m(a) 
-    deriv = -f**2 - (2 + H_prime_over_H(a))*f + 1.5*Omega_m_a(a)
-    return deriv
-
-#-- Definition of \"time\" = ln(a)
-a = 10.**np.linspace(-2, 0, 10000)  #de 10**-2 à 10**0
-ln_a = np.log(a)
-
-#-- Initial condition pour z bien supérieur à 1 (2)
-f0 = 1
-f = odeint(df_over_dlna, f0, ln_a)
-
-#- Make the figure
 plt.figure()
-plt.plot(a, f)
+
+for i, Omega_m in enumerate(omega_m_list):
+    Omega_Lambda = 1 - Omega_m
+
+ # Equation : f \prime + f^2 + \left( 2 + \frac{H\prime}{H} \right) f - \frac{3}{2}\frac{\Omega_m}{\Omega_m + \Omega_\lambda a^3} = 0
+
+    def H(a):
+        return H_0 *np.sqrt(Omega_m * a**-3 + Omega_Lambda)
+
+    def H_prime_over_H(a):
+        #H'/H = dH/dlna /H = dlnH/dlna = -3/2*Omega_m(a)
+        return -1.5 * Omega_m_a(a)
+
+    def Omega_m_a(a):
+        return Omega_m / (Omega_m + Omega_Lambda * a **-3)
+
+    def df_over_dlna(f, ln_a):
+        #f' = df/dlna
+        a = np.exp(ln_a)
+        #f' = - f² - \left( 2 + \frac{H\prime}{H} \right) f + \frac{3}{2}\Omega_m(a) 
+        deriv = -f**2 - (2 + H_prime_over_H(a))*f + 1.5*Omega_m_a(a)
+        return deriv
+
+    #-- Definition of \"time\" = ln(a)
+    a = 10.**np.linspace(-2, 0, 10000)  #de 10**-2 à 10**0
+    ln_a = np.log(a)
+
+    #-- Initial condition - pour z bien supérieur à 1 (2)
+    f0 = 1
+    f = odeint(df_over_dlna, f0, ln_a)
+
+    plt.plot(a, f, 
+        linestyle='-', color=f'C{i}', linewidth=2, label=f'$\Omega_m$ = {Omega_m}; $\Omega_\lambda$ = {Omega_Lambda}')
+
+
 plt.xlabel('Scale factor a')
 plt.ylabel('Growth-rate f')
 plt.xscale('log')
 plt.grid(True)
-#plt.legend()
-plt.tight_layout()
-plt.show()
-
-
-### 3.2) In the cell below, make a figure comparing the growth-rate for several values of $\\Omega_m$.
-
-a_values = 10.**np.linspace(-2, 0, 10000)
-omega_m_list = [0.1, 0.3, 0.7, 0.9]
-
-
-for i, om in enumerate(omega_m_list):
-    omega_Lambda = 1 - om #univers plat
-    f_values = [f(a, **parameters) for a in a_values]
-    plt.plot(a_values, f_values, 
-        linestyle='-', color=f'C{i}', linewidth=2, label=f'$\chi$; $\Omega_m$ = {om}; $\Omega_\lambda$ = {omega_Lambda}')
-
-
-"""
-
-
-
-plt.xlabel("$z$")
-plt.ylabel("Distance [$h^{-1}$ Mpc]")
-plt.grid(True)
 plt.legend()
 plt.tight_layout()
 plt.show()
-
 
 
 
