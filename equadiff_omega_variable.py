@@ -52,17 +52,3 @@ plt.tight_layout()
 plt.show()
 
 """Pour des valeurs de plus en plus grands de \Omega_m, quand le facteur d'échelle a se rapproche de 1, le taux de croissance f est de plus en plus faible"""
-
-"### 3.3) Challenge (optional): solve and plot the solution for $f(a)$ for a different dark energy model, where its equation-of-state is given by \n",
-"\n",
-"### $w_{\\rm DE}(a) = w_0 + (1-a)w_a $\n",
-"\n",
-"### Compare $f(a)$ for :\n",
-"\n",
-"- $w_0 = -1.0$ and $w_a = 0$ (cosmological constant)\n",
-"- $w_0 = -1.2$ and $w_a = 0$\n",
-"- $w_0 = -0.8$ and $w_a = 0$\n",
-"- $w_0 = -1.0$ and $w_a = 0.1$\n",
-"- $w_0 = -1.0$ and $w_a = -0.1$\n",
-"\n",
-"### Hint: first find the equation for $H(a)$, then the equation for $H^\\prime$, then write a new function to solve the differential equation"
