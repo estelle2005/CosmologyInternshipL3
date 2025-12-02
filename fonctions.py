@@ -5,7 +5,7 @@ from scipy.integrate import odeint
 
 H_0 = 73.2
 
-# $w(a) = w_0 + (1-a)w_a $
+# $W(a) = W_0 + (1-a)W_a $
 
 #-- Definition of \"time\" = ln(a)
 a = 10.**np.linspace(-2, 0, 10000)  #de 10**-2 à 10**0
@@ -44,7 +44,7 @@ def df_over_dlna(f, ln_a, pars):
 
 def growth_rate_f(pars):
     f0 = 1 #condition initiale
-    f = odeint(df_over_dlna, f0, ln_a, pars)
+    f = odeint(df_over_dlna, f0, ln_a, args=(pars,))
     return f
 
 def growth_factor_D(pars):
@@ -58,13 +58,13 @@ def growth_factor_D(pars):
 
 def plot_D():
     plt.figure()
-    w_0_list = [-1, -1, -0.5, 0]
-    w_a_list = [0, 0, 0, 0]
+    W_0_list = [-1, -1, -0.5, 0]
+    W_a_list = [0, 0, 0, 0]
     Omega_Lambda_list = [0.69, 0.72, 0.69, 0] 
     for i in range (3):
-        pars = {'Omega_Lambda': Omega_Lambda_list[i], 'W_0': w_0_list[i], 'W_a': w_a_list[i]}  
+        pars = {'Omega_Lambda': Omega_Lambda_list[i], 'W_0': W_0_list[i], 'W_a': W_a_list[i]}  
         plt.plot(a, growth_factor_D(pars)/a, 
-            linestyle='-', color=f'C{i}', linewidth=2, label=f'$W$ = {w_0_list[i]}; $\Omega_\Lambda$ = {Omega_Lambda_list[i]}')
+            linestyle='-', color=f'C{i}', linewidth=2, label=f'$W$ = {W_0_list[i]}; $\Omega_\Lambda$ = {Omega_Lambda_list[i]}')
     plt.xlabel('Scale factor a')
     plt.ylabel('Growth factor divided by a')
     plt.xscale('log')
@@ -76,15 +76,16 @@ def plot_D():
 
 def plot_f():
     plt.figure()
-    w_0_list = [-1, -0.8, -0.6, -0.4, -0.2]
-    w_a_list = [0, -0.6, -1.2, -1.8, -2.4]
+    W_0_list = [-1, -0.8, -0.6, -0.4, -0.2]
+    W_a_list = [0, -0.6, -1.2, -1.8, -2.4]
     #Omega_m = 0.3
     Omega_Lambda = 0.7
-    for i in range (3):
-        pars = {'Omega_Lambda': Omega_Lambda, 'W_0': w_0_list[i], 'W_a': w_a_list[i]}
-        f = growth_rate_f(pars)
-        plt.plot(a, f, 
-            linestyle='-', color=f'C{i}', linewidth=2, label=f'$W_0$ = {w_0_list[i]}; $w_a$ = {w_a_list[i]}')
+    for i in range (5):
+        pars = {'Omega_Lambda': Omega_Lambda, 'W_0': W_0_list[i], 'W_a': W_a_list[i]}
+        f_solution = growth_rate_f(pars)
+        f_values = f_solution[:,0]
+        plt.plot(a, f_values, 
+            linestyle='-', color=f'C{i}', linewidth=2, label=f'$W_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
     plt.xlabel('Scale factor a')
     plt.ylabel('Growth-rate f')
     plt.xscale('log')
