@@ -56,7 +56,7 @@ def growth_factor_D(pars):
     D = np.exp(ln_D)
     return D
 
-def plot_D(): #D/a pour différentes valeurs de W et Omega_Lambda, en fonction de a
+def plot_D_over_a(): #D/a pour différentes valeurs de W et Omega_Lambda, en fonction de a
     plt.figure()
     W_0_list = [-1, -1, -0.5, 0]
     W_a_list = [0, 0, 0, 0]
@@ -73,6 +73,24 @@ def plot_D(): #D/a pour différentes valeurs de W et Omega_Lambda, en fonction d
     plt.tight_layout()
     plt.show()
 
+def plot_D(): #D pour différentes valeurs de w_0 et w_a à Omega_Lambda fixé, en fonction de z
+    plt.figure()
+    W_0_list = [-1, -0.8, -0.6, -0.4, -0.2]
+    W_a_list = [0, -0.6, -1.2, -1.8, -2.4]
+    #Omega_m = 0.3
+    Omega_Lambda = 0.7
+    for i in range(len(W_a_list)):
+        pars = {'Omega_Lambda': Omega_Lambda, 'W_0': W_0_list[i], 'W_a': W_a_list[i]}  
+        plt.plot(z, growth_factor_D(pars), 
+            linestyle='-', color=f'C{i}', linewidth=2, label=f'$w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
+    plt.xlabel('Redshift z')
+    plt.ylabel('Growth factor $D_+$')
+    plt.xscale('log')
+    plt.grid(True)
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+
 
 def plot_f(): #f pour différentes valeurs de w_0 et w_a, en fonction de z, pour Omega_Lambda fixé
     plt.figure()
@@ -80,7 +98,7 @@ def plot_f(): #f pour différentes valeurs de w_0 et w_a, en fonction de z, pour
     W_a_list = [0, -0.6, -1.2, -1.8, -2.4]
     #Omega_m = 0.3
     Omega_Lambda = 0.7
-    for i in range (5):
+    for i in range(len(W_a_list)):
         pars = {'Omega_Lambda': Omega_Lambda, 'W_0': W_0_list[i], 'W_a': W_a_list[i]}
         f_solution = growth_rate_f(pars)
         f_values = f_solution[:,0]
