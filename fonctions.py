@@ -66,7 +66,7 @@ def plot_H_z_times_1plusz(): #derivée de a pour différentes valeurs de w_0 et 
     for i in range(len(W_a_list)):
         pars = {'Omega_Lambda': Omega_Lambda, 'W_0': W_0_list[i], 'W_a': W_a_list[i]}  
         plt.plot(z, H(a, pars) * a, 
-            linestyle='-', color=f'C{i}', linewidth=2, label=f'$W$ = {W_0_list[i]}; $\Omega_\Lambda$ = {Omega_Lambda}')
+            linestyle='-', color=f'C{i}', linewidth=2, label=f'$w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
     plt.xlabel('Redshift z')
     plt.ylabel('$H(z)(1+z)[km/s/Mpc]$')
     plt.xscale('log')
@@ -74,7 +74,6 @@ def plot_H_z_times_1plusz(): #derivée de a pour différentes valeurs de w_0 et 
     plt.legend()
     plt.tight_layout()
     plt.show()
-
 
 
 def plot_D_over_a(): #D/a pour différentes valeurs de W et Omega_Lambda, en fonction de a
