@@ -10,7 +10,7 @@ H_0 = 73.2
 #-- Definition of \"time\" = ln(a)
 a = 10.**np.linspace(-2, 0, 10000)  #de 10**-2 à 10**0
 ln_a = np.log(a)
-
+z = 1/a - 1
 
 def H(a, pars):
     Omega_Lambda = pars['Omega_Lambda']
@@ -74,7 +74,7 @@ def plot_D():
     plt.show()
 
 
-def plot_f():
+def plot_f(): #en fonction de z
     plt.figure()
     W_0_list = [-1, -0.8, -0.6, -0.4, -0.2]
     W_a_list = [0, -0.6, -1.2, -1.8, -2.4]
@@ -84,9 +84,9 @@ def plot_f():
         pars = {'Omega_Lambda': Omega_Lambda, 'W_0': W_0_list[i], 'W_a': W_a_list[i]}
         f_solution = growth_rate_f(pars)
         f_values = f_solution[:,0]
-        plt.plot(a, f_values, 
-            linestyle='-', color=f'C{i}', linewidth=2, label=f'$W_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
-    plt.xlabel('Scale factor a')
+        plt.plot(z, f_values, 
+            linestyle='-', color=f'C{i}', linewidth=2, label=f'$w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
+    plt.xlabel('Redshift z')
     plt.ylabel('Growth-rate f')
     plt.xscale('log')
     plt.grid(True)
