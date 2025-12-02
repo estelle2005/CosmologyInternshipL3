@@ -18,15 +18,15 @@ for i, W_0 in enumerate(w_0_list):
     W_a = w_a_list[i]
 
     def H(a):
-        return H_0 *np.sqrt(Omega_m * a**-3 + Omega_Lambda*a**(-3*(1 + W_0 + W_a))*np.exp(3*W_a*(1-a)))
+        return H_0 *np.sqrt(Omega_m * a**-3 + Omega_Lambda*a**(-3*(1 + W_0 + W_a))*np.exp(-3*W_a*(1-a)))
 
     def H_prime(a):
-        u_prime = Omega_m * a**(-3) + (1 + W_0 + W_a + a)*Omega_Lambda* a**(-3*(1 + W_0 + W_a))*np.exp(3*(1-a))
-        H_prime = - H_0 * 3/2 * u_prime / H(a)
+        u_prime = Omega_m * a**(-3) + (1 + W_0 + W_a + a)*Omega_Lambda* a**(-3*(1 + W_0 + W_a))*np.exp(-3*W_a*(1-a))
+        H_prime = - H_0 **2 * 3/2 * u_prime / H(a)
         return H_prime
     
     def Omega_m_a(a):
-        return Omega_m / (Omega_m + Omega_Lambda * a ** (-3*(W_0 + W_a)) * np.exp(3*W_a*(1-a)))
+        return Omega_m / (Omega_m + Omega_Lambda * a ** (-3*(W_0 + W_a)) * np.exp(-3*W_a*(1-a)))
 
     def df_over_dlna(f, ln_a):
         #f' = df/dlna
@@ -35,7 +35,7 @@ for i, W_0 in enumerate(w_0_list):
         deriv = -f**2 - (2 + H_prime(a)/H(a))*f + 1.5*Omega_m_a(a)
         return deriv
 
-    #-- Definition of \"time\" = ln(a)
+    #-- Definition of \"time\" = ln(a)Hi, I'm going to grab lunch at the cafeteria and join today's speaker. Would you be interested in join?
     a = 10.**np.linspace(-2, 0, 10000)  #de 10**-2 à 10**0
     ln_a = np.log(a)
 
