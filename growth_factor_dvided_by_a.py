@@ -51,7 +51,7 @@ for i, W_0 in enumerate(w_0_list):
     term = f * delta_lna
     int_dlnD = np.cumsum(term)
 
-    ln_D = int_dlnD
+    ln_D = int_dlnD + np.log(D_init)
     
     D = np.exp(ln_D)
 
