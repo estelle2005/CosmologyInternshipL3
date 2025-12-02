@@ -56,6 +56,27 @@ def growth_factor_D(pars):
     D = np.exp(ln_D)
     return D
 
+
+def plot_H_z_times_1plusz(): #derivée de a pour différentes valeurs de w_0 et w_a, Omega_Lambda fixé, en fonction de z
+    plt.figure()
+    W_0_list = [-1, -0.8, -0.6, -0.4, -0.2]
+    W_a_list = [0, -0.6, -1.2, -1.8, -2.4]
+    #Omega_m = 0.3
+    Omega_Lambda = 0.7
+    for i in range(len(W_a_list)):
+        pars = {'Omega_Lambda': Omega_Lambda, 'W_0': W_0_list[i], 'W_a': W_a_list[i]}  
+        plt.plot(z, H(a, pars) * a, 
+            linestyle='-', color=f'C{i}', linewidth=2, label=f'$W$ = {W_0_list[i]}; $\Omega_\Lambda$ = {Omega_Lambda}')
+    plt.xlabel('Redshift z')
+    plt.ylabel('$H(z)(1+z)[km/s/Mpc]$')
+    plt.xscale('log')
+    plt.grid(True)
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+
+
+
 def plot_D_over_a(): #D/a pour différentes valeurs de W et Omega_Lambda, en fonction de a
     plt.figure()
     W_0_list = [-1, -1, -0.5, 0]
@@ -74,7 +95,7 @@ def plot_D_over_a(): #D/a pour différentes valeurs de W et Omega_Lambda, en fon
     plt.show()
 
 def plot_D(): #D pour différentes valeurs de w_0 et w_a à Omega_Lambda fixé, en fonction de z
-    plt.figure()
+    plt.figure() # à vérifier
     W_0_list = [-1, -0.8, -0.6, -0.4, -0.2]
     W_a_list = [0, -0.6, -1.2, -1.8, -2.4]
     #Omega_m = 0.3
@@ -105,7 +126,7 @@ def plot_f(): #f pour différentes valeurs de w_0 et w_a, en fonction de z, pour
         plt.plot(z, f_values, 
             linestyle='-', color=f'C{i}', linewidth=2, label=f'$w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
     plt.xlabel('Redshift z')
-    plt.ylabel('Growth-rate f')
+    plt.ylabel('GroGrowth-rate wth-rate f')
     plt.xscale('log')
     plt.grid(True)
     plt.legend()
@@ -113,7 +134,7 @@ def plot_f(): #f pour différentes valeurs de w_0 et w_a, en fonction de z, pour
     plt.show()
 
 
-def f_times_Dplus():
+def f_times_Dplus():#à vérifier
     plt.figure()
     W_0_list = [-1, -0.8, -0.6, -0.4, -0.2]
     W_a_list = [0, -0.6, -1.2, -1.8, -2.4]
@@ -126,7 +147,7 @@ def f_times_Dplus():
         plt.plot(z, f_values * growth_factor_D(pars), 
             linestyle='-', color=f'C{i}', linewidth=2, label=f'$w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
     plt.xlabel('Redshift z')
-    plt.ylabel('Growth-rate f')
+    plt.ylabel('$f \times D_+$')
     plt.xscale('log')
     plt.grid(True)
     plt.legend()
