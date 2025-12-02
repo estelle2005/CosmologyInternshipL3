@@ -56,7 +56,7 @@ def growth_factor_D(pars):
     D = np.exp(ln_D)
     return D
 
-def plot_D():
+def plot_D(): #D/a pour différentes valeurs de W et Omega_Lambda, en fonction de a
     plt.figure()
     W_0_list = [-1, -1, -0.5, 0]
     W_a_list = [0, 0, 0, 0]
@@ -74,7 +74,7 @@ def plot_D():
     plt.show()
 
 
-def plot_f(): #en fonction de z
+def plot_f(): #f pour différentes valeurs de w_0 et w_a, en fonction de z, pour Omega_Lambda fixé
     plt.figure()
     W_0_list = [-1, -0.8, -0.6, -0.4, -0.2]
     W_a_list = [0, -0.6, -1.2, -1.8, -2.4]
@@ -93,5 +93,3 @@ def plot_f(): #en fonction de z
     plt.legend()
     plt.tight_layout()
     plt.show()
-
-plot_f()
