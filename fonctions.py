@@ -133,7 +133,7 @@ def plot_f(): #f pour différentes valeurs de w_0 et w_a, en fonction de z, pour
     plt.show()
 
 
-def f_times_Dplus():#à vérifier
+def f_times_Dplus():
     plt.figure()
     W_0_list = [-1, -0.8, -0.6, -0.4, -0.2]
     W_a_list = [0, -0.6, -1.2, -1.8, -2.4]
@@ -146,7 +146,7 @@ def f_times_Dplus():#à vérifier
         plt.plot(z, f_values * growth_factor_D(pars), 
             linestyle='-', color=f'C{i}', linewidth=2, label=f'$w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
     plt.xlabel('Redshift z')
-    plt.ylabel('$f \times D_+$')
+    plt.ylabel(r'$f \times D_+$')
     plt.xscale('log')
     plt.grid(True)
     plt.legend()
