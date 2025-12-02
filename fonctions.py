@@ -111,3 +111,24 @@ def plot_f(): #f pour différentes valeurs de w_0 et w_a, en fonction de z, pour
     plt.legend()
     plt.tight_layout()
     plt.show()
+
+
+def f_times_Dplus():
+    plt.figure()
+    W_0_list = [-1, -0.8, -0.6, -0.4, -0.2]
+    W_a_list = [0, -0.6, -1.2, -1.8, -2.4]
+    #Omega_m = 0.3
+    Omega_Lambda = 0.7
+    for i in range(len(W_a_list)):
+        pars = {'Omega_Lambda': Omega_Lambda, 'W_0': W_0_list[i], 'W_a': W_a_list[i]}
+        f_solution = growth_rate_f(pars)
+        f_values = f_solution[:,0]
+        plt.plot(z, f_values * growth_factor_D(pars), 
+            linestyle='-', color=f'C{i}', linewidth=2, label=f'$w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
+    plt.xlabel('Redshift z')
+    plt.ylabel('Growth-rate f')
+    plt.xscale('log')
+    plt.grid(True)
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
