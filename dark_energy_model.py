@@ -21,13 +21,6 @@ for i, W_0 in enumerate(w_0_list):
     def H(a):
         return H_0 *np.sqrt(Omega_m * a**-3 + Omega_Lambda*a**(-3*(1 + W_0 + W_a))*np.exp(3*W_a*(1-a)))
 
-    """def H_prime(H, x):  #dérivée de H(x)
-        #sans coef devant
-        u_prime = Omega_m * np.exp(-3*x) + (1 + W_0 + W_a + np.exp(x))*Omega_Lambda* np.exp(-3*(x + W_0 * x + W_a * (x-1) + np.exp(x)))
-        u = np.sqrt(Omega_m * np.exp(-3) + Omega_Lambda*np.exp(-3*(x + W_0*x + W_a*(x-1)+np.exp(x))))
-        #on rajoute les coeffs
-        return -H_0 * 3/2 * u_prime/u"""
-
     def H_prime(a):
         u_prime = Omega_m * a**(-3) + (1 + W_0 + W_a + a)*Omega_Lambda* a**(-3*(1 + W_0 + W_a))*np.exp(3*(1-a))
         H_prime = - H_0 * 3/2 * u_prime / H(a)
