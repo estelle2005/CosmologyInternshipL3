@@ -44,14 +44,23 @@ for i, W_0 in enumerate(w_0_list):
     f0 = 1
     f = odeint(df_over_dlna, f0, ln_a)
 
-    
+    a_init = 0.01
+    D_init = 0.01
 
-    plt.plot(a, f, 
-        linestyle='-', color=f'C{i}', linewidth=2, label=f'$w_0$ = {W_0}; $w_a$ = {W_a}')
+    delta_lna = ln_a[1] - ln_a[0]
+    term = f * delta_lna
+    int_dlnD = np.cumsum(term)
+
+    ln_D = int_dlnD
+    
+    D = np.exp(ln_D)
+
+    plt.plot(a, D/a, 
+        linestyle='-', color=f'C{i}', linewidth=2, label=f'$W$ = {W_0}; $\Omega_\Lambda$ = {Omega_Lambda}')
 
 
 plt.xlabel('Scale factor a')
-plt.ylabel('Growth-rate f')
+plt.ylabel('Growth factor divided by a')
 plt.xscale('log')
 plt.grid(True)
 plt.legend()
