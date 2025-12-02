@@ -48,7 +48,7 @@ def growth_rate_f(pars):
     return f
 
 def growth_factor_D(pars):
-    D_init = 0.01   #a_init = 0.01
+    D_init = 0.01   #a_init = 0.01 - comme si on mettait 'A_s', cad on normalise
     delta_lna = ln_a[1] - ln_a[0]
     term = growth_rate_f(pars) * delta_lna
     int_dlnD = np.cumsum(term)
