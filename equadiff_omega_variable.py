@@ -22,7 +22,7 @@ for i, Omega_m in enumerate(omega_m_list):
         return -1.5 * Omega_m_a(a)
 
     def Omega_m_a(a):
-        return Omega_m / (Omega_m + Omega_Lambda * a **-3)
+        return Omega_m / (Omega_m + Omega_Lambda * a **3)
 
     def df_over_dlna(f, ln_a):
         #f' = df/dlna
