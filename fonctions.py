@@ -81,7 +81,7 @@ def plot_D_over_a(): #D/a pour différentes valeurs de W et Omega_Lambda, en fon
     W_0_list = [-1, -1, -0.5, 0]
     W_a_list = [0, 0, 0, 0]
     Omega_Lambda_list = [0.69, 0.72, 0.69, 0] 
-    for i in range (3):
+    for i in range(len(Omega_Lambda_list)):
         pars = {'Omega_Lambda': Omega_Lambda_list[i], 'W_0': W_0_list[i], 'W_a': W_a_list[i]}  
         plt.plot(a, growth_factor_D(pars)/a, 
             linestyle='-', color=f'C{i}', linewidth=2, label=f'$W$ = {W_0_list[i]}; $\Omega_\Lambda$ = {Omega_Lambda_list[i]}')
@@ -152,3 +152,9 @@ def f_times_Dplus():
     plt.legend()
     plt.tight_layout()
     plt.show()
+
+
+plot_f()
+plot_D_over_a()
+plot_D()
+plot_H_z_times_1plusz()
