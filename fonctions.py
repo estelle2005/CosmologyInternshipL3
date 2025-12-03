@@ -124,8 +124,8 @@ def plot_f(): #f pour différentes valeurs de w_0 et w_a, en fonction de z, pour
         f_values = f_solution[:,0]
         plt.plot(z, f_values, 
             linestyle='-', color=f'C{i}', linewidth=2, label=f'$w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
-    plt.xlabel('Redshift z')
-    plt.ylabel('GroGrowth-rate wth-rate f')
+    plt.xlabel(f'$z$')
+    plt.ylabel(f'$f(z)$')
     plt.xscale('log')
     plt.grid(True)
     plt.legend()
@@ -155,6 +155,5 @@ def f_times_Dplus():
 
 
 plot_f()
-plot_D_over_a()
-plot_D()
-plot_H_z_times_1plusz()
+#plot_D()
+#plot_H_z_times_1plusz()
