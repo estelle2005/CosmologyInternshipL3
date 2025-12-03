@@ -44,7 +44,7 @@ for i, Omega_m in enumerate(omega_m_list):
 
 
 plt.xlabel('Scale factor a')
-plt.ylabel('Growth-rate f')
+plt.ylabel('Growth rate f')
 plt.xscale('log')
 plt.grid(True)
 plt.legend()
