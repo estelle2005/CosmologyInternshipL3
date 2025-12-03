@@ -12,6 +12,7 @@ H_0 = 73.2
 a = 10.**np.linspace(-2, 0, 10000)  #de 10**-2 à 10**0
 ln_a = np.log(a)
 z = 1/a - 1
+
 #pars = {'Omega_Lambda': Omega_Lambda, 'W_0': W_0_list[i], 'W_a': W_a_list[i]}  
 
 def H(a, pars):
@@ -156,8 +157,9 @@ def plot_f_times_Dplus():
 
 
 #DISTANCES
-#FAIRE CODE DISTANCE FONCTIONS ET PLOT AVEC DICTIONNAIRE
+
 # est -ce que je modifie pour evolving dark energy ou je mets juste omega lambda
+#omega _ m doit être dans le dictionnaire
 
 Omega_r = 0.0001
 coeff= 3*10**3
@@ -165,7 +167,7 @@ coeff= 3*10**3
 
 def H(z, pars): # on sort le H_0
     Omega_Lambda = pars['Omega_Lambda']
-    Omega_m = 1 - Omega_Lambda - Omega_r
+    Omega_m = pars['Omega_m']
     a = 1/(1+z)
     hubble_rate = np.sqrt(Omega_m * a**-3 + Omega_r * a**-4 + Omega_Lambda)
     return hubble_rate
@@ -174,8 +176,6 @@ def invH(z_prime, pars):
     return 1/H(z_prime, pars)
 
 def khi(z, pars):
-    Omega_Lambda = pars['Omega_Lambda']
-    Omega_m = 1 - Omega_Lambda - Omega_r
     res, err = quad(invH, 0, z, args = (pars))
     return res * coeff
 
@@ -187,34 +187,21 @@ def d_L(z, pars):
     a = 1 / (1+z)
     return khi(z, pars)/a
 
-"""pars = 
- Omega_m, Omega_r, Omega_Lambda"""
 
-z_values = np.linspace(0, 10, 1000)
-Omega_m_list = [0.1, 0.3, 0.9]
-
-
-for i, om in enumerate(Omega_m_list):
-    Omega_Lambda = 1 - om #univers plat
-    parameters = {'Omega_m': om, 'Omega_r': Omega_r, 'Omega_Lambda': Omega_Lambda}
-    khi_values = [khi(z, **parameters)for z in z_values]
-    d_A_values = [d_A(z, **parameters)for z in z_values]
-    d_L_values = [d_L(z, **parameters)for z in z_values]
-    #H = H(z_values, om, Omega_r, Omega_Lambda)
-    plt.plot(z_values, khi_values, 
-        linestyle='-', color=f'C{i}', linewidth=2, label=f'$\chi$; $\Omega_m$ = {om}; $\Omega_\lambda$ = {Omega_Lambda}')
-    plt.plot(z_values, d_A_values, 
-        linestyle='--', color=f'C{i}', linewidth=2, label=f'$d_A$; $\Omega_m$ = {om}; $\Omega_\lambda$ = {Omega_Lambda}')
-    plt.plot(z_values, d_L_values, 
-        linestyle='-.', color=f'C{i}', linewidth=2, label=f'$d_L$; $\Omega_m$ = {om}; $\Omega_\lambda$ = {Omega_Lambda}')
-
-
-
-
-
-plt.xlabel("$z$")
-plt.ylabel("Distance [$h^{-1}$ Mpc]")
-plt.grid(True)
-plt.legend()
-plt.tight_layout()
-plt.show()
+def plot_alldistances(): #toutes les distances sur le même graphique
+    plt.figure()
+    Omega_m_list = [0.1, 0.3, 0.9]
+    for i in range(len(Omega_m_list)):
+        pars = {'Omega_m': Omega_m_list[i], 'Omega_Lambda': 1 - Omega_m_list[i] - Omega_r} 
+        plt.plot(z, khi(z, pars), 
+            linestyle='-', color=f'C{i}', linewidth=2, label=f'$\chi$; $\Omega_m$ = {pars["Omega_m"]}; $\Omega_\lambda$ = {pars["Omega_Lambda"]}')
+        plt.plot(z, d_A(z, pars), 
+            linestyle='--', color=f'C{i}', linewidth=2, label=f'$d_A$; $\Omega_m$ = {pars["Omega_m"]}; $\Omega_\lambda$ = {pars["Omega_Lambda"]}')
+        plt.plot(z, d_L(z, pars), 
+            linestyle='-.', color=f'C{i}', linewidth=2, label=f'$d_L$; $\Omega_m$ = {pars["Omega_m"]}; $\Omega_\lambda$ = {pars["Omega_Lambda"]}')
+    plt.xlabel("$z$")
+    plt.ylabel("Distance [$h^{-1}$ Mpc]")
+    plt.grid(True)
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
