@@ -67,7 +67,7 @@ def plot_H_z_times_1plusz(): #derivée de a pour différentes valeurs de w_0 et 
         pars = {'Omega_Lambda': Omega_Lambda, 'W_0': W_0_list[i], 'W_a': W_a_list[i]}  
         plt.plot(z, H(a, pars) * a, 
             linestyle='-', color=f'C{i}', linewidth=2, label=f'$w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
-    plt.xlabel('Redshift z')
+    plt.xlabel(f'$z$')
     plt.ylabel('$H(z)(1+z)[km/s/Mpc]$')
     plt.xscale('log')
     plt.grid(True)
@@ -154,4 +154,4 @@ def plot_f_times_Dplus():
     plt.show()
 
 
-plot_H_z_times_1plusz()
+#plot_f_times_Dplus
