@@ -158,23 +158,25 @@ def plot_f_times_Dplus():
 
 #DISTANCES
 
-# est -ce que je modifie pour evolving dark energy ou je mets juste omega lambda
+#ATTENTION ici on ne néglige pas omega_r 
 #omega _ m doit être dans le dictionnaire
 
 Omega_r = 0.0001
 coeff= 3*10**3
 
 
-def H(z, pars): # on sort le H_0
+def H_sans_H0(z, pars): # on sort le H_0
     Omega_Lambda = pars['Omega_Lambda']
     Omega_m = pars['Omega_m']
+    W_0 = pars['W_0']
+    W_a = pars['W_a']
     a = 1/(1+z)
-    hubble_rate = np.sqrt(Omega_m * a**-3 + Omega_r * a**-4 + Omega_Lambda)
+    hubble_rate = np.sqrt(Omega_m * a**-3 + Omega_r * a**-4 + Omega_Lambda*a**(-3*(1 + W_0 + W_a))*np.exp(-3*W_a*(1-a)))
     return hubble_rate
 
 def khi(z, pars):
     def invH(z_prime, pars):
-        return 1/H(z_prime, pars)
+        return 1/H_sans_H0(z_prime, pars)
     res, err = quad(invH, 0, z, pars)
     return res * coeff
 
@@ -188,20 +190,21 @@ def d_L(z, pars):
 
 
 def plot_alldistances(): #toutes les distances sur le même graphique
-    #ATTENTION ici on ne néglige pas omega_r mais on fait Omega_m = 1 - Omega_Lambda
     plt.figure()
+    W_0_list = [-1, -0.8, -0.6, -0.4, -0.2]
+    W_a_list = [0, -0.6, -1.2, -1.8, -2.4]
     Omega_m_list = [0.1, 0.3, 0.9]
     for i in range(len(Omega_m_list)):
-        pars = {'Omega_m': Omega_m_list[i], 'Omega_Lambda': 1 - Omega_m_list[i]} 
+        pars = {'Omega_m': Omega_m_list[i], 'Omega_Lambda': 1 - Omega_m_list[i] - Omega_r, 'W_0': W_0_list[i], 'W_a': W_a_list[i]} 
         khi_values = [khi(z_i, pars)for z_i in z]
         d_A_values = [d_A(z_i, pars)for z_i in z]
         d_L_values = [d_L(z_i, pars)for z_i in z]
         plt.plot(z, khi_values, 
-            linestyle='-', color=f'C{i}', linewidth=2, label=f'$\chi$; $\Omega_m$ = {pars["Omega_m"]}; $\Omega_\lambda$ = {pars["Omega_Lambda"]}')
+            linestyle='-', color=f'C{i}', linewidth=2, label=f'$\chi$; $\Omega_m$ = {pars["Omega_m"]}; $\Omega_\lambda$ = {pars["Omega_Lambda"]}; $w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
         plt.plot(z, d_A_values, 
-            linestyle='--', color=f'C{i}', linewidth=2, label=f'$d_A$; $\Omega_m$ = {pars["Omega_m"]}; $\Omega_\lambda$ = {pars["Omega_Lambda"]}')
+            linestyle='--', color=f'C{i}', linewidth=2, label=f'$d_A$; $\Omega_m$ = {pars["Omega_m"]}; $\Omega_\lambda$ = {pars["Omega_Lambda"]}; $w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
         plt.plot(z, d_L_values, 
-            linestyle='-.', color=f'C{i}', linewidth=2, label=f'$d_L$; $\Omega_m$ = {pars["Omega_m"]}; $\Omega_\lambda$ = {pars["Omega_Lambda"]}')
+            linestyle='-.', color=f'C{i}', linewidth=2, label=f'$d_L$; $\Omega_m$ = {pars["Omega_m"]}; $\Omega_\lambda$ = {pars["Omega_Lambda"]}; $w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
     plt.xlabel("$z$")
     plt.ylabel("Distance [$h^{-1}$ Mpc]")
     plt.grid(True)
@@ -210,14 +213,15 @@ def plot_alldistances(): #toutes les distances sur le même graphique
     plt.show()
 
 def plot_comoving_distance(): #khi
-    #ATTENTION ici on ne néglige pas omega_r mais on fait Omega_m = 1 - Omega_Lambda
     plt.figure()
+    W_0_list = [-1, -0.8, -0.6, -0.4, -0.2]
+    W_a_list = [0, -0.6, -1.2, -1.8, -2.4]
     Omega_m_list = [0.1, 0.3, 0.9]
     for i in range(len(Omega_m_list)):
-        pars = {'Omega_m': Omega_m_list[i], 'Omega_Lambda': 1 - Omega_m_list[i]} 
+        pars = {'Omega_m': Omega_m_list[i], 'Omega_Lambda': 1 - Omega_m_list[i] - Omega_r, 'W_0': W_0_list[i], 'W_a': W_a_list[i]} 
         khi_values = [khi(z_i, pars)for z_i in z]
         plt.plot(z, khi_values, 
-            linestyle='-', color=f'C{i}', linewidth=2, label=f'$\chi$; $\Omega_m$ = {pars["Omega_m"]}; $\Omega_\lambda$ = {pars["Omega_Lambda"]}')
+            linestyle='-', color=f'C{i}', linewidth=2, label=f'$\chi$; $\Omega_m$ = {pars["Omega_m"]}; $\Omega_\lambda$ = {pars["Omega_Lambda"]}; $w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
     plt.xlabel("$z$")
     plt.ylabel("Distance $\chi$ [$h^{-1}$ Mpc]")
     plt.grid(True)
@@ -226,14 +230,15 @@ def plot_comoving_distance(): #khi
     plt.show()
 
 def plot_angular_diameter_distance(): #d_A
-    #ATTENTION ici on ne néglige pas omega_r mais on fait Omega_m = 1 - Omega_Lambda
     plt.figure()
+    W_0_list = [-1, -0.8, -0.6, -0.4, -0.2]
+    W_a_list = [0, -0.6, -1.2, -1.8, -2.4]
     Omega_m_list = [0.1, 0.3, 0.9]
     for i in range(len(Omega_m_list)):
-        pars = {'Omega_m': Omega_m_list[i], 'Omega_Lambda': 1 - Omega_m_list[i]} 
+        pars = {'Omega_m': Omega_m_list[i], 'Omega_Lambda': 1 - Omega_m_list[i] - Omega_r, 'W_0': W_0_list[i], 'W_a': W_a_list[i]} 
         d_A_values = [d_A(z_i, pars)for z_i in z]
         plt.plot(z, d_A_values, 
-            linestyle='--', color=f'C{i}', linewidth=2, label=f'$d_A$; $\Omega_m$ = {pars["Omega_m"]}; $\Omega_\lambda$ = {pars["Omega_Lambda"]}')
+            linestyle='--', color=f'C{i}', linewidth=2, label=f'$d_A$; $\Omega_m$ = {pars["Omega_m"]}; $\Omega_\lambda$ = {pars["Omega_Lambda"]}; $w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
     plt.xlabel("$z$")
     plt.ylabel("Distance $d_A$ [$h^{-1}$ Mpc]")
     plt.grid(True)
@@ -242,14 +247,15 @@ def plot_angular_diameter_distance(): #d_A
     plt.show()
 
 def plot_luminosity_distance(): #d_L
-    #ATTENTION ici on ne néglige pas omega_r mais on fait Omega_m = 1 - Omega_Lambda
     plt.figure()
+    W_0_list = [-1, -0.8, -0.6, -0.4, -0.2]
+    W_a_list = [0, -0.6, -1.2, -1.8, -2.4]
     Omega_m_list = [0.1, 0.3, 0.9]
     for i in range(len(Omega_m_list)):
-        pars = {'Omega_m': Omega_m_list[i], 'Omega_Lambda': 1 - Omega_m_list[i]} 
+        pars = {'Omega_m': Omega_m_list[i], 'Omega_Lambda': 1 - Omega_m_list[i] - Omega_r, 'W_0': W_0_list[i], 'W_a': W_a_list[i]} 
         d_L_values = [d_L(z_i, pars)for z_i in z]
         plt.plot(z, d_L_values, 
-            linestyle='-.', color=f'C{i}', linewidth=2, label=f'$d_L$; $\Omega_m$ = {pars["Omega_m"]}; $\Omega_\lambda$ = {pars["Omega_Lambda"]}')
+            linestyle='-.', color=f'C{i}', linewidth=2, label=f'$d_L$; $\Omega_m$ = {pars["Omega_m"]}; $\Omega_\lambda$ = {pars["Omega_Lambda"]}; ; $w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
     plt.xlabel("$z$")
     plt.ylabel("Distance $d_L$ [$h^{-1}$ Mpc]")
     plt.grid(True)
