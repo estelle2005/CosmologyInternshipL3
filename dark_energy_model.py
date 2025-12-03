@@ -35,7 +35,7 @@ for i, W_0 in enumerate(w_0_list):
         deriv = -f**2 - (2 + H_prime(a)/H(a))*f + 1.5*Omega_m_a(a)
         return deriv
 
-    #-- Definition of \"time\" = ln(a)Hi, I'm going to grab lunch at the cafeteria and join today's speaker. Would you be interested in join?
+    #-- Definition of \"time\" = ln(a)
     a = 10.**np.linspace(-2, 0, 10000)  #de 10**-2 à 10**0
     ln_a = np.log(a)
 
@@ -48,7 +48,7 @@ for i, W_0 in enumerate(w_0_list):
 
 
 plt.xlabel('Scale factor a')
-plt.ylabel('Growth-rate f')
+plt.ylabel('Growth rate f')
 plt.xscale('log')
 plt.grid(True)
 plt.legend()
