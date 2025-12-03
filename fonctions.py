@@ -172,11 +172,10 @@ def H(z, pars): # on sort le H_0
     hubble_rate = np.sqrt(Omega_m * a**-3 + Omega_r * a**-4 + Omega_Lambda)
     return hubble_rate
 
-def invH(z_prime, pars):
-    return 1/H(z_prime, pars)
-
 def khi(z, pars):
-    res, err = quad(invH, 0, z, args = (pars))
+    def invH(z_prime, pars):
+        return 1/H(z_prime, pars)
+    res, err = quad(invH, 0, z, pars)
     return res * coeff
 
 def d_A(z, pars):
@@ -189,15 +188,19 @@ def d_L(z, pars):
 
 
 def plot_alldistances(): #toutes les distances sur le même graphique
+    #ATTENTION ici on ne néglige pas omega_r mais on fait Omega_m = 1 - Omega_Lambda
     plt.figure()
     Omega_m_list = [0.1, 0.3, 0.9]
     for i in range(len(Omega_m_list)):
-        pars = {'Omega_m': Omega_m_list[i], 'Omega_Lambda': 1 - Omega_m_list[i] - Omega_r} 
-        plt.plot(z, khi(z, pars), 
+        pars = {'Omega_m': Omega_m_list[i], 'Omega_Lambda': 1 - Omega_m_list[i]} 
+        khi_values = [khi(z_i, pars)for z_i in z]
+        d_A_values = [d_A(z_i, pars)for z_i in z]
+        d_L_values = [d_L(z_i, pars)for z_i in z]
+        plt.plot(z, khi_values, 
             linestyle='-', color=f'C{i}', linewidth=2, label=f'$\chi$; $\Omega_m$ = {pars["Omega_m"]}; $\Omega_\lambda$ = {pars["Omega_Lambda"]}')
-        plt.plot(z, d_A(z, pars), 
+        plt.plot(z, d_A_values, 
             linestyle='--', color=f'C{i}', linewidth=2, label=f'$d_A$; $\Omega_m$ = {pars["Omega_m"]}; $\Omega_\lambda$ = {pars["Omega_Lambda"]}')
-        plt.plot(z, d_L(z, pars), 
+        plt.plot(z, d_L_values, 
             linestyle='-.', color=f'C{i}', linewidth=2, label=f'$d_L$; $\Omega_m$ = {pars["Omega_m"]}; $\Omega_\lambda$ = {pars["Omega_Lambda"]}')
     plt.xlabel("$z$")
     plt.ylabel("Distance [$h^{-1}$ Mpc]")
@@ -205,3 +208,5 @@ def plot_alldistances(): #toutes les distances sur le même graphique
     plt.legend()
     plt.tight_layout()
     plt.show()
+
+plot_alldistances()
