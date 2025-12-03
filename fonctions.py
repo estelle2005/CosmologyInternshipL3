@@ -146,12 +146,9 @@ def plot_f_times_Dplus():
         plt.plot(z, f_values * growth_factor_D(pars), 
             linestyle='-', color=f'C{i}', linewidth=2, label=f'$w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
     plt.xlabel('$z$')
-    plt.ylabel(r'$f \times D_+$')
+    plt.ylabel(r'$f \times D_+(z)$')
     plt.xscale('log')
     plt.grid(True)
     plt.legend()
     plt.tight_layout()
     plt.show()
-
-
-#plot_f_times_Dplus
