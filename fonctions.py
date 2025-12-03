@@ -103,8 +103,8 @@ def plot_D(): #D pour différentes valeurs de w_0 et w_a à Omega_Lambda fixé, 
         pars = {'Omega_Lambda': Omega_Lambda, 'W_0': W_0_list[i], 'W_a': W_a_list[i]}  
         plt.plot(z, growth_factor_D(pars), 
             linestyle='-', color=f'C{i}', linewidth=2, label=f'$w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
-    plt.xlabel('Redshift z')
-    plt.ylabel('Growth factor $D_+$')
+    plt.xlabel(f'$z$')
+    plt.ylabel(f'$D_+(z)$')
     plt.xscale('log')
     plt.grid(True)
     plt.legend()
@@ -154,6 +154,5 @@ def f_times_Dplus():
     plt.show()
 
 
-plot_f()
-#plot_D()
+plot_D()
 #plot_H_z_times_1plusz()
