@@ -209,4 +209,50 @@ def plot_alldistances(): #toutes les distances sur le même graphique
     plt.tight_layout()
     plt.show()
 
-plot_alldistances()
+def plot_comoving_distance(): #khi
+    #ATTENTION ici on ne néglige pas omega_r mais on fait Omega_m = 1 - Omega_Lambda
+    plt.figure()
+    Omega_m_list = [0.1, 0.3, 0.9]
+    for i in range(len(Omega_m_list)):
+        pars = {'Omega_m': Omega_m_list[i], 'Omega_Lambda': 1 - Omega_m_list[i]} 
+        khi_values = [khi(z_i, pars)for z_i in z]
+        plt.plot(z, khi_values, 
+            linestyle='-', color=f'C{i}', linewidth=2, label=f'$\chi$; $\Omega_m$ = {pars["Omega_m"]}; $\Omega_\lambda$ = {pars["Omega_Lambda"]}')
+    plt.xlabel("$z$")
+    plt.ylabel("Distance $\chi$ [$h^{-1}$ Mpc]")
+    plt.grid(True)
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+
+def plot_angular_diameter_distance(): #d_A
+    #ATTENTION ici on ne néglige pas omega_r mais on fait Omega_m = 1 - Omega_Lambda
+    plt.figure()
+    Omega_m_list = [0.1, 0.3, 0.9]
+    for i in range(len(Omega_m_list)):
+        pars = {'Omega_m': Omega_m_list[i], 'Omega_Lambda': 1 - Omega_m_list[i]} 
+        d_A_values = [d_A(z_i, pars)for z_i in z]
+        plt.plot(z, d_A_values, 
+            linestyle='--', color=f'C{i}', linewidth=2, label=f'$d_A$; $\Omega_m$ = {pars["Omega_m"]}; $\Omega_\lambda$ = {pars["Omega_Lambda"]}')
+    plt.xlabel("$z$")
+    plt.ylabel("Distance $d_A$ [$h^{-1}$ Mpc]")
+    plt.grid(True)
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+
+def plot_luminosity_distance(): #d_L
+    #ATTENTION ici on ne néglige pas omega_r mais on fait Omega_m = 1 - Omega_Lambda
+    plt.figure()
+    Omega_m_list = [0.1, 0.3, 0.9]
+    for i in range(len(Omega_m_list)):
+        pars = {'Omega_m': Omega_m_list[i], 'Omega_Lambda': 1 - Omega_m_list[i]} 
+        d_L_values = [d_L(z_i, pars)for z_i in z]
+        plt.plot(z, d_L_values, 
+            linestyle='-.', color=f'C{i}', linewidth=2, label=f'$d_L$; $\Omega_m$ = {pars["Omega_m"]}; $\Omega_\lambda$ = {pars["Omega_Lambda"]}')
+    plt.xlabel("$z$")
+    plt.ylabel("Distance $d_L$ [$h^{-1}$ Mpc]")
+    plt.grid(True)
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
