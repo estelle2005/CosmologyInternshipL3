@@ -56,11 +56,11 @@ for i, W_0 in enumerate(w_0_list):
     D = np.exp(ln_D)
 
     plt.plot(a, D/a, 
-        linestyle='-', color=f'C{i}', linewidth=2, label=f'$W$ = {W_0}; $\Omega_\Lambda$ = {Omega_Lambda}')
+        linestyle='-', color=f'C{i}', linewidth=2, label=f'$w$ = {W_0}; $\Omega_\Lambda$ = {Omega_Lambda}')
 
 
-plt.xlabel('Scale factor a')
-plt.ylabel('Growth factor divided by a')
+plt.xlabel('a')
+plt.ylabel(f'$D_+(a)/a$')
 plt.xscale('log')
 plt.grid(True)
 plt.legend()
