@@ -40,11 +40,11 @@ for i, om in enumerate(omega_m_list):
     d_L_values = [d_L(z, **parameters)for z in z_values]
     #H = H(z_values, om, omega_r, omega_lambda)
     plt.plot(z_values, khi_values, 
-        linestyle='-', color=f'C{i}', linewidth=2, label=f'$\chi$; $\Omega_m$ = {om}; $\Omega_r$ = {omega_r}; $\Omega_\lambda$ = {omega_lambda}')
+        linestyle='-', color=f'C{i}', linewidth=2, label=f'$\chi$; $\Omega_m$ = {om}; $\Omega_\lambda$ = {omega_lambda}')
     plt.plot(z_values, d_A_values, 
-        linestyle='--', color=f'C{i}', linewidth=2, label=f'$d_A$; $\Omega_m$ = {om}; $\Omega_r$ = {omega_r}; $\Omega_\lambda$ = {omega_lambda}')
+        linestyle='--', color=f'C{i}', linewidth=2, label=f'$d_A$; $\Omega_m$ = {om}; $\Omega_\lambda$ = {omega_lambda}')
     plt.plot(z_values, d_L_values, 
-        linestyle='-.', color=f'C{i}', linewidth=2, label=f'$d_L$; $\Omega_m$ = {om}; $\Omega_r$ = {omega_r}; $\Omega_\lambda$ = {omega_lambda}')
+        linestyle='-.', color=f'C{i}', linewidth=2, label=f'$d_L$; $\Omega_m$ = {om}; $\Omega_\lambda$ = {omega_lambda}')
 
 
 
