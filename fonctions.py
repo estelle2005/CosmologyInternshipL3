@@ -59,6 +59,7 @@ def growth_factor_D(pars):
     return D
 
 
+
 def plot_H_z_times_1plusz(): #derivée de a pour différentes valeurs de w_0 et w_a, Omega_Lambda fixé, en fonction de z
     plt.figure()
     W_0_list = [-1, -0.8, -0.6, -0.4, -0.2]
@@ -76,7 +77,6 @@ def plot_H_z_times_1plusz(): #derivée de a pour différentes valeurs de w_0 et 
     plt.legend()
     plt.tight_layout()
     plt.show()
-
 
 def plot_D_over_a(): #D/a pour différentes valeurs de W et Omega_Lambda, en fonction de a
     plt.figure()
@@ -113,7 +113,6 @@ def plot_D(): #D pour différentes valeurs de w_0 et w_a à Omega_Lambda fixé, 
     plt.tight_layout()
     plt.show()
 
-
 def plot_f(): #f pour différentes valeurs de w_0 et w_a, en fonction de z, pour Omega_Lambda fixé
     plt.figure()
     W_0_list = [-1, -0.8, -0.6, -0.4, -0.2]
@@ -134,7 +133,6 @@ def plot_f(): #f pour différentes valeurs de w_0 et w_a, en fonction de z, pour
     plt.tight_layout()
     plt.show()
 
-
 def plot_f_times_Dplus():
     plt.figure()
     W_0_list = [-1, -0.8, -0.6, -0.4, -0.2]
@@ -154,6 +152,7 @@ def plot_f_times_Dplus():
     plt.legend()
     plt.tight_layout()
     plt.show()
+
 
 
 #DISTANCES
