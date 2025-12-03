@@ -51,4 +51,4 @@ plt.legend()
 plt.tight_layout()
 plt.show()
 
-"""Pour des valeurs de plus en plus grands de \Omega_m, quand le facteur d'échelle a se rapproche de 1, le taux de croissance f est de plus en plus faible"""
+"""Pour des valeurs de plus en plus petites de \Omega_m, le taux de croissance f diminue de plus en plus tôt (pour un facteur d'échelle de plus en plus faible)"""
