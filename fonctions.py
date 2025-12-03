@@ -145,7 +145,7 @@ def f_times_Dplus():
         f_values = f_solution[:,0]
         plt.plot(z, f_values * growth_factor_D(pars), 
             linestyle='-', color=f'C{i}', linewidth=2, label=f'$w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
-    plt.xlabel('Redshift z')
+    plt.xlabel(r'$z$')
     plt.ylabel(r'$f \times D_+$')
     plt.xscale('log')
     plt.grid(True)
@@ -154,5 +154,4 @@ def f_times_Dplus():
     plt.show()
 
 
-plot_D()
-#plot_H_z_times_1plusz()
+plot_H_z_times_1plusz()
