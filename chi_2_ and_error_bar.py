@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import numpy as np
 import fonctions
 from scipy.stats import chisquare
 import pandas as pd
@@ -25,26 +26,6 @@ chi2, p = chisquare(observes, theoriques)
 print(f"Statistique Khi carré : {chi2:.4f}")
 print(f"p-value : {p:.4f}")"""
 
-'''
-m.hesse()  # accurately computes uncertainties
-----
-# draw data and fitted line
-plt.errorbar(data_x, data_y, data_yerr, fmt="ok", label="data")
-plt.plot(data_x, line(data_x, *m.values), label="fit")
-
-# display legend with some fit info
-fit_info = [
-    f"$\\chi^2$/$n_\\mathrm{{dof}}$ = {m.fval:.1f} / {m.ndof:.0f} = {m.fmin.reduced_chi2:.1f}",
-]
-for p, v, e in zip(m.parameters, m.values, m.errors):
-    fit_info.append(f"{p} = ${v:.3f} \\pm {e:.3f}$")
-
-plt.legend(title="\n".join(fit_info), frameon=False)
-plt.xlabel("x")
-plt.ylabel("y");
-
-'''
-
 r_d = 147.05 # Mpc today
 c = 3 * 10**8
 
@@ -56,7 +37,6 @@ DV_over_rd_exp = tableau['DV_over_rd']
 sigma_DV_over_rd = tableau['DV_over_rd_err']
 DM_over_DH_exp = tableau['DM_over_DH']
 sigma_DM_over_DH = tableau['DM_over_DH_err']
-
  
 #pars = {'Omega_m': 0.3,'Omega_Lambda': 0.7,'W_0': -1, 'W_a': 0}
 
@@ -72,17 +52,42 @@ def model_wrapper_Dv_over_rd(z, Omega_m, Omega_Lambda, W_0, W_a):
     return Dv_over_rd(z, pars)
 
 def iminuit_Dv_over_rd():
-    cost_Dv_over_rd = LeastSquares(z, DV_over_rd_exp, sigma_DV_over_rd, model_wrapper_Dv_over_rd)
-    m_Dv_over_rd = Minuit(cost_Dv_over_rd, Omega_m=0.3, Omega_Lambda = 0.7, W_0 = -1, W_a = 0) 
+    cost = LeastSquares(z, DV_over_rd_exp, sigma_DV_over_rd, model_wrapper_Dv_over_rd)
+    m = Minuit(cost, Omega_m=0.3, Omega_Lambda = 0.7, W_0 = -1, W_a = 0) 
     
-    m_Dv_over_rd.limits['Omega_m'] = (0.1, 1.0)
-    m_Dv_over_rd.limits['Omega_Lambda'] = (0.0, 1.0)
-    m_Dv_over_rd.limits['W_0'] = (-1.0, 0.0)
-    m_Dv_over_rd.limits['W_a'] = (-3.0, 0.0)
+    m.limits['Omega_m'] = (0.1, 1.0)
+    m.limits['Omega_Lambda'] = (0.0, 1.0)
+    m.limits['W_0'] = (-1.0, 0.0)
+    m.limits['W_a'] = (-3.0, 0.0)
     
-    m_Dv_over_rd.migrad()  # finds minimum of least_squares function
+    m.migrad()  # finds minimum of least_squares function
+    print("Résultat de l'ajustement:")
+    print(f"$\Omega_m$ = {m.values['Omega_m']:.3f} ± {m.errors['Omega_m']:.3f}")
+    print(f"$\Omega_\Lambda$= {m.values['Omega_Lambda']:.3f} ± {m.errors['Omega_Lambda']:.3f}")
+    print(f"$w_0$ = {m.values['W_0']:.2f} ± {m.errors['W_0']:.2f}")
+    print(f"$w_a$= {m.values['W_a']:.2f} ± {m.errors['W_a']:.2f}")
+    print(f"χ²/dof = {m.fval:.2f}/{m.ndof} = {m.fval/m.ndof:.2f}")
 
+    z_plot = np.linspace(min(z)-0.5, max(z)+0.5, 100)
+    pars_fit = {
+        'Omega_m': m.values['Omega_m'],
+        'Omega_Lambda': m.values['Omega_Lambda'],
+        'W_0': m.values['W_0'],
+        'W_a': m.values['W_a']}
+    DV_plot = np.array([Dv_over_rd(z, pars_fit) for z in z_plot])
 
+    plt.figure()
+    plt.errorbar(z, DV_over_rd_exp, yerr=sigma_DV_over_rd, fmt='o', capsize=5,
+                label='Données BAO', color='darkblue')
+    plt.plot(z_plot, DV_plot, 'r-', linewidth=2,
+            label=f'Fit: $\Omega_m={m.values["Omega_m"]:.3f}, $\Omega_Lambda={m.values["Omega_Lambda"]:.3f},W_0={m.values["W_0"]:.2f}, W_a={m.values["W_a"]:.2f}')
+    plt.xlabel('Redshift z')
+    plt.ylabel(r'$D_V / r_d$')
+    plt.legend()
+    plt.grid(True, alpha=0.3)
+    plt.show()
+
+iminuit_Dv_over_rd()
 
 def DM_over_DH(z, pars):
     a = 1 / (1+z)
@@ -100,18 +105,14 @@ def chi_carré_Dv_over_rd():
         sum = sum + ((DV_over_rd_exp[i] - Dv_over_rd(z[i]))**2)/((sigma_DV_over_rd[i])**2)
     return sum
 
-
 def chi_carré_DM_over_DH():
     sum = 0
     for i in range(len(z)):
         sum = sum + ((DM_over_DH_exp[i] - DM_over_DH(z[i]))**2)/((sigma_DM_over_DH[i])**2)
     return sum
 
-
 def plot_Dv_over_rd_error_bar():
     plt.figure()
-    f = [Dv_over_rd(z_i) for z_i in z]
-    plt.plot(z, f, color ='black', label= 'Theoretical values')
     plt.errorbar(z, DV_over_rd_exp, yerr=sigma_DV_over_rd, color='blue', 
              ecolor='red', label='Données ± erreur')
     plt.xlabel('$z$')
@@ -123,8 +124,6 @@ def plot_Dv_over_rd_error_bar():
 
 def plot_DM_over_DH_error_bar():
     plt.figure()
-    f = [DM_over_DH(z_i) for z_i in z]
-    plt.plot(z, f, color ='black', label= 'Theoretical values')
     plt.errorbar(z, DM_over_DH_exp, yerr=sigma_DM_over_DH, color ='blue', 
              ecolor='red', label='Données ± erreur')
     plt.xlabel('$z$')
