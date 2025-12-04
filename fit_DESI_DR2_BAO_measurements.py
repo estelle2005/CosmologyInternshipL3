@@ -1,16 +1,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import fonctions
-from scipy.stats import chisquare
 import pandas as pd
-
-
-from iminuit import minimize  # has same interface as scipy.optimize.minimize
-from iminuit import Minuit, describe
+from iminuit import Minuit
 from iminuit.cost import LeastSquares
-
-
-#pars = {'Omega_Lambda': Omega_Lambda, 'W_0': W_0_list[i], 'W_a': W_a_list[i], 'H_0': 73.2}
 
 r_d = 147.05 # Mpc today
 c = 3 * 10**5
