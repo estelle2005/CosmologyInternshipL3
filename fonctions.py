@@ -52,12 +52,13 @@ def growth_rate_f(z, pars):
     #-- Definition of \"time\" = ln(a)
     a = 10.**np.linspace(-2, a_z, 1000)  #de 10**-2 à a qui dépend de z
     ln_a = np.log(a)
-    z = 1/a - 1
     f = odeint(df_over_dlna, f0, ln_a, args=(pars,))
     return f
 
-def growth_factor_D(pars):
-    mettre le a_z comme au dessus
+def growth_factor_D(z, pars):
+    a_z = 1 / (1+z)
+    a = 10.**np.linspace(-2, a_z, 1000)  #de 10**-2 à a qui dépend de z
+    ln_a = np.log(a)
     D_init = 0.01   #a_init = 0.01 - comme si on mettait 'A_s', cad on normalise
     delta_lna = ln_a[1] - ln_a[0]
     term = growth_rate_f(pars) * delta_lna
