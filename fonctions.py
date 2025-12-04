@@ -8,9 +8,9 @@ from scipy.integrate import quad
 # $W(a) = W_0 + (1-a)W_a $
 
 #-- Definition of \"time\" = ln(a)
-a = 10.**np.linspace(-2, 0, 10000)  #de 10**-2 à 10**0
-ln_a = np.log(a)
-z = 1/a - 1
+#a = 10.**np.linspace(-2, 0, 10000)  #de 10**-2 à 10**0
+#ln_a = np.log(a)
+#z = 1/a - 1
 
 #pars = {'Omega_Lambda': Omega_Lambda, 'W_0': W_0_list[i], 'W_a': W_a_list[i]}  
 
@@ -21,19 +21,6 @@ def H(a, pars):
     H_0 = pars['H_0']
     Omega_m = 1 - Omega_Lambda
     return H_0 *np.sqrt(Omega_m * a**-3 + Omega_Lambda*a**(-3*(1 + W_0 + W_a))*np.exp(-3*W_a*(1-a)))
-"""
-def H(a, pars):
-    Omega_Lambda = pars['Omega_Lambda']
-    W_0 = pars['W_0']
-    W_a = pars['W_a']
-    Omega_m = 1 - Omega_Lambda
-    a = np.asarray(a)
-    term1 = Omega_m * a**-3
-    term2 = Omega_Lambda*a**(-3*(1 + W_0 + W_a))*np.exp(-3*W_a*(1-a))
-    H_0 = pars['H_0']
-    return H_0 * np.sqrt(term1 + term2)
-
-"""
 
 def H_prime(a, pars): #on définit un dictionnaire pour les paramètres
     Omega_Lambda = pars['Omega_Lambda']
@@ -59,12 +46,18 @@ def df_over_dlna(f, ln_a, pars):
     deriv = -f**2 - (2 + H_prime(a, pars)/H(a, pars))*f + 1.5*Omega_m_a(a, pars)
     return deriv
 
-def growth_rate_f(pars):
+def growth_rate_f(z, pars):
     f0 = 1 #condition initiale
+    a_z = 1 / (1+z)
+    #-- Definition of \"time\" = ln(a)
+    a = 10.**np.linspace(-2, a_z, 1000)  #de 10**-2 à a qui dépend de z
+    ln_a = np.log(a)
+    z = 1/a - 1
     f = odeint(df_over_dlna, f0, ln_a, args=(pars,))
     return f
 
 def growth_factor_D(pars):
+    mettre le a_z comme au dessus
     D_init = 0.01   #a_init = 0.01 - comme si on mettait 'A_s', cad on normalise
     delta_lna = ln_a[1] - ln_a[0]
     term = growth_rate_f(pars) * delta_lna
@@ -76,6 +69,8 @@ def growth_factor_D(pars):
 
 
 def plot_H_z_times_1plusz(): #derivée de a pour différentes valeurs de w_0 et w_a, Omega_Lambda fixé, en fonction de z
+    a = 10.**np.linspace(-2, 0, 10000)  #de 10**-2 à 10**0
+    z = 1/a - 1
     plt.figure()
     W_0_list = [-1, -0.8, -0.6, -0.4, -0.2]
     W_a_list = [0, -0.6, -1.2, -1.8, -2.4]
@@ -94,6 +89,7 @@ def plot_H_z_times_1plusz(): #derivée de a pour différentes valeurs de w_0 et 
     plt.show()
 
 def plot_D_over_a(): #D/a pour différentes valeurs de W et Omega_Lambda, en fonction de a
+    a = 10.**np.linspace(-2, 0, 10000)  #de 10**-2 à 10**0
     plt.figure()
     W_0_list = [-1, -1, -0.5, 0]
     W_a_list = [0, 0, 0, 0]
@@ -111,6 +107,8 @@ def plot_D_over_a(): #D/a pour différentes valeurs de W et Omega_Lambda, en fon
     plt.show()
 
 def plot_D(): #D pour différentes valeurs de w_0 et w_a à Omega_Lambda fixé, en fonction de z
+    a = 10.**np.linspace(-2, 0, 10000)  #de 10**-2 à 10**0
+    z = 1/a - 1
     plt.figure() # à vérifier
     W_0_list = [-1, -0.8, -0.6, -0.4, -0.2]
     W_a_list = [0, -0.6, -1.2, -1.8, -2.4]
@@ -129,6 +127,8 @@ def plot_D(): #D pour différentes valeurs de w_0 et w_a à Omega_Lambda fixé, 
     plt.show()
 
 def plot_f(): #f pour différentes valeurs de w_0 et w_a, en fonction de z, pour Omega_Lambda fixé
+    a = 10.**np.linspace(-2, 0, 10000)  #de 10**-2 à 10**0
+    z = 1/a - 1
     plt.figure()
     W_0_list = [-1, -0.8, -0.6, -0.4, -0.2]
     W_a_list = [0, -0.6, -1.2, -1.8, -2.4]
@@ -149,6 +149,8 @@ def plot_f(): #f pour différentes valeurs de w_0 et w_a, en fonction de z, pour
     plt.show()
 
 def plot_f_times_Dplus():
+    a = 10.**np.linspace(-2, 0, 10000)  #de 10**-2 à 10**0
+    z = 1/a - 1
     plt.figure()
     W_0_list = [-1, -0.8, -0.6, -0.4, -0.2]
     W_a_list = [0, -0.6, -1.2, -1.8, -2.4]
@@ -194,7 +196,7 @@ def khi(z, pars):
         return 1/H(a, pars)
     res, err = quad(invH, 0, z, pars)
     coeff = 3*10**5
-    return res * coeff
+    return res * coequadff
 
 def d_A(z, pars):
     a = 1 / (1+z)
