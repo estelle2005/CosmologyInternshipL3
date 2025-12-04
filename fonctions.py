@@ -4,7 +4,6 @@ from scipy.integrate import odeint
 from scipy.integrate import quad
 
 
-H_0 = 73.2
 
 # $W(a) = W_0 + (1-a)W_a $
 
@@ -19,6 +18,7 @@ z = 1/a - 1
     Omega_Lambda = pars['Omega_Lambda']
     W_0 = pars['W_0']
     W_a = pars['W_a']
+    H_0 = pars['H_0']
     Omega_m = 1 - Omega_Lambda
     return H_0 *np.sqrt(Omega_m * a**-3 + Omega_Lambda*a**(-3*(1 + W_0 + W_a))*np.exp(-3*W_a*(1-a)))
 """
@@ -30,13 +30,14 @@ def H(a, pars):
     a = np.asarray(a)
     term1 = Omega_m * a**-3
     term2 = Omega_Lambda*a**(-3*(1 + W_0 + W_a))*np.exp(-3*W_a*(1-a))
-    H_0 = 73.2
-    return H_0 * np.sqrt(term1 + term2 )
+    H_0 = pars['H_0']
+    return H_0 * np.sqrt(term1 + term2)
 
 def H_prime(a, pars): #on définit un dictionnaire pour les paramètres
     Omega_Lambda = pars['Omega_Lambda']
     W_0 = pars['W_0']
     W_a = pars['W_a']
+    H_0 = pars['H_0']
     Omega_m = 1 - Omega_Lambda
     u_prime = Omega_m * a**(-3) + (1 + W_0 + W_a + a)*Omega_Lambda* a**(-3*(1 + W_0 + W_a))*np.exp(-3*W_a*(1-a))
     H_prime = - H_0 **2 * 3/2 * u_prime / H(a, pars)
@@ -79,7 +80,7 @@ def plot_H_z_times_1plusz(): #derivée de a pour différentes valeurs de w_0 et 
     #Omega_m = 0.3
     Omega_Lambda = 0.7
     for i in range(len(W_a_list)):
-        pars = {'Omega_Lambda': Omega_Lambda, 'W_0': W_0_list[i], 'W_a': W_a_list[i]}  
+        pars = {'Omega_Lambda': Omega_Lambda, 'W_0': W_0_list[i], 'W_a': W_a_list[i], 'H_0':73.2}  
         plt.plot(z, H(a, pars) * a, 
             linestyle='-', color=f'C{i}', linewidth=2, label=f'$w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
     plt.xlabel(f'$z$')
@@ -96,7 +97,7 @@ def plot_D_over_a(): #D/a pour différentes valeurs de W et Omega_Lambda, en fon
     W_a_list = [0, 0, 0, 0]
     Omega_Lambda_list = [0.69, 0.72, 0.69, 0] 
     for i in range(len(Omega_Lambda_list)):
-        pars = {'Omega_Lambda': Omega_Lambda_list[i], 'W_0': W_0_list[i], 'W_a': W_a_list[i]}  
+        pars = {'Omega_Lambda': Omega_Lambda_list[i], 'W_0': W_0_list[i], 'W_a': W_a_list[i], 'H_0':73.2}  
         plt.plot(a, growth_factor_D(pars)/a, 
             linestyle='-', color=f'C{i}', linewidth=2, label=f'$W$ = {W_0_list[i]}; $\Omega_\Lambda$ = {Omega_Lambda_list[i]}')
     plt.xlabel('Scale factor a')
@@ -114,7 +115,7 @@ def plot_D(): #D pour différentes valeurs de w_0 et w_a à Omega_Lambda fixé, 
     #Omega_m = 0.3
     Omega_Lambda = 0.7
     for i in range(len(W_a_list)):
-        pars = {'Omega_Lambda': Omega_Lambda, 'W_0': W_0_list[i], 'W_a': W_a_list[i]}  
+        pars = {'Omega_Lambda': Omega_Lambda, 'W_0': W_0_list[i], 'W_a': W_a_list[i], 'H_0':73.2}  
         plt.plot(z, growth_factor_D(pars), 
             linestyle='-', color=f'C{i}', linewidth=2, label=f'$w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
     plt.xlabel(f'$z$')
@@ -132,7 +133,7 @@ def plot_f(): #f pour différentes valeurs de w_0 et w_a, en fonction de z, pour
     #Omega_m = 0.3
     Omega_Lambda = 0.7
     for i in range(len(W_a_list)):
-        pars = {'Omega_Lambda': Omega_Lambda, 'W_0': W_0_list[i], 'W_a': W_a_list[i]}
+        pars = {'Omega_Lambda': Omega_Lambda, 'W_0': W_0_list[i], 'W_a': W_a_list[i], 'H_0':73.2}
         f_solution = growth_rate_f(pars)
         f_values = f_solution[:,0]
         plt.plot(z, f_values, 
@@ -152,7 +153,7 @@ def plot_f_times_Dplus():
     #Omega_m = 0.3
     Omega_Lambda = 0.7
     for i in range(len(W_a_list)):
-        pars = {'Omega_Lambda': Omega_Lambda, 'W_0': W_0_list[i], 'W_a': W_a_list[i]}
+        pars = {'Omega_Lambda': Omega_Lambda, 'W_0': W_0_list[i], 'W_a': W_a_list[i], 'H_0':73.2}
         f_solution = growth_rate_f(pars)
         f_values = f_solution[:,0]
         plt.plot(z, f_values * growth_factor_D(pars), 
@@ -206,7 +207,7 @@ def plot_alldistances(): #toutes les distances sur le même graphique
     W_a_list = [0, -0.6, -1.2, -1.8, -2.4]
     Omega_m_list = [0.1, 0.3, 0.9]
     for i in range(len(Omega_m_list)):
-        pars = {'Omega_m': Omega_m_list[i], 'Omega_Lambda': 1 - Omega_m_list[i] - Omega_r, 'W_0': W_0_list[i], 'W_a': W_a_list[i]} 
+        pars = {'Omega_m': Omega_m_list[i], 'Omega_Lambda': 1 - Omega_m_list[i] - Omega_r, 'W_0': W_0_list[i], 'W_a': W_a_list[i], 'H_0':73.2} 
         khi_values = [khi(z_i, pars)for z_i in z]
         d_A_values = [d_A(z_i, pars)for z_i in z]
         d_L_values = [d_L(z_i, pars)for z_i in z]
@@ -229,7 +230,7 @@ def plot_comoving_distance(): #khi
     W_a_list = [0, -0.6, -1.2, -1.8, -2.4]
     Omega_m_list = [0.1, 0.3, 0.9]
     for i in range(len(Omega_m_list)):
-        pars = {'Omega_m': Omega_m_list[i], 'Omega_Lambda': 1 - Omega_m_list[i] - Omega_r, 'W_0': W_0_list[i], 'W_a': W_a_list[i]} 
+        pars = {'Omega_m': Omega_m_list[i], 'Omega_Lambda': 1 - Omega_m_list[i] - Omega_r, 'W_0': W_0_list[i], 'W_a': W_a_list[i], 'H_0':73.2} 
         khi_values = [khi(z_i, pars)for z_i in z]
         plt.plot(z, khi_values, 
             linestyle='-', color=f'C{i}', linewidth=2, label=f'$\chi$; $\Omega_m$ = {pars["Omega_m"]}; $\Omega_\lambda$ = {pars["Omega_Lambda"]}; $w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
@@ -246,7 +247,7 @@ def plot_angular_diameter_distance(): #d_A
     W_a_list = [0, -0.6, -1.2, -1.8, -2.4]
     Omega_m_list = [0.1, 0.3, 0.9]
     for i in range(len(Omega_m_list)):
-        pars = {'Omega_m': Omega_m_list[i], 'Omega_Lambda': 1 - Omega_m_list[i] - Omega_r, 'W_0': W_0_list[i], 'W_a': W_a_list[i]} 
+        pars = {'Omega_m': Omega_m_list[i], 'Omega_Lambda': 1 - Omega_m_list[i] - Omega_r, 'W_0': W_0_list[i], 'W_a': W_a_list[i], 'H_0':73.2} 
         d_A_values = [d_A(z_i, pars)for z_i in z]
         plt.plot(z, d_A_values, 
             linestyle='--', color=f'C{i}', linewidth=2, label=f'$d_A$; $\Omega_m$ = {pars["Omega_m"]}; $\Omega_\lambda$ = {pars["Omega_Lambda"]}; $w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
@@ -263,7 +264,7 @@ def plot_luminosity_distance(): #d_L
     W_a_list = [0, -0.6, -1.2, -1.8, -2.4]
     Omega_m_list = [0.1, 0.3, 0.9]
     for i in range(len(Omega_m_list)):
-        pars = {'Omega_m': Omega_m_list[i], 'Omega_Lambda': 1 - Omega_m_list[i] - Omega_r, 'W_0': W_0_list[i], 'W_a': W_a_list[i]} 
+        pars = {'Omega_m': Omega_m_list[i], 'Omega_Lambda': 1 - Omega_m_list[i] - Omega_r, 'W_0': W_0_list[i], 'W_a': W_a_list[i], 'H_0':73.2} 
         d_L_values = [d_L(z_i, pars)for z_i in z]
         plt.plot(z, d_L_values, 
             linestyle='-.', color=f'C{i}', linewidth=2, label=f'$d_L$; $\Omega_m$ = {pars["Omega_m"]}; $\Omega_\lambda$ = {pars["Omega_Lambda"]}; ; $w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
