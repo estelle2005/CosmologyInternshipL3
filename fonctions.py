@@ -14,7 +14,7 @@ z = 1/a - 1
 
 #pars = {'Omega_Lambda': Omega_Lambda, 'W_0': W_0_list[i], 'W_a': W_a_list[i]}  
 
-"""def H(a, pars):
+def H(a, pars):
     Omega_Lambda = pars['Omega_Lambda']
     W_0 = pars['W_0']
     W_a = pars['W_a']
@@ -32,6 +32,8 @@ def H(a, pars):
     term2 = Omega_Lambda*a**(-3*(1 + W_0 + W_a))*np.exp(-3*W_a*(1-a))
     H_0 = pars['H_0']
     return H_0 * np.sqrt(term1 + term2)
+
+"""
 
 def H_prime(a, pars): #on définit un dictionnaire pour les paramètres
     Omega_Lambda = pars['Omega_Lambda']
@@ -174,9 +176,9 @@ def plot_f_times_Dplus():
 #omega _ m doit être dans le dictionnaire
 
 Omega_r = 0.0001
-coeff= 3*10**3
 
 
+"""
 def H_sans_H0(z, pars): # on sort le H_0
     Omega_Lambda = pars['Omega_Lambda']
     Omega_m = pars['Omega_m']
@@ -185,11 +187,14 @@ def H_sans_H0(z, pars): # on sort le H_0
     a = 1/(1+z)
     hubble_rate = np.sqrt(Omega_m * a**-3 + Omega_r * a**-4 + Omega_Lambda*a**(-3*(1 + W_0 + W_a))*np.exp(-3*W_a*(1-a)))
     return hubble_rate
+"""
 
 def khi(z, pars):
     def invH(z_prime, pars):
-        return 1/H_sans_H0(z_prime, pars)
+        a = 1 / (1+z_prime)
+        return 1/H(a, pars)
     res, err = quad(invH, 0, z, pars)
+    coeff = 3*10**5
     return res * coeff
 
 def d_A(z, pars):
