@@ -85,10 +85,10 @@ def Dv_over_rd(z):
     return Dv / r_d
 
 def DM_over_DH(z):
+    a = 1 / (1+z)
     D_M = fonctions.d_A(z, pars) * (1+z)
     D_H = c / fonctions.H(a, pars)
     return D_M / D_H
-
 
 def chi_carré_Dv_over_rd():
     sum = 0
@@ -102,5 +102,19 @@ def chi_carré_DM_over_DH():
     for i in range(len(z)):
         sum = sum + (DM_over_DH_exp[i] - DM_over_DH(z[i]))/(sigma_DM_over_DH[i])**2
 
+
+def plot_Dv_over_rd_error_bar():
+    plt.figure()
+    plt.errorbar(z, DV_over_rd_exp, yerr=sigma_DV_over_rd, color='blue', 
+             ecolor='red', label='Données ± erreur')
+    plt.xlabel('$z$')
+    plt.ylabel(r'$D_V / r_d$')
+    plt.grid(True)
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+
+
+plot_Dv_over_rd_error_bar()
 
 pars = {'Omega_m': 0.3,'Omega_Lambda': 0.7,'W_0': -1, 'W_a': 0}
