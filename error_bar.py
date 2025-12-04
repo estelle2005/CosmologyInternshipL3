@@ -3,6 +3,10 @@ import fonctions
 from scipy.stats import chisquare
 import pandas as pd
 
+import iminuit
+from iminuit import minimize  # has same interface as scipy.optimize.minimize
+from iminuit import Minuit, describe
+from iminuit.cost import LeastSquares
 
 
 """H_values = fonctions.H(a,pars)
@@ -25,12 +29,53 @@ chi2, p = chisquare(observes, theoriques)
 print(f"Statistique Khi carré : {chi2:.4f}")
 print(f"p-value : {p:.4f}")"""
 
+'''def line(x, α, β):
+    return α + x * β
+
+
+# generate random toy data with random offsets in y
+rng = np.random.default_rng(1)
+data_x = np.linspace(0, 1, 10)
+data_yerr = 0.1  # could also be an array
+data_y = rng.normal(line(data_x, 1, 2), data_yerr)
+
+
+least_squares = LeastSquares(data_x, data_y, data_yerr, line)
+
+m = Minuit(least_squares, α=0, β=0)  # starting values for α and β
+
+m.migrad()  # finds minimum of least_squares function
+m.hesse()  # accurately computes uncertainties
+
+
+
+# draw data and fitted line
+plt.errorbar(data_x, data_y, data_yerr, fmt="ok", label="data")
+plt.plot(data_x, line(data_x, *m.values), label="fit")
+
+# display legend with some fit info
+fit_info = [
+    f"$\\chi^2$/$n_\\mathrm{{dof}}$ = {m.fval:.1f} / {m.ndof:.0f} = {m.fmin.reduced_chi2:.1f}",
+]
+for p, v, e in zip(m.parameters, m.values, m.errors):
+    fit_info.append(f"{p} = ${v:.3f} \\pm {e:.3f}$")
+
+plt.legend(title="\n".join(fit_info), frameon=False)
+plt.xlabel("x")
+plt.ylabel("y");
+
+'''
+
 r_d = 147.05 # Mpc today
 c = 3 * 10**8
 
 tableau = pd.read_csv('DESI_DR2_BAO_measurements.csv')
 
 z = tableau['z_eff']
+DV_over_rd_exp = tableau['DV_over_rd']
+sigma_DV_over_rd = tableau['DV_over_rd_err']
+DM_over_DH_exp = tableau['DM_over_DH']
+sigma_DM_over_DH = tableau['DM_over_DH_err']
 
 def Dv_over_rd(z):
     a = 1 / (1 + z)
@@ -45,10 +90,17 @@ def DM_over_DH(z):
     return D_M / D_H
 
 
-def chi_carré():
-    for z_i in z:
+def chi_carré_Dv_over_rd():
+    sum = 0
+    for i in range(len(z)):
+        sum = sum + (DV_over_rd_exp[i] - Dv_over_rd(z[i]))/(sigma_DV_over_rd[i])**2
+    return sum
 
-pars = {'Omega_m': ,'Omega_Lambda': ,'W_'}
 
-iminuit
-Least
+def chi_carré_DM_over_DH():
+    sum = 0
+    for i in range(len(z)):
+        sum = sum + (DM_over_DH_exp[i] - DM_over_DH(z[i]))/(sigma_DM_over_DH[i])**2
+
+
+pars = {'Omega_m': 0.3,'Omega_Lambda': 0.7,'W_0': -1, 'W_a': 0}
