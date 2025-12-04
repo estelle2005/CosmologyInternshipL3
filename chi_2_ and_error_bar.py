@@ -10,9 +10,6 @@ from iminuit import Minuit, describe
 from iminuit.cost import LeastSquares
 
 
-"""H_values = fonctions.H(a,pars)
-a = 10.**np.linspace(-2, 0, 10000)  #de 10**-2 à 10**0
-ln_a = np.log(a)"""
 #pars = {'Omega_Lambda': Omega_Lambda, 'W_0': W_0_list[i], 'W_a': W_a_list[i]}
 
 
@@ -27,7 +24,7 @@ print(f"Statistique Khi carré : {chi2:.4f}")
 print(f"p-value : {p:.4f}")"""
 
 r_d = 147.05 # Mpc today
-c = 3 * 10**8
+c = 3 * 10**5
 
 tableau = pd.read_csv('DESI_DR2_BAO_measurements.csv')
 tableau = tableau.sort_values('z_eff').reset_index(drop=True)
@@ -40,16 +37,27 @@ sigma_DM_over_DH = tableau['DM_over_DH_err']
  
 #pars = {'Omega_m': 0.3,'Omega_Lambda': 0.7,'W_0': -1, 'W_a': 0}
 
-def Dv_over_rd(z, pars):
-    a = 1 / (1 + z)
-    D_M = fonctions.d_A(z, pars) * (1+z)
-    D_H = c / fonctions.H(a, pars)
-    Dv = (z * D_M**2 * D_H)**(1/3)
-    return Dv / r_d
+def Dv_over_rd(z_val, pars):
+    a = 1 / (1 + z_val)
+    print(f"DEBUG: z={z_val}, a={a}, type(z_val)={type(z_val)}")
+    D_A = fonctions.d_A(z_val, pars)
+    print(f"DEBUG: D_A={D_A}, type={type(D_A)}")
+    D_M = D_A * (1+z_val)
+    print(f"DEBUG: D_M={D_M}")
+    H_val = fonctions.H(a, pars)
+    print(f"DEBUG: H={H_val}, type={type(H_val)}")
+    D_H = c / H_val
+    print(f"DEBUG: D_H={D_H}")
+    Dv = (z_val * D_M**2 * D_H)**(1/3)
+    print(f"DEBUG: Dv={Dv}")
+    result = Dv / r_d
+    print(f"DEBUG: result={result}")
+    return result
 
-def model_wrapper_Dv_over_rd(z, Omega_m, Omega_Lambda, W_0, W_a):
+
+def model_wrapper_Dv_over_rd(z_val, Omega_m, Omega_Lambda, W_0, W_a):
     pars = {'Omega_m': Omega_m,'Omega_Lambda': Omega_Lambda,'W_0': W_0, 'W_a': W_a}
-    return Dv_over_rd(z, pars)
+    return Dv_over_rd(z_val, pars)
 
 def iminuit_Dv_over_rd():
     cost = LeastSquares(z, DV_over_rd_exp, sigma_DV_over_rd, model_wrapper_Dv_over_rd)
@@ -57,8 +65,8 @@ def iminuit_Dv_over_rd():
     
     m.limits['Omega_m'] = (0.1, 1.0)
     m.limits['Omega_Lambda'] = (0.0, 1.0)
-    m.limits['W_0'] = (-1.0, 0.0)
-    m.limits['W_a'] = (-3.0, 0.0)
+    m.limits['W_0'] = (-2.0, 0.0)
+    m.limits['W_a'] = (-3.0, 2.0)
     
     m.migrad()  # finds minimum of least_squares function
     print("Résultat de l'ajustement:")
@@ -66,15 +74,17 @@ def iminuit_Dv_over_rd():
     print(f"$\Omega_\Lambda$= {m.values['Omega_Lambda']:.3f} ± {m.errors['Omega_Lambda']:.3f}")
     print(f"$w_0$ = {m.values['W_0']:.2f} ± {m.errors['W_0']:.2f}")
     print(f"$w_a$= {m.values['W_a']:.2f} ± {m.errors['W_a']:.2f}")
+    print(f"χ²      = {m.fval:.2f}")
     print(f"χ²/dof = {m.fval:.2f}/{m.ndof} = {m.fval/m.ndof:.2f}")
 
-    z_plot = np.linspace(min(z)-0.5, max(z)+0.5, 100)
+    z_plot = np.linspace(min(z)*0.9, max(z)*1.1, 200)
     pars_fit = {
         'Omega_m': m.values['Omega_m'],
         'Omega_Lambda': m.values['Omega_Lambda'],
         'W_0': m.values['W_0'],
         'W_a': m.values['W_a']}
-    DV_plot = np.array([Dv_over_rd(z, pars_fit) for z in z_plot])
+    
+    DV_plot = np.array([Dv_over_rd(z_val, pars_fit) for z_val in z_plot])
 
     plt.figure()
     plt.errorbar(z, DV_over_rd_exp, yerr=sigma_DV_over_rd, fmt='o', capsize=5,
@@ -86,6 +96,7 @@ def iminuit_Dv_over_rd():
     plt.legend()
     plt.grid(True, alpha=0.3)
     plt.show()
+    return m, pars_fit
 
 iminuit_Dv_over_rd()
 
