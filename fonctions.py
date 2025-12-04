@@ -177,7 +177,6 @@ def plot_f_times_Dplus():
 
 Omega_r = 0.0001
 
-
 """
 def H_sans_H0(z, pars): # on sort le H_0
     Omega_Lambda = pars['Omega_Lambda']
