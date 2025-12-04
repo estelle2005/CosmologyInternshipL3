@@ -15,12 +15,23 @@ z = 1/a - 1
 
 #pars = {'Omega_Lambda': Omega_Lambda, 'W_0': W_0_list[i], 'W_a': W_a_list[i]}  
 
-def H(a, pars):
+"""def H(a, pars):
     Omega_Lambda = pars['Omega_Lambda']
     W_0 = pars['W_0']
     W_a = pars['W_a']
     Omega_m = 1 - Omega_Lambda
     return H_0 *np.sqrt(Omega_m * a**-3 + Omega_Lambda*a**(-3*(1 + W_0 + W_a))*np.exp(-3*W_a*(1-a)))
+"""
+def H(a, pars):
+    Omega_Lambda = pars['Omega_Lambda']
+    W_0 = pars['W_0']
+    W_a = pars['W_a']
+    Omega_m = 1 - Omega_Lambda
+    a = np.asarray(a)
+    term1 = Omega_m * a**-3
+    term2 = Omega_Lambda*a**(-3*(1 + W_0 + W_a))*np.exp(-3*W_a*(1-a))
+    H_0 = 73.2
+    return H_0 * np.sqrt(term1 + term2 )
 
 def H_prime(a, pars): #on définit un dictionnaire pour les paramètres
     Omega_Lambda = pars['Omega_Lambda']
