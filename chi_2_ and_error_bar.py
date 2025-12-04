@@ -12,17 +12,6 @@ from iminuit.cost import LeastSquares
 
 #pars = {'Omega_Lambda': Omega_Lambda, 'W_0': W_0_list[i], 'W_a': W_a_list[i]}
 
-
-"""# Effectifs observés et théoriques
-observes = [16, 18, 22, 20, 24]
-theoriques = [20, 20, 20, 20, 20]
-
-# Test du khi carré d'adéquation
-chi2, p = chisquare(observes, theoriques)
-
-print(f"Statistique Khi carré : {chi2:.4f}")
-print(f"p-value : {p:.4f}")"""
-
 r_d = 147.05 # Mpc today
 c = 3 * 10**5
 
@@ -98,6 +87,7 @@ def iminuit_Dv_over_rd():
     plt.show()
     return m, pars_fit
 
+
 iminuit_Dv_over_rd()
 
 def DM_over_DH(z, pars):
@@ -110,16 +100,16 @@ def model_wrapper_DM_over_DH(z, Omega_m, Omega_Lambda, W_0, W_a):
     pars = {'Omega_m': Omega_m,'Omega_Lambda': Omega_Lambda,'W_0': W_0, 'W_a': W_a}
     return DM_over_DH(z, pars)
 
-def chi_carré_Dv_over_rd():
+def chi_carré_Dv_over_rd(pars):
     sum = 0
     for i in range(len(z)):
-        sum = sum + ((DV_over_rd_exp[i] - Dv_over_rd(z[i]))**2)/((sigma_DV_over_rd[i])**2)
+        sum += ((DV_over_rd_exp[i] - Dv_over_rd(z[i], pars))**2)/((sigma_DV_over_rd[i])**2)
     return sum
 
-def chi_carré_DM_over_DH():
+def chi_carré_DM_over_DH(pars):
     sum = 0
     for i in range(len(z)):
-        sum = sum + ((DM_over_DH_exp[i] - DM_over_DH(z[i]))**2)/((sigma_DM_over_DH[i])**2)
+        sum +=((DM_over_DH_exp[i] - DM_over_DH(z[i], pars))**2)/((sigma_DM_over_DH[i])**2)
     return sum
 
 def plot_Dv_over_rd_error_bar():
