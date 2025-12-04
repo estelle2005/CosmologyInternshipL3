@@ -61,13 +61,11 @@ def growth_factor_D(z, pars):
     ln_a = np.log(a)
     D_init = 0.01   #a_init = 0.01 - comme si on mettait 'A_s', cad on normalise
     delta_lna = ln_a[1] - ln_a[0]
-    term = growth_rate_f(pars) * delta_lna
+    term = growth_rate_f(z, pars) * delta_lna
     int_dlnD = np.cumsum(term)
     ln_D = int_dlnD + np.log(D_init)
     D = np.exp(ln_D)
     return D
-
-
 
 def plot_H_z_times_1plusz(): #derivée de a pour différentes valeurs de w_0 et w_a, Omega_Lambda fixé, en fonction de z
     a = 10.**np.linspace(-2, 0, 10000)  #de 10**-2 à 10**0
