@@ -70,6 +70,7 @@ r_d = 147.05 # Mpc today
 c = 3 * 10**8
 
 tableau = pd.read_csv('DESI_DR2_BAO_measurements.csv')
+tableau = tableau.sort_values('z_eff').reset_index(drop=True)
 
 z = tableau['z_eff']
 DV_over_rd_exp = tableau['DV_over_rd']
