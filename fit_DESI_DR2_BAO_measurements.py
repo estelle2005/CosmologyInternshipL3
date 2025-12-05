@@ -142,6 +142,7 @@ def chi_carré_DM_over_DH(pars):
         sum += ((DM_over_DH_exp[i] - DM_over_DH(z[i], pars))**2)/((sigma_DM_over_DH[i])**2)
     return sum"""
 
+#COURBE THEORIQUE AVEC SET DE PARAMÈTRES FIXES ET DONNEES EXP AVEC BARRES D'ERREURS
 def plot_Dv_over_rd_error_bar():
     plt.figure()
     pars = {'Omega_m': 0.3,'Omega_Lambda': 0.7,'W_0': -1, 'W_a': 0, 'H_0': 73.2}
@@ -173,9 +174,7 @@ def plot_DM_over_DH_error_bar():
     plt.show()
 
 
-
-# THEORIQUE
-
+# 2 GRAPHIQUES - THEORIQUE PARAMÈTRES FIXES - BARRES D'ERREURS
 def plot_Dv_over_rd_double_():
     fig, axs = plt.subplots(nrows=2, ncols=1)
     pars = {'Omega_m': 0.3,'Omega_Lambda': 0.7,'W_0': -1, 'W_a': 0, 'H_0': 73.2}
@@ -214,9 +213,8 @@ def plot_DM_over_DH_double_():
     axs[1].grid(True)
     plt.show()
 
-#AVEC FIT
+#2 GRAPHIQUES - AVEC FIT
 def plot_fit_Dv_over_rd_error_bar():
-    #IMINUIT
     cost = LeastSquares(z, DV_over_rd_exp, sigma_DV_over_rd, model_wrapper_Dv_over_rd)
     m = Minuit(cost, Omega_m=0.3, 
                #Omega_Lambda = 0.7,
@@ -246,7 +244,6 @@ def plot_fit_Dv_over_rd_error_bar():
         'H_0': m.values['H_0']}
     
     DV_plot = np.array([Dv_over_rd(z_val, pars_fit) for z_val in z_plot])
-    #FIN IMINUIT
 
     fig, axs = plt.subplots(nrows=2, ncols=1)
     axs[0].errorbar(z, DV_over_rd_exp, yerr=sigma_DV_over_rd, fmt='o', capsize=5,
@@ -302,8 +299,8 @@ def plot_fit_DM_over_DH_error_bar():
                 label='Données BAO', color='darkblue')
     axs[0].plot(z_plot, DM_plot, 'r-', linewidth=2,
             label=f'Fit: $\Omega_m$={m.values["Omega_m"]:.3f}, $\Omega_\Lambda$= {pars_fit["Omega_Lambda"]:.3f},$w_0$={m.values["W_0"]:.2f}, $w_a$={m.values["W_a"]:.2f}')
-    axs[0].xlabel('Redshift z')
-    axs[0].ylabel(r'$D_M / D_H$')
+    axs[0].set_xlabel('Redshift z')
+    axs[0].set_ylabel(r'$D_M / D_H$')
     axs[0].grid(True, alpha=0.3)
     f_residu = [DM_over_DH(z_i, pars_fit) for z_i in z]
     residu = ((DM_over_DH_exp - f_residu)/sigma_DM_over_DH)
@@ -316,7 +313,4 @@ def plot_fit_DM_over_DH_error_bar():
 
 
 
-
-
-
-
+plot_Dv_over_rd_double_()
