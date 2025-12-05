@@ -6,7 +6,7 @@ from iminuit import Minuit
 from iminuit.cost import LeastSquares
 
 r_d = 147.05 # Mpc today
-c = 3 * 10**5
+c = 3 * 10**5 # en km
 
 tableau = pd.read_csv('DESI_DR2_BAO_measurements.csv')
 tableau = tableau.sort_values('z_eff').reset_index(drop=True)
