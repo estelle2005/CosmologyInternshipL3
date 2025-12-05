@@ -76,22 +76,3 @@ def iminuit_fsigma8():
     return m, pars_fit
 
 iminuit_fsigma8()
-
-
-
-
-"""
-def plot_DM_over_DH_error_bar():
-    plt.figure()
-    z_model = np.linspace(min(z)*0.9, max(z)*1.1, 200)
-    f = [DM_over_DH(z_i, pars) for z_i in z_model]
-    plt.plot(z_model, f)
-    plt.errorbar(z, fsigma8_exp, yerr=fsigma8_err, color ='black', 
-             ecolor='red', fmt='o', label='Données ± erreur')
-    plt.xlabel('$z$')
-    plt.ylabel(r'$D_M / D_H$')
-    plt.grid(True)
-    plt.legend()
-    plt.tight_layout()
-    plt.show()
-    """
