@@ -5,6 +5,8 @@ import pandas as pd
 from iminuit import Minuit
 from iminuit.cost import LeastSquares
 
+#plt.ion()
+
 r_d = 147.05 # Mpc today
 c = 3 * 10**5 # en km
 
@@ -268,8 +270,8 @@ def plot_fit_Dv_over_rd_error_bar():
     axs[1].set_ylabel('Résidu normalisé')
     axs[1].grid(True)
     axs[1].legend()
-    plt.show()
     plt.savefig('/home/etudiant15/Documents/STAGE CPPM/Figures/Dv_over_rd_DESI_DR2_double.pdf', bbox_inches='tight')
+    plt.show()
     return m, pars_fit
 
 def plot_fit_DM_over_DH_error_bar():
@@ -321,9 +323,12 @@ def plot_fit_DM_over_DH_error_bar():
     axs[1].set_ylabel('Résidu normalisé')
     axs[1].grid(True)
     axs[1].legend()
-    plt.show()
     plt.savefig('/home/etudiant15/Documents/STAGE CPPM/Figures/DM_over_DH_DESI_DR2_double.pdf', bbox_inches='tight')
+    plt.show()
     return m, pars_fit
 
-#plot_fit_DM_over_DH_error_bar()
-plot_fit_Dv_over_rd_error_bar()
+plot_fit_DM_over_DH_error_bar()
+#plot_fit_Dv_over_rd_error_bar()
+
+
+KHI CARRE QUI SOMME 
