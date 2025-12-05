@@ -67,7 +67,7 @@ def iminuit_fsigma8():
     plt.errorbar(z, fsigma8_exp, yerr=sigma_fsigma8, fmt='o', capsize=5,
                 label='Données BAO', color='darkblue')
     plt.plot(z_plot, fsigma8_plot, 'r-', linewidth=2,
-            label=f'Fit: $\Omega_m$={m.values["Omega_m"]:.3f}, $\Omega_\Lambda$= {pars_fit["Omega_Lambda"]:.3f},$w_0$={m.values["W_0"]:.2f}, $w_a$={m.values["W_a"]:.2f}, $f_\sigma8$={pars_fit["sigma8"]:.9f}')
+            label=f'Fit: $\Omega_m$={m.values["Omega_m"]:.3f}, $\Omega_\Lambda$= {pars_fit["Omega_Lambda"]:.3f},$w_0$={m.values["W_0"]:.2f}, $w_a$={m.values["W_a"]:.2f}, $f_\sigma8$={pars_fit["sigma8"]}')
     plt.xlabel('Redshift z')
     plt.ylabel(r'$f_{\sigma8}$')
     plt.legend()
