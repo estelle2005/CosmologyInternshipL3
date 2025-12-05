@@ -1,10 +1,14 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import logging
 from scipy.integrate import odeint
 from scipy.integrate import quad
 
 
-
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
 # $W(a) = W_0 + (1-a)W_a $
 
 #-- Definition of \"time\" = ln(a)
@@ -47,28 +51,34 @@ def df_over_dlna(f, ln_a, pars):
     return deriv
 
 def growth_rate_f(z, pars):
-    f0 = 1 #condition initiale
-    a_z = 1 / (1+z)
-    #-- Definition of \"time\" = ln(a)
-    a = 10.**np.linspace(-2, a_z, 1000)  #de 10**-2 à a qui dépend de z
-    ln_a = np.log(a)
-    f = odeint(df_over_dlna, f0, ln_a, args=(pars,))
-    return f
+    if hasattr(z, "__len__") == True : 
+        result = np.array([growth_rate_f(z_i, pars) for z_i in z])
+    else :
+        f0 = 1 #condition initiale
+        a_z = 1 / (1+z)
+        #-- Definition of \"time\" = ln(a)
+        a = 10.**np.linspace(-2, np.log10(a_z), 1000)  #de 10**-2 à a_z qui dépend de z
+        ln_a = np.log(a)
+        result = odeint(df_over_dlna, f0, ln_a, args=(pars,))[-1, 0]
+    return result
 
 def growth_factor_D(z, pars):
-    a_z = 1 / (1+z)
-    a = 10.**np.linspace(-2, a_z, 1000)  #de 10**-2 à a qui dépend de z
-    ln_a = np.log(a)
-    D_init = 0.01   #a_init = 0.01 - comme si on mettait 'A_s', cad on normalise
-    delta_lna = ln_a[1] - ln_a[0]
-    term = growth_rate_f(z, pars) * delta_lna
-    int_dlnD = np.cumsum(term)
-    ln_D = int_dlnD + np.log(D_init)
-    D = np.exp(ln_D)
-    return D
+    if hasattr(z, "__len__") == True : 
+        result = np.array([growth_factor_D(z_i, pars) for z_i in z])
+    else:
+        a_z = 1 / (1+z)
+        a = 10.**np.linspace(-2, np.log10(a_z), 1000)  #de 10**-2 à a qui dépend de z
+        ln_a = np.log(a)
+        D_init = 0.01   #a_init = 0.01 - comme si on mettait 'A_s', cad on normalise
+        delta_lna = ln_a[1] - ln_a[0]
+        term = growth_rate_f(z, pars) * delta_lna
+        int_dlnD = np.cumsum(term)
+        ln_D = int_dlnD + np.log(D_init)
+        result = np.exp(ln_D)[-1]
+    return result
 
 def plot_H_z_times_1plusz(): #derivée de a pour différentes valeurs de w_0 et w_a, Omega_Lambda fixé, en fonction de z
-    a = 10.**np.linspace(-2, 0, 10000)  #de 10**-2 à 10**0
+    a = 10.**np.linspace(-2, 0, 100)  #de 10**-2 à 10**0
     z = 1/a - 1
     plt.figure()
     W_0_list = [-1, -0.8, -0.6, -0.4, -0.2]
@@ -88,14 +98,14 @@ def plot_H_z_times_1plusz(): #derivée de a pour différentes valeurs de w_0 et 
     plt.show()
 
 def plot_D_over_a(): #D/a pour différentes valeurs de W et Omega_Lambda, en fonction de a
-    a = 10.**np.linspace(-2, 0, 10000)  #de 10**-2 à 10**0
+    a = 10.**np.linspace(-2, 0, 1000)  #de 10**-2 à 10**0
     plt.figure()
     W_0_list = [-1, -1, -0.5, 0]
     W_a_list = [0, 0, 0, 0]
     Omega_Lambda_list = [0.69, 0.72, 0.69, 0] 
     for i in range(len(Omega_Lambda_list)):
         pars = {'Omega_Lambda': Omega_Lambda_list[i], 'W_0': W_0_list[i], 'W_a': W_a_list[i], 'H_0':73.2}  
-        plt.plot(a, growth_factor_D(pars)/a, 
+        plt.plot(a, growth_factor_D(z, pars)/a, 
             linestyle='-', color=f'C{i}', linewidth=2, label=f'$W$ = {W_0_list[i]}; $\Omega_\Lambda$ = {Omega_Lambda_list[i]}')
     plt.xlabel('Scale factor a')
     plt.ylabel('Growth factor divided by a')
@@ -106,7 +116,7 @@ def plot_D_over_a(): #D/a pour différentes valeurs de W et Omega_Lambda, en fon
     plt.show()
 
 def plot_D(): #D pour différentes valeurs de w_0 et w_a à Omega_Lambda fixé, en fonction de z
-    a = 10.**np.linspace(-2, 0, 10000)  #de 10**-2 à 10**0
+    a = 10.**np.linspace(-2, 0, 100)  #de 10**-2 à 10**0
     z = 1/a - 1
     plt.figure() # à vérifier
     W_0_list = [-1, -0.8, -0.6, -0.4, -0.2]
@@ -114,8 +124,9 @@ def plot_D(): #D pour différentes valeurs de w_0 et w_a à Omega_Lambda fixé, 
     #Omega_m = 0.3
     Omega_Lambda = 0.7
     for i in range(len(W_a_list)):
+        logging.info(f"boucle D, {i}")
         pars = {'Omega_Lambda': Omega_Lambda, 'W_0': W_0_list[i], 'W_a': W_a_list[i], 'H_0':73.2}  
-        plt.plot(z, growth_factor_D(pars), 
+        plt.plot(z, growth_factor_D(z, pars), 
             linestyle='-', color=f'C{i}', linewidth=2, label=f'$w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
     plt.xlabel(f'$z$')
     plt.ylabel(f'$D_+(z)$')
@@ -126,7 +137,7 @@ def plot_D(): #D pour différentes valeurs de w_0 et w_a à Omega_Lambda fixé, 
     plt.show()
 
 def plot_f(): #f pour différentes valeurs de w_0 et w_a, en fonction de z, pour Omega_Lambda fixé
-    a = 10.**np.linspace(-2, 0, 10000)  #de 10**-2 à 10**0
+    a = 10.**np.linspace(-2, 0, 100)  #de 10**-2 à 10**0
     z = 1/a - 1
     plt.figure()
     W_0_list = [-1, -0.8, -0.6, -0.4, -0.2]
@@ -135,10 +146,13 @@ def plot_f(): #f pour différentes valeurs de w_0 et w_a, en fonction de z, pour
     Omega_Lambda = 0.7
     for i in range(len(W_a_list)):
         pars = {'Omega_Lambda': Omega_Lambda, 'W_0': W_0_list[i], 'W_a': W_a_list[i], 'H_0':73.2}
-        f_solution = growth_rate_f(pars)
-        f_values = f_solution[:,0]
-        plt.plot(z, f_values, 
-            linestyle='-', color=f'C{i}', linewidth=2, label=f'$w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
+        f_solution = growth_rate_f(z, pars)
+        #f_values = f_solution[:,0]
+        plt.plot(z, f_solution, 
+                 'o',
+                linestyle='-', color=f'C{i}', 
+                #linewidth=2,
+                label=f'$w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
     plt.xlabel(f'$z$')
     plt.ylabel(f'$f(z)$')
     plt.xscale('log')
@@ -146,6 +160,8 @@ def plot_f(): #f pour différentes valeurs de w_0 et w_a, en fonction de z, pour
     plt.legend()
     plt.tight_layout()
     plt.show()
+
+
 
 def plot_f_times_Dplus():
     a = 10.**np.linspace(-2, 0, 10000)  #de 10**-2 à 10**0
@@ -157,7 +173,7 @@ def plot_f_times_Dplus():
     Omega_Lambda = 0.7
     for i in range(len(W_a_list)):
         pars = {'Omega_Lambda': Omega_Lambda, 'W_0': W_0_list[i], 'W_a': W_a_list[i], 'H_0':73.2}
-        f_solution = growth_rate_f(pars)
+        f_solution = growth_rate_f(z, pars)
         f_values = f_solution[:,0]
         plt.plot(z, f_values * growth_factor_D(pars), 
             linestyle='-', color=f'C{i}', linewidth=2, label=f'$w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
@@ -195,7 +211,7 @@ def khi(z, pars):
         return 1/H(a, pars)
     res, err = quad(invH, 0, z, pars)
     coeff = 3*10**5
-    return res * coequadff
+    return res * coeff
 
 def d_A(z, pars):
     a = 1 / (1+z)
@@ -208,6 +224,8 @@ def d_L(z, pars):
 
 def plot_alldistances(): #toutes les distances sur le même graphique
     plt.figure()
+    a = 10.**np.linspace(-2, 0, 100)  #de 10**-2 à 10**0
+    z = 1/a - 1
     W_0_list = [-1, -0.8, -0.6, -0.4, -0.2]
     W_a_list = [0, -0.6, -1.2, -1.8, -2.4]
     Omega_m_list = [0.1, 0.3, 0.9]
@@ -231,6 +249,8 @@ def plot_alldistances(): #toutes les distances sur le même graphique
 
 def plot_comoving_distance(): #khi
     plt.figure()
+    a = 10.**np.linspace(-2, 0, 100)  #de 10**-2 à 10**0
+    z = 1/a - 1
     W_0_list = [-1, -0.8, -0.6, -0.4, -0.2]
     W_a_list = [0, -0.6, -1.2, -1.8, -2.4]
     Omega_m_list = [0.1, 0.3, 0.9]
@@ -248,6 +268,8 @@ def plot_comoving_distance(): #khi
 
 def plot_angular_diameter_distance(): #d_A
     plt.figure()
+    a = 10.**np.linspace(-2, 0, 100)  #de 10**-2 à 10**0
+    z = 1/a - 1
     W_0_list = [-1, -0.8, -0.6, -0.4, -0.2]
     W_a_list = [0, -0.6, -1.2, -1.8, -2.4]
     Omega_m_list = [0.1, 0.3, 0.9]
@@ -265,6 +287,8 @@ def plot_angular_diameter_distance(): #d_A
 
 def plot_luminosity_distance(): #d_L
     plt.figure()
+    a = 10.**np.linspace(-2, 0, 1000)  #de 10**-2 à 10**0
+    z = 1/a - 1
     W_0_list = [-1, -0.8, -0.6, -0.4, -0.2]
     W_a_list = [0, -0.6, -1.2, -1.8, -2.4]
     Omega_m_list = [0.1, 0.3, 0.9]
