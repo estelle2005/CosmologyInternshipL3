@@ -232,7 +232,7 @@ def plot_D_over_a(): #D/a pour différentes valeurs de W et Omega_Lambda, en fon
     plt.show()
 
 def plot_f_times_Dplus():
-    a = 10.**np.linspace(-2, 0, 10000)  #de 10**-2 à 10**0
+    a = 10.**np.linspace(-2, 0, 1000)  #de 10**-2 à 10**0
     z = 1/a - 1
     plt.figure()
     W_0_list = [-1, -0.8, -0.6, -0.4, -0.2]
@@ -242,8 +242,8 @@ def plot_f_times_Dplus():
     for i in range(len(W_a_list)):
         pars = {'Omega_Lambda': Omega_Lambda, 'W_0': W_0_list[i], 'W_a': W_a_list[i], 'H_0':73.2}
         f_solution = growth_rate_f(z, pars)
-        f_values = f_solution[:,0]
-        plt.plot(z, f_values * growth_factor_D(pars), 
+        #f_values = f_solution[:,0]
+        plt.plot(z, f_solution * growth_factor_D(z, pars), 
             linestyle='-', color=f'C{i}', linewidth=2, label=f'$w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
     plt.xlabel('$z$')
     plt.ylabel(r'$f \times D_+(z)$')
@@ -252,6 +252,7 @@ def plot_f_times_Dplus():
     plt.legend()
     plt.tight_layout()
     plt.show()
+
 
 
 #DISTANCES
