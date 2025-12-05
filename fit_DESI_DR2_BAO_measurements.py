@@ -284,8 +284,6 @@ def plot_fit_DM_over_DH_error_bar():
     #m.limits['Omega_Lambda'] = (0.0, 1.0)
     m.limits['W_0'] = (-2.0, 0.0)
     m.limits['W_a'] = (-3.0, 2.0)
-    """ m.fixed['W_0'] = True
-    m.fixed['W_a'] = True"""
     m.fixed['H_0'] = True
 
     m.migrad()  # finds minimum of least_squares function
