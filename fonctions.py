@@ -224,7 +224,7 @@ def d_L(z, pars):
 
 def plot_alldistances(): #toutes les distances sur le même graphique
     plt.figure()
-    a = 10.**np.linspace(-2, 0, 100)  #de 10**-2 à 10**0
+    a = 10.**np.linspace(-2, 0, 1000)  #de 10**-2 à 10**0
     z = 1/a - 1
     W_0_list = [-1, -0.8, -0.6, -0.4, -0.2]
     W_a_list = [0, -0.6, -1.2, -1.8, -2.4]
@@ -249,7 +249,7 @@ def plot_alldistances(): #toutes les distances sur le même graphique
 
 def plot_comoving_distance(): #khi
     plt.figure()
-    a = 10.**np.linspace(-2, 0, 100)  #de 10**-2 à 10**0
+    a = 10.**np.linspace(-2, 0, 1000)  #de 10**-2 à 10**0
     z = 1/a - 1
     W_0_list = [-1, -0.8, -0.6, -0.4, -0.2]
     W_a_list = [0, -0.6, -1.2, -1.8, -2.4]
@@ -268,7 +268,7 @@ def plot_comoving_distance(): #khi
 
 def plot_angular_diameter_distance(): #d_A
     plt.figure()
-    a = 10.**np.linspace(-2, 0, 100)  #de 10**-2 à 10**0
+    a = 10.**np.linspace(-2, 0, 1000)  #de 10**-2 à 10**0
     z = 1/a - 1
     W_0_list = [-1, -0.8, -0.6, -0.4, -0.2]
     W_a_list = [0, -0.6, -1.2, -1.8, -2.4]
