@@ -175,7 +175,7 @@ def plot_DM_over_DH_error_bar():
 
 
 # 2 GRAPHIQUES - THEORIQUE PARAMÈTRES FIXES - BARRES D'ERREURS
-def plot_Dv_over_rd_double_():
+def plot_Dv_over_rd_th():
     fig, axs = plt.subplots(nrows=2, ncols=1)
     pars = {'Omega_m': 0.3,'Omega_Lambda': 0.7,'W_0': -1, 'W_a': 0, 'H_0': 73.2}
     z_model = np.linspace(min(z)*0.9, max(z)*1.1, 200)
@@ -194,7 +194,7 @@ def plot_Dv_over_rd_double_():
     axs[1].grid(True)   
     plt.show()
 
-def plot_DM_over_DH_double_():
+def plot_DM_over_DH_th():
     fig, axs = plt.subplots(nrows=2, ncols=1)
     pars = {'Omega_m': 0.3,'Omega_Lambda': 0.7,'W_0': -1, 'W_a': 0, 'H_0': 73.2}
     z_model = np.linspace(min(z)*0.9, max(z)*1.1, 200)
@@ -313,4 +313,4 @@ def plot_fit_DM_over_DH_error_bar():
 
 
 
-plot_Dv_over_rd_double_()
+plot_fit_Dv_over_rd_error_bar()
