@@ -52,15 +52,14 @@ def df_over_dlna(f, ln_a, pars):
 
 def growth_rate_f(z, pars):
     if hasattr(z, "__len__") == True : 
-        result = np.array([growth_rate_f(z_i, pars) for z_i in z])
+        f = np.array([growth_rate_f(z_i, pars) for z_i in z])
     else :
-        f0 = 1 #condition initiale
         a_z = 1 / (1+z)
-        #-- Definition of \"time\" = ln(a)
         a = 10.**np.linspace(-2, np.log10(a_z), 1000)  #de 10**-2 à a_z qui dépend de z
         ln_a = np.log(a)
-        result = odeint(df_over_dlna, f0, ln_a, args=(pars,))[-1, 0]
-    return result
+        f0 = 1 #condition initiale
+        f = odeint(df_over_dlna, f0, ln_a, args=(pars,))[-1, 0]
+    return f
 
 def growth_factor_D(z, pars):
     if hasattr(z, "__len__") == True : 
@@ -74,7 +73,7 @@ def growth_factor_D(z, pars):
         term = growth_rate_f(z, pars) * delta_lna
         int_dlnD = np.cumsum(term)
         ln_D = int_dlnD + np.log(D_init)
-        result = np.exp(ln_D)[-1]
+        result = np.exp(ln_D)
     return result
 
 def plot_H_z_times_1plusz(): #derivée de a pour différentes valeurs de w_0 et w_a, Omega_Lambda fixé, en fonction de z
@@ -124,9 +123,10 @@ def plot_D(): #D pour différentes valeurs de w_0 et w_a à Omega_Lambda fixé, 
     #Omega_m = 0.3
     Omega_Lambda = 0.7
     for i in range(len(W_a_list)):
-        logging.info(f"boucle D, {i}")
+        #logging.info(f"boucle D, {i}")
         pars = {'Omega_Lambda': Omega_Lambda, 'W_0': W_0_list[i], 'W_a': W_a_list[i], 'H_0':73.2}  
-        plt.plot(z, growth_factor_D(z, pars), 
+        D_solution = growth_factor_D(z, pars)
+        plt.plot(z, D_solution, 
             linestyle='-', color=f'C{i}', linewidth=2, label=f'$w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
     plt.xlabel(f'$z$')
     plt.ylabel(f'$D_+(z)$')
@@ -135,6 +135,8 @@ def plot_D(): #D pour différentes valeurs de w_0 et w_a à Omega_Lambda fixé, 
     plt.legend()
     plt.tight_layout()
     plt.show()
+
+plot_D()
 
 def plot_f(): #f pour différentes valeurs de w_0 et w_a, en fonction de z, pour Omega_Lambda fixé
     a = 10.**np.linspace(-2, 0, 100)  #de 10**-2 à 10**0
@@ -184,7 +186,6 @@ def plot_f_times_Dplus():
     plt.legend()
     plt.tight_layout()
     plt.show()
-
 
 
 #DISTANCES
