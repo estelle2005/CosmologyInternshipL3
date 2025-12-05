@@ -215,6 +215,7 @@ def plot_H_z_times_1plusz(): #derivée de a pour différentes valeurs de w_0 et 
 
 def plot_D_over_a(): #D/a pour différentes valeurs de W et Omega_Lambda, en fonction de a
     a = 10.**np.linspace(-2, 0, 1000)  #de 10**-2 à 10**0
+    z = 1/a - 1
     plt.figure()
     W_0_list = [-1, -1, -0.5, 0]
     W_a_list = [0, 0, 0, 0]
@@ -252,7 +253,6 @@ def plot_f_times_Dplus():
     plt.legend()
     plt.tight_layout()
     plt.show()
-
 
 
 #DISTANCES
