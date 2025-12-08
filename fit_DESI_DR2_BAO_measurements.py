@@ -75,6 +75,7 @@ def iminuit_Dv_over_rd():
     plt.ylabel(r'$D_V / r_d$')
     plt.legend()
     plt.grid(True, alpha=0.3)
+    plt.savefig('/home/etudiant15/Documents/STAGE CPPM/Figures/Dv_over_rd_DESI_DR2.pdf', bbox_inches='tight')
     plt.show()
     return m, pars_fit
 
@@ -90,7 +91,7 @@ def model_wrapper_DM_over_DH(z_val, Omega_m, W_0, W_a, H_0):
     return np.array([DM_over_DH(z_i, pars) for z_i in z_val])
 
 def iminuit_DM_over_DH():
-    cost = LeastSquares(z, DM_over_DH_exp, sigma_DM_over_DH, model_wrapper_DM_over_DH)
+    cost = LeastSquares(z_DM, DM_over_DH_exp, sigma_DM_over_DH, model_wrapper_DM_over_DH)
     m = Minuit(cost, Omega_m=0.3, 
                #Omega_Lambda = 0.7,
                W_0 = -1, W_a = 0, H_0 = 73.2) 
@@ -129,6 +130,7 @@ def iminuit_DM_over_DH():
     plt.ylabel(r'$D_M / D_H$')
     plt.legend()
     plt.grid(True, alpha=0.3)
+    plt.savefig('/home/etudiant15/Documents/STAGE CPPM/Figures/DM_over_DH_DESI_DR2.pdf', bbox_inches='tight')
     plt.show()
     return m, pars_fit
 #ON PEUT METTRE LES PARAMÈTRES DU FIT DANS UN DICTIONNAIRE ET FAIRE UN PLOT SÉPARÉ
@@ -176,6 +178,7 @@ def plot_DM_over_DH_error_bar():
     plt.tight_layout()
     plt.show()
 
+"""pas un fit - paramètres de base"""
 
 # 2 GRAPHIQUES - THEORIQUE PARAMÈTRES FIXES - BARRES D'ERREURS
 def plot_Dv_over_rd_th():
@@ -192,7 +195,7 @@ def plot_Dv_over_rd_th():
     axs[0].legend()
     f_residu = [Dv_over_rd(z_i, pars) for z_i in z_Dv]
     residu = ((DV_over_rd_exp - f_residu)/sigma_DV_over_rd)
-    axs[1].errorbar(z_Dv, residu, yerr=1, color='black', ecolor='red', fmt='o', label='Données ± erreur')
+    axs[1].errorbar(z_Dv, residu, yerr=1, color='black', ecolor='red', fmt='o', label='BAO')
     axs[1].set_xlabel('$z$')
     axs[1].set_ylabel('Normalized residue')
     axs[1].grid(True)  
@@ -213,13 +216,14 @@ def plot_DM_over_DH_th():
     axs[0].legend()
     f_residu = [DM_over_DH(z_i, pars) for z_i in z_DM]
     residu = ((DM_over_DH_exp - f_residu)/sigma_DM_over_DH)
-    axs[1].errorbar(z_DM, residu, yerr=1, color='black', ecolor='red', fmt='o', label='Données ± erreur')
+    axs[1].errorbar(z_DM, residu, yerr=1, color='black', ecolor='red', fmt='o', label='BAO')
     axs[1].set_xlabel('$z$')
     axs[1].set_ylabel('Normalized residue')
     axs[1].grid(True)
     axs[1].legend()
     plt.show()
 
+"""pas un fit - paramètres de base"""
 
 #2 GRAPHIQUES - AVEC FIT
 def plot_fit_Dv_over_rd_error_bar():
@@ -325,8 +329,6 @@ def plot_fit_DM_over_DH_error_bar():
     plt.show()
     return m, pars_fit
 
-#plot_fit_DM_over_DH_error_bar()
-#plot_fit_Dv_over_rd_error_bar()
 
 
 #KHI CARRE QUI SOMME 
@@ -401,12 +403,6 @@ def plot_fit_combined():
     plt.show()
     return m, pars_fit
 
-
-plot_fit_DM_over_DH_error_bar()
-plot_Dv_over_rd_error_bar()
-plot_fit_Dv_over_rd_error_bar()
-plot_DM_over_DH_error_bar()
-plot_fit_combined()
 
 """f_residu = [DM_over_DH(z_i, pars_fit) for z_i in z_DM]
     residu = ((DM_over_DH_exp - f_residu)/sigma_DM_over_DH)
