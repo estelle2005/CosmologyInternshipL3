@@ -132,5 +132,3 @@ def plot_fit_fsigma8_error_bar():
     plt.savefig('/home/etudiant15/Documents/STAGE CPPM/Figures/f_sigma8_DESI_DR1_double.pdf', bbox_inches='tight')
     plt.show()
     return m, pars_fit
-
-plot_fit_fsigma8_error_bar()
