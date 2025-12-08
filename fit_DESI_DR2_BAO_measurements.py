@@ -493,10 +493,3 @@ def plot_fit_combined_error_bar():
     plt.show()
     return m, pars_fit
 
-
-plot_fit_combined()
-plot_fit_combined_error_bar()
-plot_fit_DM_over_DH_error_bar()
-plot_fit_Dv_over_rd_error_bar()
-iminuit_DM_over_DH()
-iminuit_Dv_over_rd()
