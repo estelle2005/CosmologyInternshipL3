@@ -48,6 +48,7 @@ def iminuit_fsigma8():
     #print(f"$\Omega_\Lambda$= {m.values['Omega_Lambda']:.3f} ± {m.errors['Omega_Lambda']:.3f}")
     print(f"$w_0$ = {m.values['W_0']:.2f} ± {m.errors['W_0']:.2f}")
     print(f"$w_a$= {m.values['W_a']:.2f} ± {m.errors['W_a']:.2f}")
+    print(f"$H_0$= {m.values['H_0']:.2f} ± {m.errors['H_0']:.2f}")
     print(f"$f_(\sigma 8)$ = {m.values['sigma8']:.2f} ± {m.errors['sigma8']:.2f}")
     print(f"χ²      = {m.fval:.2f}")
     print(f"χ²/dof = {m.fval:.2f}/{m.ndof} = {m.fval/m.ndof:.2f}")
@@ -131,5 +132,3 @@ def plot_fit_fsigma8_error_bar():
     plt.savefig('/home/etudiant15/Documents/STAGE CPPM/Figures/f_sigma8_DESI_DR1_double.pdf', bbox_inches='tight')
     plt.show()
     return m, pars_fit
-
-iminuit_fsigma8()
