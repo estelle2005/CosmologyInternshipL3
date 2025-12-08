@@ -201,7 +201,7 @@ def plot_Dv_over_rd_th():
     axs[1].set_ylabel('Normalized residue')
     axs[1].grid(True)  
     axs[1].legend() 
-    plt.show()
+    #plt.show()
 
 def plot_DM_over_DH_th():
     fig, axs = plt.subplots(nrows=2, ncols=1)
@@ -222,7 +222,7 @@ def plot_DM_over_DH_th():
     axs[1].set_ylabel('Normalized residue')
     axs[1].grid(True)
     axs[1].legend()
-    plt.show()
+    #plt.show()
 
 """pas un fit - paramètres de base"""
 
@@ -513,10 +513,8 @@ def plot_fit_combined_error_bar():
     lower_a = merrors_a.lower
     upper_a = merrors_a.upper
     inf_a = - lower_a
+    #ON PEUT AUSSI FAIRE UN DICTIONNAIRE AVEC LES ERREURS DEDANS
 
     print(f'BAO & ${m.values["Omega_m"]:.3f}^{{+{upper_m:.3f}}}_{{{- inf_m:.3f}}}$ & ${m.values["W_0"]:.3f}^{{+{upper_0:.3f}}}_{{{- inf_0:.3f}}}$ & {m.values["W_a"]:.3f}^{{+{upper_a:.3f}}}_{{{- inf_a:.3f}}}$ & -')
     return m, pars_fit
 
-plot_fit_combined_error_bar()
-
-#parametres avec err
