@@ -65,7 +65,7 @@ def iminuit_fsigma8():
 
     plt.figure()
     plt.errorbar(z, fsigma8_exp, yerr=sigma_fsigma8, fmt='o', capsize=5,
-                label='BAO Data', color='darkblue')
+                label='RSD Data', color='darkblue')
     plt.plot(z_plot, fsigma8_plot, 'r-', linewidth=2,
             label=f'Fit: $\Omega_m$={m.values["Omega_m"]:.3f}, $\Omega_\Lambda$= {pars_fit["Omega_Lambda"]:.3f},$w_0$={m.values["W_0"]:.2f}, $w_a$={m.values["W_a"]:.2f}, $f_\sigma8$={pars_fit["sigma8"]}')
     plt.xlabel('Redshift z')
@@ -113,7 +113,7 @@ def plot_fit_fsigma8_error_bar():
 
     fig, axs = plt.subplots(nrows=2, ncols=1, figsize= (8,6))
     axs[0].errorbar(z, fsigma8_exp, yerr=sigma_fsigma8, fmt='o', capsize=5,
-                label='BAO Data', color='darkblue')
+                label='RSD Data', color='darkblue')
     axs[0].plot(z_plot, fsigma8_plot, 'r-', linewidth=2,
             label=f'Fit: $\Omega_m$={m.values["Omega_m"]:.3f}, $\Omega_\Lambda$= {pars_fit["Omega_Lambda"]:.3f},$w_0$={m.values["W_0"]:.2f}, $w_a$={m.values["W_a"]:.2f}, $f_\sigma8$={pars_fit["sigma8"]}')
     axs[0].set_ylabel(r'$f_{\sigma8}$')
@@ -121,7 +121,7 @@ def plot_fit_fsigma8_error_bar():
     axs[0].grid(True, alpha=0.3)
     f_residu = [fsigma8_th(z_i, pars_fit) for z_i in z]
     residu = ((fsigma8_exp - f_residu)/sigma_fsigma8)
-    axs[1].errorbar(z, residu, yerr=1, color='black', ecolor='red', fmt='o', label='BAO Data')
+    axs[1].errorbar(z, residu, yerr=1, color='black', ecolor='red', fmt='o', label='RSD Data')
     axs[1].set_xlabel('$z$')
     axs[1].set_ylabel('Normalized residue')
     axs[1].grid(True)
