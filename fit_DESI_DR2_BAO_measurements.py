@@ -269,7 +269,7 @@ def plot_fit_Dv_over_rd_error_bar():
     axs[0].legend()
     f_residu = [Dv_over_rd(z_i, pars_fit) for z_i in z_Dv]
     residu = ((DV_over_rd_exp - f_residu)/sigma_DV_over_rd)
-    axs[1].errorbar(z_Dv, residu, yerr=1, color='black', ecolor='red', fmt='o', label='BAO')
+    axs[1].errorbar(z_Dv, residu, yerr=1, color='black', ecolor='red', fmt='o', label='BAO Data')
     axs[1].set_xlabel('$z$')
     axs[1].set_ylabel('Normalized residue')
     axs[1].grid(True)
@@ -320,7 +320,7 @@ def plot_fit_DM_over_DH_error_bar():
     axs[0].legend()
     f_residu = [DM_over_DH(z_i, pars_fit) for z_i in z_DM]
     residu = ((DM_over_DH_exp - f_residu)/sigma_DM_over_DH)
-    axs[1].errorbar(z_DM, residu, yerr=1, color='black', ecolor='red', fmt='o', label='Données ± erreur')
+    axs[1].errorbar(z_DM, residu, yerr=1, color='black', ecolor='red', fmt='o', label='BAO Data')
     axs[1].set_xlabel('$z$')
     axs[1].set_ylabel('Normalized residue')
     axs[1].grid(True)
@@ -402,6 +402,16 @@ def plot_fit_combined():
     plt.savefig('/home/etudiant15/Documents/STAGE CPPM/Figures/chi_combined_DESI_DR2.pdf', bbox_inches='tight')
     plt.show()
     return m, pars_fit
+
+plot_Dv_over_rd_error_bar()
+plot_DM_over_DH_error_bar()
+plot_DM_over_DH_th()
+plot_Dv_over_rd_th()
+plot_fit_combined()
+plot_fit_DM_over_DH_error_bar()
+plot_fit_Dv_over_rd_error_bar()
+iminuit_DM_over_DH()
+iminuit_Dv_over_rd()
 
 
 """f_residu = [DM_over_DH(z_i, pars_fit) for z_i in z_DM]
