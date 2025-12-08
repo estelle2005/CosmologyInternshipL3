@@ -48,6 +48,7 @@ def iminuit_Dv_over_rd():
     m.fixed['H_0'] = True
 
     m.migrad()  # finds minimum of least_squares function
+    m.minos()
     print("Résultat de l'ajustement:")
     print(f"$\Omega_m$ = {m.values['Omega_m']:.3f} ± {m.errors['Omega_m']:.3f}")
     #print(f"$\Omega_\Lambda$= {m.values['Omega_Lambda']:.3f} ± {m.errors['Omega_Lambda']:.3f}")
@@ -79,7 +80,6 @@ def iminuit_Dv_over_rd():
     plt.show()
     return m, pars_fit
 
-
 def DM_over_DH(z_val, pars):
     a = 1 / (1+z_val)
     D_M = fonctions.d_A(z_val, pars) * (1+z_val)
@@ -103,6 +103,7 @@ def iminuit_DM_over_DH():
     m.fixed['H_0'] = True
 
     m.migrad()  # finds minimum of least_squares function
+    m.minos()
     print("Résultat de l'ajustement:")
     print(f"$\Omega_m$ = {m.values['Omega_m']:.3f} ± {m.errors['Omega_m']:.3f}")
     #print(f"$\Omega_\Lambda$= {m.values['Omega_Lambda']:.3f} ± {m.errors['Omega_Lambda']:.3f}")
@@ -239,6 +240,7 @@ def plot_fit_Dv_over_rd_error_bar():
     m.fixed['H_0'] = True
 
     m.migrad()  # finds minimum of least_squares function
+    m.minos()
     print(m)
     print("Résultat de l'ajustement:")
     print(f"$\Omega_m$ = {m.values['Omega_m']:.3f} ± {m.errors['Omega_m']:.3f}")
@@ -291,6 +293,7 @@ def plot_fit_DM_over_DH_error_bar():
     m.fixed['H_0'] = True
 
     m.migrad()  # finds minimum of least_squares function
+    m.minos()
     print(m)
     print("Résultat de l'ajustement:")
     print(f"$\Omega_m$ = {m.values['Omega_m']:.3f} ± {m.errors['Omega_m']:.3f}")
@@ -349,7 +352,7 @@ def plot_fit_combined():
     m.fixed['H_0'] = True
 
     m.migrad()  # finds minimum of least_squares function
-
+    m.minos()
     print(m)
     print("Résultat de l'ajustement:")
     print(f"$\Omega_m$ = {m.values['Omega_m']:.3f} ± {m.errors['Omega_m']:.3f}")
@@ -418,7 +421,8 @@ def plot_fit_combined_error_bar():
     m.limits['W_a'] = (-3.0, 2.0)
     m.fixed['H_0'] = True
 
-    m.migrad()  # finds minimum of least_squares function
+    m.migrad() # finds minimum of least_squares function
+    m.minos() 
 
     print(m)
     print("Résultat de l'ajustement:")
@@ -490,4 +494,9 @@ def plot_fit_combined_error_bar():
     return m, pars_fit
 
 
+plot_fit_combined()
 plot_fit_combined_error_bar()
+plot_fit_DM_over_DH_error_bar()
+plot_fit_Dv_over_rd_error_bar()
+iminuit_DM_over_DH()
+iminuit_Dv_over_rd()
