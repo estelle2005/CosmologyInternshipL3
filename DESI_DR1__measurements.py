@@ -42,6 +42,7 @@ def iminuit_fsigma8():
     m.limits['sigma8'] = (0.6, 1.0)
 
     m.migrad()  # finds minimum of least_squares function
+    m.minos()
     print("Résultat de l'ajustement:")
     print(f"$\Omega_m$ = {m.values['Omega_m']:.3f} ± {m.errors['Omega_m']:.3f}")
     #print(f"$\Omega_\Lambda$= {m.values['Omega_Lambda']:.3f} ± {m.errors['Omega_Lambda']:.3f}")
@@ -90,6 +91,7 @@ def plot_fit_fsigma8_error_bar():
     m.limits['sigma8'] = (0.6, 1.0)
 
     m.migrad()  # finds minimum of least_squares function
+    m.minos()
     print("Résultat de l'ajustement:")
     print(f"$\Omega_m$ = {m.values['Omega_m']:.3f} ± {m.errors['Omega_m']:.3f}")
     #print(f"$\Omega_\Lambda$= {m.values['Omega_Lambda']:.3f} ± {m.errors['Omega_Lambda']:.3f}")
@@ -130,5 +132,4 @@ def plot_fit_fsigma8_error_bar():
     plt.show()
     return m, pars_fit
 
-plot_fit_fsigma8_error_bar()
 iminuit_fsigma8()
