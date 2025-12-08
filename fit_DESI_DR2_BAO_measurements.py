@@ -271,7 +271,7 @@ def plot_fit_Dv_over_rd_error_bar():
     axs[0].legend()
     f_residu = [Dv_over_rd(z_i, pars_fit) for z_i in z_Dv]
     residu = ((DV_over_rd_exp - f_residu)/sigma_DV_over_rd)
-    axs[1].errorbar(z_Dv, residu, yerr=1, color='black', ecolor='red', fmt='o', label='BAO Data')
+    axs[1].errorbar(z_Dv, residu, yerr=1, color='black', ecolor='red', fmt='o', capsize=5, label='BAO Data')
     axs[1].set_xlabel('$z$')
     axs[1].set_ylabel('Normalized residue')
     axs[1].grid(True)
@@ -323,7 +323,7 @@ def plot_fit_DM_over_DH_error_bar():
     axs[0].legend()
     f_residu = [DM_over_DH(z_i, pars_fit) for z_i in z_DM]
     residu = ((DM_over_DH_exp - f_residu)/sigma_DM_over_DH)
-    axs[1].errorbar(z_DM, residu, yerr=1, color='black', ecolor='red', fmt='o', label='BAO Data')
+    axs[1].errorbar(z_DM, residu, yerr=1, color='black', ecolor='red', fmt='o', capsize=5, label='BAO Data')
     axs[1].set_xlabel('$z$')
     axs[1].set_ylabel('Normalized residue')
     axs[1].grid(True)
@@ -464,7 +464,7 @@ def plot_fit_combined_error_bar():
 
     f_residu_DM = [DM_over_DH(z_i, pars_fit) for z_i in z_DM]
     residu = ((DM_over_DH_exp - f_residu_DM)/sigma_DM_over_DH)
-    axs[1].errorbar(z_DM, residu, yerr=1, color='black', ecolor='red', fmt='o', label='BAO Data')
+    axs[1].errorbar(z_DM, residu, yerr=1, color='black', ecolor='red', fmt='o', capsize=5, label='BAO Data')
     axs[1].set_xlabel('$z$')
     axs[1].set_ylabel('Normalized residue')
     axs[1].grid(True)
@@ -483,7 +483,7 @@ def plot_fit_combined_error_bar():
 
     f_residu_DV = [Dv_over_rd(z_i, pars_fit) for z_i in z_Dv]
     residu = ((DV_over_rd_exp - f_residu_DV)/sigma_DV_over_rd)
-    axs[3].errorbar(z_Dv, residu, yerr=1, color='black', ecolor='red', fmt='o', label='BAO Data')
+    axs[3].errorbar(z_Dv, residu, yerr=1, color='black', ecolor='red', fmt='o', capsize=5, label='BAO Data')
     axs[3].set_xlabel('$z$')
     axs[3].set_ylabel('Normalized residue')
     axs[3].grid(True)
@@ -491,5 +491,32 @@ def plot_fit_combined_error_bar():
 
     plt.savefig('/home/etudiant15/Documents/STAGE CPPM/Figures/chi_combined_DESI_DR2_error_bar.pdf', bbox_inches='tight')
     plt.show()
+
+    """parameters = [
+        pars_fit['Omega_m'],
+        pars_fit['W_0'],
+        pars_fit['W_a']]
+    for i in range(len(parameters)):
+        print(m.params[i]('merror'))"""
+    
+    merrors_m = m.merrors["Omega_m"]
+    lower_m = merrors_m.lower
+    upper_m = merrors_m.upper
+    inf_m = - lower_m
+
+    merrors_0 = m.merrors["W_0"]
+    lower_0 = merrors_0.lower
+    upper_0 = merrors_0.upper
+    inf_0 = - lower_0
+
+    merrors_a = m.merrors["W_a"]
+    lower_a = merrors_a.lower
+    upper_a = merrors_a.upper
+    inf_a = - lower_a
+
+    print(f'BAO & ${m.values["Omega_m"]:.3f}^{{+{upper_m:.3f}}}_{{{- inf_m:.3f}}}$ & ${m.values["W_0"]:.3f}^{{+{upper_0:.3f}}}_{{{- inf_0:.3f}}}$ & {m.values["W_a"]:.3f}^{{+{upper_a:.3f}}}_{{{- inf_a:.3f}}}$ & -')
     return m, pars_fit
 
+plot_fit_combined_error_bar()
+
+#parametres avec err
