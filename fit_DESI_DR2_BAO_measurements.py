@@ -304,7 +304,7 @@ def plot_fit_DM_over_DH_error_bar():
     m.limits['W_0'] = (-2.0, 0.0)
     m.limits['W_a'] = (-3.0, 2.0)
     m.fixed['H_0'] = True
-    m.limits['H_0xr_d'] = (5000, 20000)
+    m.fixed['H_0xr_d'] = True
 
     m.migrad()  # finds minimum of least_squares function
     m.minos()
@@ -349,7 +349,6 @@ def plot_fit_DM_over_DH_error_bar():
     plt.show()
     return m, pars_fit
 
-plot_fit_DM_over_DH_error_bar()
 
 #KHI CARRE QUI SOMME 
 
@@ -558,6 +557,3 @@ def plot_fit_combined_error_bar():
 
     print(f'BAO & ${m.values["Omega_m"]:.3f}^{{+{upper_m:.3f}}}_{{{- inf_m:.3f}}}$ & ${m.values["W_0"]:.3f}^{{+{upper_0:.3f}}}_{{{- inf_0:.3f}}}$ & ${m.values["W_a"]:.3f}^{{+{upper_a:.3f}}}_{{{- inf_a:.3f}}}$ & - & ${m.values["H_0xr_d"]:.3f}^{{+{upper_H:.3f}}}_{{{- inf_H:.3f}}}$')
     return m, pars_fit
-
-#plot_fit_combined()
-#plot_fit_combined_error_bar()
