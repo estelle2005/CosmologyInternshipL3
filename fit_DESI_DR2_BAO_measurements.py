@@ -91,8 +91,8 @@ def DM_over_DH(z_val, pars):
     D_H = c / fonctions.H(a, pars)
     return D_M / D_H
 
-def model_wrapper_DM_over_DH(z_val, Omega_m, W_0, W_a, H_0):
-    pars = {'Omega_m': Omega_m,'Omega_Lambda': 1 - Omega_m,'W_0': W_0, 'W_a': W_a, 'H_0': H_0}
+def model_wrapper_DM_over_DH(z_val, Omega_m, W_0, W_a, H_0, H_0xr_d):
+    pars = {'Omega_m': Omega_m,'Omega_Lambda': 1 - Omega_m,'W_0': W_0, 'W_a': W_a, 'H_0': H_0, 'H_0xr_d': H_0xr_d}
     return np.array([DM_over_DH(z_i, pars) for z_i in z_val])
 
 def iminuit_DM_over_DH():
@@ -295,7 +295,7 @@ def plot_fit_Dv_over_rd_error_bar():
 
 def plot_fit_DM_over_DH_error_bar():
     cost = LeastSquares(z_DM, DM_over_DH_exp, sigma_DM_over_DH, model_wrapper_DM_over_DH)
-    m = Minuit(cost, Omega_m=0.3, 
+    m = Minuit(cost, Omega_m=0.3,
                #Omega_Lambda = 0.7,
                W_0 = -1, W_a = 0, H_0 = 73.2, H_0xr_d = 10764.06) 
     
@@ -559,5 +559,5 @@ def plot_fit_combined_error_bar():
     print(f'BAO & ${m.values["Omega_m"]:.3f}^{{+{upper_m:.3f}}}_{{{- inf_m:.3f}}}$ & ${m.values["W_0"]:.3f}^{{+{upper_0:.3f}}}_{{{- inf_0:.3f}}}$ & ${m.values["W_a"]:.3f}^{{+{upper_a:.3f}}}_{{{- inf_a:.3f}}}$ & - & ${m.values["H_0xr_d"]:.3f}^{{+{upper_H:.3f}}}_{{{- inf_H:.3f}}}$')
     return m, pars_fit
 
-plot_fit_combined()
-plot_fit_combined_error_bar()
+#plot_fit_combined()
+#plot_fit_combined_error_bar()
