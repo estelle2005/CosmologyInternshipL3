@@ -19,28 +19,28 @@ logging.basicConfig(
 #pars = {'Omega_Lambda': Omega_Lambda, 'W_0': W_0_list[i], 'W_a': W_a_list[i]}  
 
 def H(a, pars):
-    Omega_Lambda = pars['Omega_Lambda']
+    Omega_m = pars['Omega_m']
     W_0 = pars['W_0']
     W_a = pars['W_a']
     H_0 = pars['H_0']
-    Omega_m = 1 - Omega_Lambda
+    Omega_Lambda = 1 - Omega_m
     return H_0 *np.sqrt(Omega_m * a**-3 + Omega_Lambda*a**(-3*(1 + W_0 + W_a))*np.exp(-3*W_a*(1-a)))
 
 def H_prime(a, pars): #on définit un dictionnaire pour les paramètres
-    Omega_Lambda = pars['Omega_Lambda']
+    Omega_m = pars['Omega_m']
     W_0 = pars['W_0']
     W_a = pars['W_a']
     H_0 = pars['H_0']
-    Omega_m = 1 - Omega_Lambda
+    Omega_Lambda = 1 - Omega_m
     u_prime = Omega_m * a**(-3) + (1 + W_0 + W_a + a)*Omega_Lambda* a**(-3*(1 + W_0 + W_a))*np.exp(-3*W_a*(1-a))
     H_prime = - H_0 **2 * 3/2 * u_prime / H(a, pars)
     return H_prime
 
 def Omega_m_a(a, pars):
-    Omega_Lambda = pars['Omega_Lambda']
+    Omega_m = pars['Omega_m']
     W_0 = pars['W_0']
     W_a = pars['W_a']
-    Omega_m = 1 - Omega_Lambda
+    Omega_Lambda = 1 - Omega_m
     return Omega_m / (Omega_m + Omega_Lambda * a ** (-3*(W_0 + W_a)) * np.exp(-3*W_a*(1-a)))
 
 def df_over_dlna(f, ln_a, pars):
