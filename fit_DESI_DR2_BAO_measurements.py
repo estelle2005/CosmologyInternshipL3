@@ -415,14 +415,26 @@ def plot_fit_combined_error_bar():
                #Omega_Lambda = 0.7,
                W_0 = -1, W_a = 0, H_0 = 73.2) 
     
+   
     m.limits['Omega_m'] = (0.1, 1.0)
     #m.limits['Omega_Lambda'] = (0.0, 1.0)
-    m.limits['W_0'] = (-2.0, 0.0)
+    m.limits['W_0'] = (-3.0, 1.0)
     m.limits['W_a'] = (-3.0, 2.0)
     m.fixed['H_0'] = True
 
+    
+    """#ON FIXE W_a et H_0 n'est plus fixe
+    m.limits['Omega_m'] = (0.1, 1.0)
+    #m.limits['Omega_Lambda'] = (0.0, 1.0)
+    m.limits['W_0'] = (-3.0, 1.0)
+    #m.limits['W_a'] = (-3.0, 2.0)
+    m.fixed['W_a'] = True
+    m.fixed['H_0'] = False
+    m.limits['H_0']= (50, 150)"""
+
     m.migrad() # finds minimum of least_squares function
     m.minos() 
+    m.draw_mncontour("Omega_m", "W_0", cl=(0.683, 0.954, 0.997), size=300)
 
     print(m)
     print("Résultat de l'ajustement:")
@@ -515,6 +527,6 @@ def plot_fit_combined_error_bar():
     inf_a = - lower_a
     #ON PEUT AUSSI FAIRE UN DICTIONNAIRE AVEC LES ERREURS DEDANS
 
-    print(f'BAO & ${m.values["Omega_m"]:.3f}^{{+{upper_m:.3f}}}_{{{- inf_m:.3f}}}$ & ${m.values["W_0"]:.3f}^{{+{upper_0:.3f}}}_{{{- inf_0:.3f}}}$ & {m.values["W_a"]:.3f}^{{+{upper_a:.3f}}}_{{{- inf_a:.3f}}}$ & -')
+    print(f'BAO & ${m.values["Omega_m"]:.3f}^{{+{upper_m:.3f}}}_{{{- inf_m:.3f}}}$ & ${m.values["W_0"]:.3f}^{{+{upper_0:.3f}}}_{{{- inf_0:.3f}}}$ & ${m.values["W_a"]:.3f}^{{+{upper_a:.3f}}}_{{{- inf_a:.3f}}}$ & -')
     return m, pars_fit
 
