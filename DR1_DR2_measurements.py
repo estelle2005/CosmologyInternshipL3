@@ -28,7 +28,7 @@ z = tableau_DR1['z_eff'].to_numpy()
 fsigma8_exp = tableau_DR1['fsigma8'].to_numpy()
 sigma_fsigma8 = tableau_DR1['fsigma8_err'].to_numpy()
 
-
+#H_0 fixé
 """def plot_fit_DR1_DR2():
     cost_f = LeastSquares(z, fsigma8_exp, sigma_fsigma8, DR1.model_wrapper_fsigma8) 
     cost_DM = LeastSquares(z_DM, DM_over_DH_exp, sigma_DM_over_DH, DR2.model_wrapper_DM_over_DH)
@@ -118,7 +118,7 @@ sigma_fsigma8 = tableau_DR1['fsigma8_err'].to_numpy()
     plt.show()
     return m, pars_fit"""
 
-
+#variable H_0 r_d
 def plot_fit_DR1_DR2():
     cost_f = LeastSquares(z, fsigma8_exp, sigma_fsigma8, DR1.model_wrapper_fsigma8) 
     cost_DM = LeastSquares(z_DM, DM_over_DH_exp, sigma_DM_over_DH, DR2.model_wrapper_DM_over_DH)
@@ -126,7 +126,7 @@ def plot_fit_DR1_DR2():
     combined_cost = cost_f + cost_DM + cost_Dv
     m = Minuit(combined_cost, Omega_m=0.3, 
                #Omega_Lambda = 0.7,
-               W_0 = -1, W_a = 0, H_0 = 73.2, sigma8 = 0.8) 
+               W_0 = -1, W_a = 0, H_0 = 73.2, sigma8 = 0.8, H_0xr_d = 10764.06) 
     
     m.limits['Omega_m'] = (0.1, 1.0)
     #m.limits['Omega_Lambda'] = (0.0, 1.0)
@@ -134,10 +134,12 @@ def plot_fit_DR1_DR2():
     m.limits['W_a'] = (-3.0, 2.0)
     m.fixed['H_0'] = True
     m.limits['sigma8'] = (0.6, 1.0)
+    m.limits['H_0xr_d'] = (5000, 20000)
 
 
     m.migrad()  # finds minimum of least_squares function
     m.minos()
+    m.draw_mncontour("W_0", "W_a", cl=(0.683, 0.954, 0.997), size=300)
     print(m)
     print("Résultat de l'ajustement:")
     print(f"$\Omega_m$ = {m.values['Omega_m']:.3f} ± {m.errors['Omega_m']:.3f}")
@@ -145,6 +147,7 @@ def plot_fit_DR1_DR2():
     print(f"$w_0$ = {m.values['W_0']:.2f} ± {m.errors['W_0']:.2f}")
     print(f"$w_a$= {m.values['W_a']:.2f} ± {m.errors['W_a']:.2f}")
     print(f"$H_0$= {m.values['H_0']:.2f} ± {m.errors['H_0']:.2f}")
+    print(f"$H_0xr_d$= {m.values['H_0xr_d']:.2f} ± {m.errors['H_0xr_d']:.2f}")
     print(f"$f_(\sigma 8)$ = {m.values['sigma8']:.2f} ± {m.errors['sigma8']:.2f}")
     print(f"χ²      = {m.fval:.2f}")
     print(f"χ²/dof = {m.fval:.2f}/{m.ndof} = {m.fval/m.ndof:.2f}")
@@ -155,20 +158,21 @@ def plot_fit_DR1_DR2():
         'W_0': m.values['W_0'],
         'W_a': m.values['W_a'],
         'H_0': m.values['H_0'],
-        'sigma8': m.values['sigma8']
+        'sigma8': m.values['sigma8'],
+        'H_0xr_d': m.values['H_0xr_d']
         }
     
-    chi2_f = np.sum(((fsigma8_exp - DR1.model_wrapper_fsigma8(z, *m.values)) / sigma_fsigma8)**2)       
+    """chi2_f = np.sum(((fsigma8_exp - DR1.fsigma8_th(z, m.values)) / sigma_fsigma8)**2)       
     chi2_DM = np.sum(((DM_over_DH_exp - DR2.model_wrapper_DM_over_DH(z_DM, m.values['Omega_m'],
-        m.values['W_0'], m.values['W_a'], m.values['H_0'])) / sigma_DM_over_DH)**2)
+        m.values['W_0'], m.values['W_a'], m.values['H_0'], m.values['H_0xr_d'])) / sigma_DM_over_DH)**2)
     chi2_DV = np.sum(((DV_over_rd_exp - DR2.model_wrapper_Dv_over_rd(z_Dv, m.values['Omega_m'],
-        m.values['W_0'], m.values['W_a'], m.values['H_0'])) / sigma_DV_over_rd)**2)
+        m.values['W_0'], m.values['W_a'], m.values['H_0'], m.values['H_0xr_d'])) / sigma_DV_over_rd)**2)
 
     print(f"\nDétail des χ²:")
     print(f"  χ²_fsigma8 = {chi2_f:.2f}")
     print(f"  χ²_DM/DH = {chi2_DM:.2f}")
     print(f"  χ²_DV/rd = {chi2_DV:.2f}")
-    print(f"  Somme vérifiée = {chi2_DM + chi2_DV:.2f}")
+    print(f"  Somme vérifiée = {chi2_DM + chi2_DV:.2f}")"""
 
     fig, axs = plt.subplots(nrows=3, ncols=1, figsize= (8,8))
 
@@ -200,7 +204,8 @@ def plot_fit_DR1_DR2():
                   f'$\Omega_\Lambda={pars_fit["Omega_Lambda"]:.3f}$,\n'
                   f'$w_0={m.values["W_0"]:.2f}$, '
                   f'$w_a={m.values["W_a"]:.2f}$, '
-                  f'$\sigma_8={pars_fit["sigma8"]:.2f}$')
+                  f'$\sigma_8={pars_fit["sigma8"]:.2f}$, '
+                  f'$H_0r_d={pars_fit["H_0xr_d"]:.2f}$')
     
     fig.text(0.5, 0.98, param_text, 
              ha='center', va='top', fontsize=11,
@@ -230,7 +235,12 @@ def plot_fit_DR1_DR2():
     upper_sigma = merrors_sigma
     inf_sigma = - lower_sigma
 
-    print(f'BAO+RSD & ${m.values["Omega_m"]:.3f}^{{+{upper_m:.3f}}}_{{{- inf_m:.3f}}}$ & ${m.values["W_0"]:.3f}^{{+{upper_0:.3f}}}_{{{- inf_0:.3f}}}$ & ${m.values["W_a"]:.3f}^{{+{upper_a:.3f}}}_{{{- inf_a:.3f}}}$ & ${m.values["sigma8"]:.3f}^{{+{upper_sigma:.3f}}}_{{{inf_sigma:.3f}}}$')
+    merrors_H = m.merrors["H_0xr_d"]
+    lower_H = merrors_H.lower
+    upper_H = merrors_H.upper
+    inf_H = - lower_H
+
+    print(f'BAO+RSD & ${m.values["Omega_m"]:.3f}^{{+{upper_m:.3f}}}_{{{- inf_m:.3f}}}$ & ${m.values["W_0"]:.3f}^{{+{upper_0:.3f}}}_{{{- inf_0:.3f}}}$ & ${m.values["W_a"]:.3f}^{{+{upper_a:.3f}}}_{{{- inf_a:.3f}}}$ & ${m.values["sigma8"]:.3f}^{{+{upper_sigma:.3f}}}_{{{inf_sigma:.3f}}}$ & ${m.values["H_0xr_d"]:.3f}^{{+{upper_H:.3f}}}_{{{- inf_H:.3f}}}$')
     return m, pars_fit
 
 plot_fit_DR1_DR2()
