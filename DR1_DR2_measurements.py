@@ -266,12 +266,12 @@ def plot_fit_DR1_DR2_noPV():
     m.limits['W_a'] = (-3.0, 2.0)
     m.fixed['H_0'] = True
     m.limits['sigma8'] = (0.6, 1.0)
-    m.limits['H_0xr_d'] = (5000, 20000)
+    m.limits['H_0xr_d'] = (3000, 30000)
 
 
     m.migrad()
     m.minos()
-    m.draw_mncontour("W_0", "W_a", cl=(0.683, 0.954, 0.997), size=100)
+    m.draw_mncontour("W_0", "W_a", cl=(0.683, 0.954,), size=100)
     print(m)
     print("Résultat de l'ajustement:")
     print(f"$\Omega_m$ = {m.values['Omega_m']:.3f} ± {m.errors['Omega_m']:.3f}")
