@@ -130,16 +130,16 @@ def plot_fit_DR1_DR2():
     
     m.limits['Omega_m'] = (0.1, 1.0)
     #m.limits['Omega_Lambda'] = (0.0, 1.0)
-    m.limits['W_0'] = (-2.0, 0.0)
+    m.limits['W_0'] = (-3.0, 1.0)
     m.limits['W_a'] = (-3.0, 2.0)
     m.fixed['H_0'] = True
     m.limits['sigma8'] = (0.6, 1.0)
     m.limits['H_0xr_d'] = (5000, 20000)
 
 
-    m.migrad()  # finds minimum of least_squares function
+    m.migrad()
     m.minos()
-    m.draw_mncontour("W_0", "W_a", cl=(0.683, 0.954, 0.997), size=300)
+    #m.draw_mncontour("W_0", "W_a", cl=(0.683, 0.954, 0.997), size=100)
     print(m)
     print("Résultat de l'ajustement:")
     print(f"$\Omega_m$ = {m.values['Omega_m']:.3f} ± {m.errors['Omega_m']:.3f}")
