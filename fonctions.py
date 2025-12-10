@@ -26,13 +26,13 @@ def H(a, pars):
     Omega_Lambda = 1 - Omega_m
     return H_0 *np.sqrt(Omega_m * a**-3 + Omega_Lambda*a**(-3*(1 + W_0 + W_a))*np.exp(-3*W_a*(1-a)))
 
-def H_prime(a, pars): #on définit un dictionnaire pour les paramètres
+def H_prime(a, pars):
     Omega_m = pars['Omega_m']
     W_0 = pars['W_0']
     W_a = pars['W_a']
     H_0 = pars['H_0']
     Omega_Lambda = 1 - Omega_m
-    u_prime = Omega_m * a**(-3) + (1 + W_0 + W_a + a)*Omega_Lambda* a**(-3*(1 + W_0 + W_a))*np.exp(-3*W_a*(1-a))
+    u_prime = Omega_m * a**(-3) + (1 + W_0 + W_a - W_a*a)*Omega_Lambda* a**(-3*(1 + W_0 + W_a))*np.exp(-3*W_a*(1-a))
     H_prime = - H_0 **2 * 3/2 * u_prime / H(a, pars)
     return H_prime
 
@@ -47,7 +47,7 @@ def df_over_dlna(f, ln_a, pars):
     #f' = df/dlna
     a = np.exp(ln_a)
     #f' = - f² - \left( 2 + \frac{H\prime}{H} \right) f + \frac{3}{2}\Omega_m(a, w_a, w_0) 
-    deriv = -f**2 - (2 + H_prime(a, pars)/H(a, pars))*f + 1.5*Omega_m_a(a, pars)
+    deriv = -f**2 - f*(2 + H_prime(a, pars)/H(a, pars)) + 1.5*Omega_m_a(a, pars)
     return deriv
 
 def growth_rate_f(z, pars):
@@ -55,10 +55,7 @@ def growth_rate_f(z, pars):
         f = np.array([growth_rate_f(z_i, pars) for z_i in z])
     else :
         a_z = 1 / (1+z)
-        if a_z > 0.01: 
-            a = 10.**np.linspace(-2, np.log10(a_z), 1000)  #de 10**-2 à a_z qui dépend de z
-        else:
-            a = np.array([0.01, a_z])
+        a = 10.**np.linspace(-3, np.log10(a_z), 1000)  #de 10**-2 à a_z qui dépend de z
         ln_a = np.log(a)
         f0 = 1 #condition initiale
         f = odeint(df_over_dlna, f0, ln_a, args=(pars,))[-1, 0]
@@ -153,10 +150,10 @@ def plot_D(): #D pour différentes valeurs de w_0 et w_a à Omega_Lambda fixé, 
     W_0_list = [-1, -0.8, -0.6, -0.4, -0.2]
     W_a_list = [0, -0.6, -1.2, -1.8, -2.4]
     #Omega_m = 0.3
-    Omega_Lambda = 0.7
+    Omega_m = 0.3
     for i in range(len(W_a_list)):
         #logging.info(f"boucle D, {i}")
-        pars = {'Omega_Lambda': Omega_Lambda, 'W_0': W_0_list[i], 'W_a': W_a_list[i], 'H_0':73.2}  
+        pars = {'Omega_m': Omega_m, 'W_0': W_0_list[i], 'W_a': W_a_list[i], 'H_0':73.2}  
         D_solution = growth_factor_D(z,pars)
         plt.plot(z, D_solution, 
             linestyle='-', color=f'C{i}', linewidth=2, label=f'$w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
@@ -166,6 +163,7 @@ def plot_D(): #D pour différentes valeurs de w_0 et w_a à Omega_Lambda fixé, 
     plt.grid(True)
     plt.legend()
     plt.tight_layout()
+    plt.savefig('/home/etudiant15/Documents/STAGE CPPM/Figures/growth_factor_D.pdf', bbox_inches='tight')
     plt.show()
 
 def plot_f(): #f pour différentes valeurs de w_0 et w_a, en fonction de z, pour Omega_Lambda fixé
@@ -175,22 +173,25 @@ def plot_f(): #f pour différentes valeurs de w_0 et w_a, en fonction de z, pour
     W_0_list = [-1, -0.8, -0.6, -0.4, -0.2]
     W_a_list = [0, -0.6, -1.2, -1.8, -2.4]
     #Omega_m = 0.3
-    Omega_Lambda = 0.7
+    Omega_m= 0.3
     for i in range(len(W_a_list)):
-        pars = {'Omega_Lambda': Omega_Lambda, 'W_0': W_0_list[i], 'W_a': W_a_list[i], 'H_0':73.2}
+        pars = {'Omega_m': Omega_m, 'W_0': W_0_list[i], 'W_a': W_a_list[i], 'H_0':73.2}
         f_solution = growth_rate_f(z, pars)
         #f_values = f_solution[:,0]
         plt.plot(z, f_solution, 
-                 'o',
+                 #'o',
                 linestyle='-', color=f'C{i}', 
                 #linewidth=2,
                 label=f'$w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
+    plt.xlim(10**-2, 10**1)
+    plt.ylim(0.4, 1.1)
     plt.xlabel(f'$z$')
     plt.ylabel(f'$f(z)$')
     plt.xscale('log')
     plt.grid(True)
     plt.legend()
     plt.tight_layout()
+    plt.savefig('/home/etudiant15/Documents/STAGE CPPM/Figures/growth_rate_f.pdf', bbox_inches='tight')
     plt.show()
 
 def plot_H_z_times_1plusz(): #derivée de a pour différentes valeurs de w_0 et w_a, Omega_Lambda fixé, en fonction de z
@@ -200,7 +201,7 @@ def plot_H_z_times_1plusz(): #derivée de a pour différentes valeurs de w_0 et 
     W_0_list = [-1, -0.8, -0.6, -0.4, -0.2]
     W_a_list = [0, -0.6, -1.2, -1.8, -2.4]
     #Omega_m = 0.3
-    Omega_Lambda = 0.7
+    Omega_m = 0.3
     for i in range(len(W_a_list)):
         pars = {'Omega_Lambda': Omega_Lambda, 'W_0': W_0_list[i], 'W_a': W_a_list[i], 'H_0':73.2}  
         plt.plot(z, H(a, pars) * a, 
@@ -211,8 +212,9 @@ def plot_H_z_times_1plusz(): #derivée de a pour différentes valeurs de w_0 et 
     plt.grid(True)
     plt.legend()
     plt.tight_layout()
+    plt.savefig('/home/etudiant15/Documents/STAGE CPPM/Figures/H_z_times_1plusz.pdf', bbox_inches='tight')
     plt.show()
-
+plot_H_z_times_1plusz()
 def plot_D_over_a(): #D/a pour différentes valeurs de W et Omega_Lambda, en fonction de a
     a = 10.**np.linspace(-2, 0, 1000)  #de 10**-2 à 10**0
     z = 1/a - 1
@@ -310,7 +312,6 @@ def plot_dA(): #toutes les distances sur le même graphique
     plt.tight_layout()
     plt.show()
 
-plot_dA()
 def plot_alldistances(): #toutes les distances sur le même graphique
     plt.figure()
     a = 10.**np.linspace(-2, 0, 1000)  #de 10**-2 à 10**0
