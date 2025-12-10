@@ -208,6 +208,8 @@ def plot_H_z_times_1plusz(): #derivée de a pour différentes valeurs de w_0 et 
             linestyle='-', color=f'C{i}', linewidth=2, label=f'$w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
     plt.xlabel(f'$z$')
     plt.ylabel('$H(z)(1+z)[km/s/Mpc]$')
+    plt.xlim(10**-2, 10**1)
+    plt.ylim(50, 130)
     plt.xscale('log')
     plt.grid(True)
     plt.legend()
@@ -319,7 +321,7 @@ def plot_alldistances(): #toutes les distances sur le même graphique
     plt.tight_layout()
     plt.savefig('/home/etudiant15/Documents/STAGE CPPM/Figures/distances.pdf', bbox_inches='tight')
     plt.show()
-plot_alldistances()
+
 def plot_comoving_distance(): #khi
     plt.figure()
     a = 10.**np.linspace(-2, 0, 1000)  #de 10**-2 à 10**0
