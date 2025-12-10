@@ -49,6 +49,7 @@ plt.xscale('log')
 plt.grid(True)
 plt.legend()
 plt.tight_layout()
+plt.savefig('/home/etudiant15/Documents/STAGE CPPM/Figures/growth_rate.pdf', bbox_inches='tight')
 plt.show()
 
 """Pour des valeurs de plus en plus petites de \Omega_m, le taux de croissance f diminue de plus en plus tôt (pour un facteur d'échelle de plus en plus faible)"""
