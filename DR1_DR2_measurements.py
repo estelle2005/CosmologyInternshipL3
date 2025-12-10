@@ -271,7 +271,7 @@ def plot_fit_DR1_DR2_noPV():
 
     m.migrad()
     m.minos()
-    #m.draw_mncontour("W_0", "W_a", cl=(0.683, 0.954, 0.997), size=100)
+    m.draw_mncontour("W_0", "W_a", cl=(0.683, 0.954, 0.997), size=100)
     print(m)
     print("Résultat de l'ajustement:")
     print(f"$\Omega_m$ = {m.values['Omega_m']:.3f} ± {m.errors['Omega_m']:.3f}")
@@ -294,7 +294,7 @@ def plot_fit_DR1_DR2_noPV():
         'H_0xr_d': m.values['H_0xr_d']
         }
     
-    chi2_f = np.sum(((fsigma8_exp_noPV - DR1.fsigma8_th(z, m.values)) / sigma_fsigma8_noPV)**2)       
+    chi2_f = np.sum(((fsigma8_exp_noPV - DR1.fsigma8_th(z_noPV, m.values)) / sigma_fsigma8_noPV)**2)       
     chi2_DM = np.sum(((DM_over_DH_exp - DR2.model_wrapper_DM_over_DH(z_DM, m.values['Omega_m'],
         m.values['W_0'], m.values['W_a'], m.values['H_0'], m.values['H_0xr_d'])) / sigma_DM_over_DH)**2)
     chi2_DV = np.sum(((DV_over_rd_exp - DR2.model_wrapper_Dv_over_rd(z_Dv, m.values['Omega_m'],
