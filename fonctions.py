@@ -257,7 +257,6 @@ def plot_f_times_Dplus():
     plt.tight_layout()
     plt.savefig('/home/etudiant15/Documents/STAGE CPPM/Figures/f_times_D.pdf', bbox_inches='tight')
     plt.show()
-plot_f_times_Dplus()
 
 #DISTANCES
 
@@ -293,27 +292,6 @@ def d_L(z, pars):
     a = 1 / (1+z)
     return khi(z, pars)/a
 
-def plot_dA(): #toutes les distances sur le même graphique
-    plt.figure()
-    a = 10.**np.linspace(-2, 0, 1000)  #de 10**-2 à 10**0
-    z = 1/a - 1
-    W_0_list = [-1, -0.8, -0.6, -0.4, -0.2]
-    W_a_list = [0, -0.6, -1.2, -1.8, -2.4]
-    Omega_m_list = [0.1, 0.3, 0.9]
-    for i in range(len(Omega_m_list)):
-        pars = {'Omega_m': Omega_m_list[i], 'Omega_Lambda': 1 - Omega_m_list[i] - Omega_r, 'W_0': W_0_list[i], 'W_a': W_a_list[i], 'H_0':73.2} 
-        khi_values = [khi(z_i, pars)for z_i in z]
-        d_A_values = [d_A(z_i, pars)for z_i in z]
-        d_L_values = [d_L(z_i, pars)for z_i in z]
-        plt.plot(z, d_A_values, 
-            linestyle='--', color=f'C{i}', linewidth=2, label=f'$d_A$; $\Omega_m$ = {pars["Omega_m"]}; $\Omega_\lambda$ = {pars["Omega_Lambda"]}; $w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
-    plt.xlabel("$z$")
-    plt.ylabel("d_A [$h^{-1}$ Mpc]")
-    plt.grid(True)
-    plt.legend()
-    plt.tight_layout()
-    plt.show()
-
 def plot_alldistances(): #toutes les distances sur le même graphique
     plt.figure()
     a = 10.**np.linspace(-2, 0, 1000)  #de 10**-2 à 10**0
@@ -327,18 +305,21 @@ def plot_alldistances(): #toutes les distances sur le même graphique
         d_A_values = [d_A(z_i, pars)for z_i in z]
         d_L_values = [d_L(z_i, pars)for z_i in z]
         plt.plot(z, khi_values, 
-            linestyle='-', color=f'C{i}', linewidth=2, label=f'$\chi$; $\Omega_m$ = {pars["Omega_m"]}; $\Omega_\lambda$ = {pars["Omega_Lambda"]}; $w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
+            linestyle='-', color=f'C{i}', linewidth=2, label=f'$\chi$; $\Omega_m$ = {pars["Omega_m"]}; $\Omega_\lambda$ = {pars["Omega_Lambda"]:.2f}; $w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
         plt.plot(z, d_A_values, 
-            linestyle='--', color=f'C{i}', linewidth=2, label=f'$d_A$; $\Omega_m$ = {pars["Omega_m"]}; $\Omega_\lambda$ = {pars["Omega_Lambda"]}; $w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
+            linestyle='--', color=f'C{i}', linewidth=2, label=f'$d_A$; $\Omega_m$ = {pars["Omega_m"]}; $\Omega_\lambda$ = {pars["Omega_Lambda"]:.2f}; $w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
         plt.plot(z, d_L_values, 
-            linestyle='-.', color=f'C{i}', linewidth=2, label=f'$d_L$; $\Omega_m$ = {pars["Omega_m"]}; $\Omega_\lambda$ = {pars["Omega_Lambda"]}; $w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
+            linestyle='-.', color=f'C{i}', linewidth=2, label=f'$d_L$; $\Omega_m$ = {pars["Omega_m"]}; $\Omega_\lambda$ = {pars["Omega_Lambda"]:.2f}; $w_0$ = {W_0_list[i]}; $w_a$ = {W_a_list[i]}')
     plt.xlabel("$z$")
     plt.ylabel("Distance [$h^{-1}$ Mpc]")
+    plt.xscale('log')
+    plt.yscale('log')
     plt.grid(True)
     plt.legend()
     plt.tight_layout()
+    plt.savefig('/home/etudiant15/Documents/STAGE CPPM/Figures/distances.pdf', bbox_inches='tight')
     plt.show()
-
+plot_alldistances()
 def plot_comoving_distance(): #khi
     plt.figure()
     a = 10.**np.linspace(-2, 0, 1000)  #de 10**-2 à 10**0
@@ -395,3 +376,4 @@ def plot_luminosity_distance(): #d_L
     plt.legend()
     plt.tight_layout()
     plt.show()
+
