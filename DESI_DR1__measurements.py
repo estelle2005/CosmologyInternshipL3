@@ -132,3 +132,30 @@ def plot_fit_fsigma8_error_bar():
     plt.savefig('/home/etudiant15/Documents/STAGE CPPM/Figures/f_sigma8_DESI_DR1_double.pdf', bbox_inches='tight')
     plt.show()
     return m, pars_fit
+
+def plot_fsigma8_lambdaCDM():
+    a = 10.**np.linspace(-2, 0, 1000)  #de 10**-2 à 10**0
+    z = 1/a - 1
+    plt.figure()
+    sigma8_list = [0.4, 0.6, 0.8, 0.1]
+    W_0 = -1
+    W_a = 0
+    Omega_m = 0.3
+    for i in range(len(sigma8_list)):
+        #logging.info(f"boucle D, {i}")
+        pars = {'Omega_m': Omega_m, 'W_0': W_0, 'W_a': W_a, 'H_0':73.2, 'sigma8': sigma8_list[i]}  
+        f_solution = fsigma8_th(z,pars)
+        print(f_solution)
+        plt.plot(z, f_solution) 
+        #    linestyle='-', color=f'C{i}', linewidth=2, label=f'$w_0$ = {W_0}; $w_a$ = {W_a}; $\sigma_8 = {sigma8_list[i]}')
+
+    """plt.xlabel(f'$z$')
+    plt.ylabel(f'$f_\sigma_8$')
+    #plt.xscale('log')
+    plt.grid(True)
+    plt.legend()
+    #plt.tight_layout()"""
+    plt.show()
+    
+
+plot_fsigma8_lambdaCDM()

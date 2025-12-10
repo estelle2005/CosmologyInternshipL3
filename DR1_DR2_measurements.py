@@ -633,6 +633,3 @@ def plot_fit_DR1_DR2_noPV_wCDM():
     return m, pars_fit
 
 plot_fit_DR1_DR2_noPV_wCDM()
-plot_fit_DR1_DR2_PV_wCDM()
-
-plot_fit_DR1_DR2_noPV()
