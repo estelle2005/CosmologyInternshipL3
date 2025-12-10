@@ -22,7 +22,7 @@ for i, W_0 in enumerate(w_0_list):
         return H_0 *np.sqrt(Omega_m * a**-3 + Omega_Lambda*a**(-3*(1 + W_0 + W_a))*np.exp(-3*W_a*(1-a)))
 
     def H_prime(a):
-        u_prime = Omega_m * a**(-3) + (1 + W_0 + W_a + a)*Omega_Lambda* a**(-3*(1 + W_0 + W_a))*np.exp(-3*W_a*(1-a))
+        u_prime = Omega_m * a**(-3) + (1 + W_0 + W_a - W_a*a)*Omega_Lambda* a**(-3*(1 + W_0 + W_a))*np.exp(-3*W_a*(1-a))
         H_prime = - H_0 **2 * 3/2 * u_prime / H(a)
         return H_prime
     
@@ -65,4 +65,5 @@ plt.xscale('log')
 plt.grid(True)
 plt.legend()
 plt.tight_layout()
+plt.savefig('/home/etudiant15/Documents/STAGE CPPM/Figures/growth_factor_divided_by_a.pdf', bbox_inches='tight')
 plt.show()
