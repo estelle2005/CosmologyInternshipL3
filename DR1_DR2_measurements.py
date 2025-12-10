@@ -601,7 +601,7 @@ def plot_fit_DR1_DR2_noPV_wCDM():
              ha='center', va='top', fontsize=11,
              bbox=dict(boxstyle='round', facecolor='lightgray', alpha=0.9))
 
-    plt.savefig('/home/etudiant15/Documents/STAGE CPPM/Figures/chi_3combined_DESI_BAO+RSD.pdf', bbox_inches='tight')
+    plt.savefig('/home/etudiant15/Documents/STAGE CPPM/Figures/chi_3combined_DESI_BAO+RSD_wCDM.pdf', bbox_inches='tight')
     plt.show()
 
     merrors_m = m.merrors["Omega_m"]
@@ -631,3 +631,8 @@ def plot_fit_DR1_DR2_noPV_wCDM():
 
     print(f'BAO+RSD & ${m.values["Omega_m"]:.3f}^{{+{upper_m:.3f}}}_{{{- inf_m:.3f}}}$ & ${m.values["W_0"]:.3f}^{{+{upper_0:.3f}}}_{{{- inf_0:.3f}}}$ & 0 & ${m.values["sigma8"]:.3f}^{{+{upper_sigma:.3f}}}_{{{inf_sigma:.3f}}}$ & ${m.values["H_0xr_d"]:.3f}^{{+{upper_H:.3f}}}_{{{- inf_H:.3f}}}$')
     return m, pars_fit
+
+plot_fit_DR1_DR2_noPV_wCDM()
+plot_fit_DR1_DR2_PV_wCDM()
+
+plot_fit_DR1_DR2_noPV()
