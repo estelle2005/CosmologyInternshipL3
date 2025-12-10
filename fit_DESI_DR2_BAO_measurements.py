@@ -732,10 +732,10 @@ def plot_fit_combined_error_bar_wCDM():
     upper_0 = merrors_0.upper
     inf_0 = - lower_0
 
-    merrors_a = m.merrors["W_a"]
-    lower_a = merrors_a.lower
-    upper_a = merrors_a.upper
-    inf_a = - lower_a
+    #merrors_a = m.merrors["W_a"]
+    #lower_a = merrors_a.lower
+    #upper_a = merrors_a.upper
+    #inf_a = - lower_a
 
     merrors_H = m.merrors["H_0xr_d"]
     lower_H = merrors_H.lower
@@ -743,6 +743,5 @@ def plot_fit_combined_error_bar_wCDM():
     inf_H = - lower_H
     #ON PEUT AUSSI FAIRE UN DICTIONNAIRE AVEC LES ERREURS DEDANS
 
-    print(f'BAO & ${m.values["Omega_m"]:.3f}^{{+{upper_m:.3f}}}_{{{- inf_m:.3f}}}$ & ${m.values["W_0"]:.3f}^{{+{upper_0:.3f}}}_{{{- inf_0:.3f}}}$ & ${m.values["W_a"]:.3f}^{{+{upper_a:.3f}}}_{{{- inf_a:.3f}}}$ & - & ${m.values["H_0xr_d"]:.3f}^{{+{upper_H:.3f}}}_{{{- inf_H:.3f}}}$')
+    print(f'BAO & ${m.values["Omega_m"]:.3f}^{{+{upper_m:.3f}}}_{{{- inf_m:.3f}}}$ & ${m.values["W_0"]:.3f}^{{+{upper_0:.3f}}}_{{{- inf_0:.3f}}}$ & 0 & - & ${m.values["H_0xr_d"]:.3f}^{{+{upper_H:.3f}}}_{{{- inf_H:.3f}}}$')
     return m, pars_fit
-
