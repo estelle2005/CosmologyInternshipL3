@@ -350,7 +350,7 @@ def plot_fit_DM_over_DH_error_bar():
     return m, pars_fit
 
 
-#ΛCDM
+#Λw_0w_aCDM
 def plot_fit_combined():
     cost_DM = LeastSquares(z_DM, DM_over_DH_exp, sigma_DM_over_DH, model_wrapper_DM_over_DH)
     cost_Dv = LeastSquares(z_Dv, DV_over_rd_exp, sigma_DV_over_rd, model_wrapper_Dv_over_rd)
@@ -440,12 +440,12 @@ def plot_fit_combined_error_bar():
     m.limits['W_0'] = (-3.0, 1.0)
     m.limits['W_a'] = (-3.0, 2.0)
     m.fixed['H_0'] = True
-    m.limits['H_0xr_d'] = (5000, 20000)
+    m.limits['H_0xr_d'] = (3000, 30000)
 
     m.migrad() # finds minimum of least_squares function
     m.minos() 
-    m.draw_mncontour("Omega_m", "W_0", cl=(0.683, 0.954, 0.997), size=300)
-
+    m.draw_mncontour("W_0", "W_a", cl=(0.683,), size=100)
+    # 0.954, 0.997
     print(m)
     print("Résultat de l'ajustement:")
     print(f"$\Omega_m$ = {m.values['Omega_m']:.3f} ± {m.errors['Omega_m']:.3f}")
@@ -515,13 +515,6 @@ def plot_fit_combined_error_bar():
 
     plt.savefig('/home/etudiant15/Documents/STAGE CPPM/Figures/chi_combined_DESI_DR2_error_bar.pdf', bbox_inches='tight')
     plt.show()
-
-    """parameters = [
-        pars_fit['Omega_m'],
-        pars_fit['W_0'],
-        pars_fit['W_a']]
-    for i in range(len(parameters)):
-        print(m.params[i]('merror'))"""
     
     merrors_m = m.merrors["Omega_m"]
     lower_m = merrors_m.lower
@@ -547,6 +540,7 @@ def plot_fit_combined_error_bar():
     print(f'BAO & ${m.values["Omega_m"]:.3f}^{{+{upper_m:.3f}}}_{{{- inf_m:.3f}}}$ & ${m.values["W_0"]:.3f}^{{+{upper_0:.3f}}}_{{{- inf_0:.3f}}}$ & ${m.values["W_a"]:.3f}^{{+{upper_a:.3f}}}_{{{- inf_a:.3f}}}$ & - & ${m.values["H_0xr_d"]:.3f}^{{+{upper_H:.3f}}}_{{{- inf_H:.3f}}}$')
     return m, pars_fit
 
+
 #wCDM - w_a fixed, H_0 no fixed, no H_0r_d
 def plot_fit_combined_wCDM():
     cost_DM = LeastSquares(z_DM, DM_over_DH_exp, sigma_DM_over_DH, model_wrapper_DM_over_DH)
@@ -561,17 +555,9 @@ def plot_fit_combined_wCDM():
     #m.limits['Omega_Lambda'] = (0.0, 1.0)
     m.limits['W_0'] = (-3.0, 1.0)
     m.fixed['W_a'] = True
-    m.fixed['H_0'] = True
-    m.limits['H_0xr_d'] = (5000, 20000)
-
-    """#ON FIXE W_a et H_0 n'est plus fixe
-    
-    
-    m.limits['W_0'] = (-3.0, 1.0)
-    #m.limits['W_a'] = (-3.0, 2.0)
-    m.fixed['W_a'] = True
     m.fixed['H_0'] = False
-    m.limits['H_0']= (50, 150)"""
+    m.fixed['H_0']= True
+    m.limits['H_0xr_d'] = (3000, 30000)
 
     m.migrad()  # finds minimum of least_squares function
     m.minos()
@@ -645,11 +631,11 @@ def plot_fit_combined_error_bar_wCDM():
     #m.limits['Omega_Lambda'] = (0.0, 1.0)
     m.limits['W_0'] = (-3.0, 1.0)
     m.fixed['W_a'] = True
-    m.fixed['H_0'] = True
-    m.limits['H_0xr_d'] = (5000, 20000)
+    m.fixed['H_0']= True
+    m.limits['H_0xr_d'] = (3000, 30000)
 
     
-    """#ON FIXE W_a et H_0 n'est plus fixe
+    """intermédiaire : #ON FIXE W_a et H_0 n'est plus fixe
     m.limits['Omega_m'] = (0.1, 1.0)
     #m.limits['Omega_Lambda'] = (0.0, 1.0)
     m.limits['W_0'] = (-3.0, 1.0)
@@ -660,8 +646,12 @@ def plot_fit_combined_error_bar_wCDM():
 
     m.migrad() # finds minimum of least_squares function
     m.minos() 
-    m.draw_mncontour("Omega_m", "W_0", cl=(0.683, 0.954, 0.997), size=300)
-
+    m.draw_mncontour("Omega_m", "W_0", cl=(0.683, 0.954,), size=300)
+    plt.xlim(0.1, 0.5)
+    plt.ylim(-2.0, 0.0)
+    plt.axhline(-1, color='black', ls=':')
+    plt.savefig('/home/etudiant15/Documents/STAGE CPPM/Figures/mncontour_DR2_wCDM.pdf', bbox_inches='tight')
+    
     print(m)
     print("Résultat de l'ajustement:")
     print(f"$\Omega_m$ = {m.values['Omega_m']:.3f} ± {m.errors['Omega_m']:.3f}")
@@ -756,4 +746,3 @@ def plot_fit_combined_error_bar_wCDM():
     print(f'BAO & ${m.values["Omega_m"]:.3f}^{{+{upper_m:.3f}}}_{{{- inf_m:.3f}}}$ & ${m.values["W_0"]:.3f}^{{+{upper_0:.3f}}}_{{{- inf_0:.3f}}}$ & ${m.values["W_a"]:.3f}^{{+{upper_a:.3f}}}_{{{- inf_a:.3f}}}$ & - & ${m.values["H_0xr_d"]:.3f}^{{+{upper_H:.3f}}}_{{{- inf_H:.3f}}}$')
     return m, pars_fit
 
-plot_fit_combined_error_bar()
