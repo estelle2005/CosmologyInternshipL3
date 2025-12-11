@@ -396,8 +396,8 @@ def plot_fit_DR1_DR2_PV_wCDM():
     m.migrad()
     m.minos()
     m.draw_mncontour("Omega_m", "W_0", cl=(0.683, 0.954, ), size=100)
-    #plt.xlim(0.2, 0.4)
-    #plt.ylim(-1.25, -0.5)
+    plt.xlim(0.2, 0.4)
+    plt.ylim(-1.25, -0.5)
     plt.axhline(-1, color='black', ls=':')
     plt.savefig('/home/etudiant15/Documents/STAGE CPPM/Figures/mncontour_BAO+RSD+PV_wCDM.pdf', bbox_inches='tight')
     
@@ -530,8 +530,8 @@ def plot_fit_DR1_DR2_noPV_wCDM():
     m.migrad()
     m.minos()
     m.draw_mncontour("Omega_m", "W_0", cl=(0.683, 0.954, ), size=100)
-    #plt.xlim(0.2, 0.4)
-    #plt.ylim(-1.25, -0.5)
+    plt.xlim(0.2, 0.4)
+    plt.ylim(-1.25, -0.5)
     plt.axhline(-1, color='black', ls=':')
     plt.savefig('/home/etudiant15/Documents/STAGE CPPM/Figures/mncontour_BAO+RSD_wCDM.pdf', bbox_inches='tight')
     
@@ -643,4 +643,4 @@ def plot_fit_DR1_DR2_noPV_wCDM():
 
     return m, pars_fit
 
-plot_fit_DR1_DR2_PV()
+plot_fit_DR1_DR2_noPV_wCDM()
