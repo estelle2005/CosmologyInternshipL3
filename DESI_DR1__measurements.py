@@ -139,7 +139,7 @@ def plot_fsigma8_lambdaCDM():
     for i in range(len(sigma8_list)):
         #logging.info(f"boucle D, {i}")
         pars = {'Omega_m': Omega_m, 'W_0': W_0, 'W_a': W_a, 'H_0':73.2, 'sigma8': sigma8_list[i]}  
-        f_solution = fsigma8_th(z,pars)
+        f_solution = fonctions.fsigma8_th(z,pars)
         print(f_solution)
         plt.plot(z, f_solution) 
         #    linestyle='-', color=f'C{i}', linewidth=2, label=f'$w_0$ = {W_0}; $w_a$ = {W_a}; $\sigma_8 = {sigma8_list[i]}')
