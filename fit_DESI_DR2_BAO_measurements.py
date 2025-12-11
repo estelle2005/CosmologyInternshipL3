@@ -543,7 +543,7 @@ def plot_fit_combined_error_bar():
     inf_H = - lower_H
     #ON PEUT AUSSI FAIRE UN DICTIONNAIRE AVEC LES ERREURS DEDANS
 
-    print(f'BAO & ${m.values["Omega_m"]:.3f}^{{+{upper_m:.3f}}}_{{{- inf_m:.3f}}}$ & ${m.values["W_0"]:.3f}^{{+{upper_0:.3f}}}_{{{- inf_0:.3f}}}$ & ${m.values["W_a"]:.3f}^{{+{upper_a:.3f}}}_{{{- inf_a:.3f}}}$ & - & ${m.values["H_0xr_d"]:.3f}^{{+{upper_H:.3f}}}_{{{- inf_H:.3f}}} & {m.fval:.2f} & {m.ndof}$')
+    print(f'BAO & ${m.values["Omega_m"]:.3f}^{{+{upper_m:.3f}}}_{{{- inf_m:.3f}}}$ & ${m.values["W_0"]:.3f}^{{+{upper_0:.3f}}}_{{{- inf_0:.3f}}}$ & ${m.values["W_a"]:.3f}^{{+{upper_a:.3f}}}_{{{- inf_a:.3f}}}$ & - & ${m.values["H_0xr_d"]:.3f}^{{+{upper_H:.3f}}}_{{{- inf_H:.3f}}}$ & {m.fval:.2f} & {m.ndof}')
     return m, pars_fit
 
 #wCDM - w_a fixed, H_0 no fixed, no H_0r_d
@@ -748,7 +748,6 @@ def plot_fit_combined_error_bar_wCDM():
     inf_H = - lower_H
     #ON PEUT AUSSI FAIRE UN DICTIONNAIRE AVEC LES ERREURS DEDANS
 
-    print(f'BAO & ${m.values["Omega_m"]:.3f}^{{+{upper_m:.3f}}}_{{{- inf_m:.3f}}}$ & ${m.values["W_0"]:.3f}^{{+{upper_0:.3f}}}_{{{- inf_0:.3f}}}$ & 0 & - & ${m.values["H_0xr_d"]:.3f}^{{+{upper_H:.3f}}}_{{{- inf_H:.3f}}} & {m.fval:.2f} & {m.ndof}$')
+    print(f'BAO & ${m.values["Omega_m"]:.3f}^{{+{upper_m:.3f}}}_{{{- inf_m:.3f}}}$ & ${m.values["W_0"]:.3f}^{{+{upper_0:.3f}}}_{{{- inf_0:.3f}}}$ & 0 & - & ${m.values["H_0xr_d"]:.3f}^{{+{upper_H:.3f}}}_{{{- inf_H:.3f}}}$ & {m.fval:.2f} & {m.ndof:.0f}')
     return m, pars_fit
 
-plot_fit_combined_error_bar()
