@@ -271,7 +271,7 @@ def plot_fit_DR1_DR2_noPV():
 
     m.migrad()
     m.minos()
-    m.draw_mncontour("W_0", "W_a", cl=(0.683, 0.954,), size=100)
+    #m.draw_mncontour("W_0", "W_a", cl=(0.683, 0.954,), size=100)
     print(m)
     print("Résultat de l'ajustement:")
     print(f"$\Omega_m$ = {m.values['Omega_m']:.3f} ± {m.errors['Omega_m']:.3f}")
@@ -396,8 +396,8 @@ def plot_fit_DR1_DR2_PV_wCDM():
     m.migrad()
     m.minos()
     m.draw_mncontour("Omega_m", "W_0", cl=(0.683, 0.954, ), size=100)
-    plt.xlim(0.2, 0.4)
-    plt.ylim(-1.25, -0.5)
+    #plt.xlim(0.2, 0.4)
+    #plt.ylim(-1.25, -0.5)
     plt.axhline(-1, color='black', ls=':')
     plt.savefig('/home/etudiant15/Documents/STAGE CPPM/Figures/mncontour_BAO+RSD+PV_wCDM.pdf', bbox_inches='tight')
     
@@ -423,7 +423,7 @@ def plot_fit_DR1_DR2_PV_wCDM():
         'H_0xr_d': m.values['H_0xr_d']
         }
     
-    """chi2_f = np.sum(((fsigma8_exp - DR1.fsigma8_th(z, m.values)) / sigma_fsigma8)**2)       
+    chi2_f = np.sum(((fsigma8_exp - DR1.fsigma8_th(z, m.values)) / sigma_fsigma8)**2)       
     chi2_DM = np.sum(((DM_over_DH_exp - DR2.model_wrapper_DM_over_DH(z_DM, m.values['Omega_m'],
         m.values['W_0'], m.values['W_a'], m.values['H_0'], m.values['H_0xr_d'])) / sigma_DM_over_DH)**2)
     chi2_DV = np.sum(((DV_over_rd_exp - DR2.model_wrapper_Dv_over_rd(z_Dv, m.values['Omega_m'],
@@ -433,7 +433,7 @@ def plot_fit_DR1_DR2_PV_wCDM():
     print(f"  χ²_fsigma8 = {chi2_f:.2f}")
     print(f"  χ²_DM/DH = {chi2_DM:.2f}")
     print(f"  χ²_DV/rd = {chi2_DV:.2f}")
-    print(f"  Somme vérifiée = {chi2_DM + chi2_DV:.2f}")"""
+    print(f"  Somme vérifiée = {chi2_DM + chi2_DV + chi2_f:.2f}")
 
     fig, axs = plt.subplots(nrows=3, ncols=1, figsize= (8,8))
 
@@ -501,7 +501,11 @@ def plot_fit_DR1_DR2_PV_wCDM():
     upper_H = merrors_H.upper
     inf_H = - lower_H
 
-    print(f'BAO+RSD+PV & ${m.values["Omega_m"]:.3f}^{{+{upper_m:.3f}}}_{{{- inf_m:.3f}}}$ & ${m.values["W_0"]:.3f}^{{+{upper_0:.3f}}}_{{{- inf_0:.3f}}}$ & 0 & ${m.values["sigma8"]:.3f}^{{+{upper_sigma:.3f}}}_{{{inf_sigma:.3f}}}$ & ${m.values["H_0xr_d"]:.3f}^{{+{upper_H:.3f}}}_{{{- inf_H:.3f}}}$')
+    print(f'BAO+RSD+PV & '+
+        f'${m.values["Omega_m"]:.3f}^{{+{upper_m:.3f}}}_{{{- inf_m:.3f}}}$ & '+
+        f'${m.values["W_0"]:.3f}^{{+{upper_0:.3f}}}_{{{- inf_0:.3f}}}$ & 0 & '+
+        f'${m.values["sigma8"]:.3f}^{{+{upper_sigma:.3f}}}_{{{inf_sigma:.3f}}}$ & '+
+        f'${m.values["H_0xr_d"]:.3f}^{{+{upper_H:.3f}}}_{{{- inf_H:.3f}}}$')
     return m, pars_fit
 
 def plot_fit_DR1_DR2_noPV_wCDM():
@@ -525,8 +529,8 @@ def plot_fit_DR1_DR2_noPV_wCDM():
     m.migrad()
     m.minos()
     m.draw_mncontour("Omega_m", "W_0", cl=(0.683, 0.954, ), size=100)
-    plt.xlim(0.2, 0.4)
-    plt.ylim(-1.25, -0.5)
+    #plt.xlim(0.2, 0.4)
+    #plt.ylim(-1.25, -0.5)
     plt.axhline(-1, color='black', ls=':')
     plt.savefig('/home/etudiant15/Documents/STAGE CPPM/Figures/mncontour_BAO+RSD_wCDM.pdf', bbox_inches='tight')
     
@@ -629,7 +633,13 @@ def plot_fit_DR1_DR2_noPV_wCDM():
     upper_H = merrors_H.upper
     inf_H = - lower_H
 
-    print(f'BAO+RSD & ${m.values["Omega_m"]:.3f}^{{+{upper_m:.3f}}}_{{{- inf_m:.3f}}}$ & ${m.values["W_0"]:.3f}^{{+{upper_0:.3f}}}_{{{- inf_0:.3f}}}$ & 0 & ${m.values["sigma8"]:.3f}^{{+{upper_sigma:.3f}}}_{{{inf_sigma:.3f}}}$ & ${m.values["H_0xr_d"]:.3f}^{{+{upper_H:.3f}}}_{{{- inf_H:.3f}}}$')
+    print(f'BAO+RSD & '+
+        f'${m.values["Omega_m"]:.3f}^{{+{upper_m:.3f}}}_{{{- inf_m:.3f}}}$ &'+
+        f' ${m.values["W_0"]:.3f}^{{+{upper_0:.3f}}}_{{{- inf_0:.3f}}}$ & 0 & '+
+        f'${m.values["sigma8"]:.3f}^{{+{upper_sigma:.3f}}}_{{{inf_sigma:.3f}}}$ & '+
+        f'${m.values["H_0xr_d"]:.3f}^{{+{upper_H:.3f}}}_{{{- inf_H:.3f}}}$ & '+
+        f'{m.fval:.2f} & {m.ndof}')
+
     return m, pars_fit
 
 plot_fit_DR1_DR2_noPV_wCDM()
