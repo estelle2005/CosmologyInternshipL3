@@ -122,7 +122,7 @@ def growth_rate_f(z, pars, a_array=None):
         D = np.exp(ln_D)
     return D"""
 
-def growth_factor_D(z, pars):
+def growth_factor_D_calcul(z, pars):
     if hasattr(z, "__len__") == True : 
         D = np.array([growth_factor_D(z_i, pars) for z_i in z])
     else:
@@ -142,6 +142,13 @@ def growth_factor_D(z, pars):
         D = np.exp(ln_D)[-1] # On veut D au dernier point (a=a_z)
     return D
 
+def growth_factor_D(z, pars):
+    return growth_factor_D_calcul(z, pars)/growth_factor_D_calcul(0, pars)
+
+def fsigma8_th(z_val, pars):
+    f_solution = growth_rate_f(z_val, pars)
+    f_values = f_solution
+    return f_values * growth_factor_D(z_val, pars) * pars['sigma8']
 
 def plot_D(): #D pour différentes valeurs de w_0 et w_a à Omega_Lambda fixé, en fonction de z
     a = 10.**np.linspace(-2, 0, 1000)  #de 10**-2 à 10**0
