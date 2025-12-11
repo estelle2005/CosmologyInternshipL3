@@ -15,15 +15,10 @@ sigma_fsigma8 = tableau['fsigma8_err'].to_numpy()
  
 #pars = {'Omega_m': 0.3,'Omega_Lambda': 0.7,'W_0': -1, 'W_a': 0, 'H_0': 73.2, 'sigma8': ...}
 
-def fsigma8_th(z_val, pars):
-    f_solution = fonctions.growth_rate_f(z_val, pars)
-    f_values = f_solution
-    return f_values * fonctions.growth_factor_D(z_val, pars) * pars['sigma8']
 
 def model_wrapper_fsigma8(z_val, Omega_m, W_0, W_a, H_0, sigma8):
     pars = {'Omega_m': Omega_m,'Omega_Lambda': 1 - Omega_m,'W_0': W_0, 'W_a': W_a, 'H_0': H_0, 'sigma8': sigma8}
-    return fsigma8_th(z_val, pars)
-
+    return fonctions.fsigma8_th(z_val, pars)
 
 """pars = {'Omega_m': Omega_m,'Omega_Lambda': 1 - Omega_m,'W_0': W_0, 'W_a': W_a, 'H_0': H_0}
     return [Dv_over_rd(z_i, pars) for z_i in z_val]"""
@@ -63,7 +58,7 @@ def iminuit_fsigma8():
         'sigma8': m.values['sigma8']
         }
     
-    fsigma8_plot = np.array([fsigma8_th(z_val, pars_fit) for z_val in z_plot])
+    fsigma8_plot = np.array([fonctions.fsigma8_th(z_val, pars_fit) for z_val in z_plot])
 
     plt.figure()
     plt.errorbar(z, fsigma8_exp, yerr=sigma_fsigma8, fmt='o', capsize=5,
@@ -112,7 +107,7 @@ def plot_fit_fsigma8_error_bar():
         'sigma8': m.values['sigma8']
         }
     
-    fsigma8_plot = np.array([fsigma8_th(z_val, pars_fit) for z_val in z_plot])
+    fsigma8_plot = np.array([fonctions.fsigma8_th(z_val, pars_fit) for z_val in z_plot])
 
     fig, axs = plt.subplots(nrows=2, ncols=1, figsize= (8,6))
     axs[0].errorbar(z, fsigma8_exp, yerr=sigma_fsigma8, fmt='o', capsize=5,
@@ -122,7 +117,7 @@ def plot_fit_fsigma8_error_bar():
     axs[0].set_ylabel(r'$f_{\sigma8}$')
     axs[0].legend()
     axs[0].grid(True, alpha=0.3)
-    f_residu = [fsigma8_th(z_i, pars_fit) for z_i in z]
+    f_residu = [fonctions.fsigma8_th(z_i, pars_fit) for z_i in z]
     residu = ((fsigma8_exp - f_residu)/sigma_fsigma8)
     axs[1].errorbar(z, residu, yerr=1, color='black', ecolor='red', fmt='o', capsize=5, label='RSD Data')
     axs[1].set_xlabel('$z$')
