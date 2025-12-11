@@ -124,7 +124,7 @@ def growth_rate_f(z, pars, a_array=None):
 
 def growth_factor_D_calcul(z, pars):
     if hasattr(z, "__len__") == True : 
-        D = np.array([growth_factor_D(z_i, pars) for z_i in z])
+        D = np.array([growth_factor_D_calcul(z_i, pars) for z_i in z])
     else:
         a_z = 1 / (1+z)
         a = 10.**np.linspace(-3, np.log10(a_z), 1000)  #de 10**-2 à a qui dépend de z
@@ -386,3 +386,17 @@ def plot_luminosity_distance(): #d_L
     plt.tight_layout()
     plt.show()
 
+def Dv_over_rd(z_val, pars):
+    a = 1 / (1 + z_val)
+    D_A = d_A(z_val, pars) * pars['H_0']
+    D_M = D_A * (1+z_val)
+    H_val = H(a, pars) / pars['H_0']
+    D_H = c / H_val
+    Dv = (z_val * D_M**2 * D_H)**(1/3)
+    return Dv / pars['H_0xr_d']
+
+def DM_over_DH(z_val, pars):
+    a = 1 / (1+z_val)
+    D_M = d_A(z_val, pars) * (1+z_val)
+    D_H = c / H(a, pars)
+    return D_M / D_H
