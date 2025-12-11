@@ -36,7 +36,7 @@ def iminuit_fsigma8():
     
     m.limits['Omega_m'] = (0.1, 1.0)
     #m.limits['Omega_Lambda'] = (0.0, 1.0)
-    m.limits['W_0'] = (-2.0, 0.0)
+    m.limits['W_0'] = (-3.0, 1.0)
     m.limits['W_a'] = (-3.0, 2.0)
     m.fixed['H_0'] = True
     m.limits['sigma8'] = (0.6, 1.0)
@@ -86,7 +86,7 @@ def plot_fit_fsigma8_error_bar():
     
     m.limits['Omega_m'] = (0.1, 1.0)
     #m.limits['Omega_Lambda'] = (0.0, 1.0)
-    m.limits['W_0'] = (-2.0, 0.0)
+    m.limits['W_0'] = (-3.0, 1.0)
     m.limits['W_a'] = (-3.0, 2.0)
     m.fixed['H_0'] = True
     m.limits['sigma8'] = (0.6, 1.0)
@@ -157,5 +157,4 @@ def plot_fsigma8_lambdaCDM():
     #plt.tight_layout()"""
     plt.show()
     
-
-plot_fsigma8_lambdaCDM()
+iminuit_fsigma8()
