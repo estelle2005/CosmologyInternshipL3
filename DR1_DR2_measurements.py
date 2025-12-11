@@ -505,7 +505,7 @@ def plot_fit_DR1_DR2_PV_wCDM():
         f'${m.values["Omega_m"]:.3f}^{{+{upper_m:.3f}}}_{{{- inf_m:.3f}}}$ & '+
         f'${m.values["W_0"]:.3f}^{{+{upper_0:.3f}}}_{{{- inf_0:.3f}}}$ & 0 & '+
         f'${m.values["sigma8"]:.3f}^{{+{upper_sigma:.3f}}}_{{{inf_sigma:.3f}}}$ & '+
-        f'${m.values["H_0xr_d"]:.3f}^{{+{upper_H:.3f}}}_{{{- inf_H:.3f}}}$'+
+        f'${m.values["H_0xr_d"]:.3f}^{{+{upper_H:.3f}}}_{{{- inf_H:.3f}}}$ &'+
         f'{m.fval:.2f} & {m.ndof}')
     return m, pars_fit
 
