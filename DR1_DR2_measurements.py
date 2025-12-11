@@ -248,7 +248,7 @@ def plot_fit_DR1_DR2_PV():
     upper_H = merrors_H.upper
     inf_H = - lower_H
 
-    print(f'BAO+RSD+PV & ${m.values["Omega_m"]:.3f}^{{+{upper_m:.3f}}}_{{{- inf_m:.3f}}}$ & ${m.values["W_0"]:.3f}^{{+{upper_0:.3f}}}_{{{- inf_0:.3f}}}$ & ${m.values["W_a"]:.3f}^{{+{upper_a:.3f}}}_{{{- inf_a:.3f}}}$ & ${m.values["sigma8"]:.3f}^{{+{upper_sigma:.3f}}}_{{{inf_sigma:.3f}}}$ & ${m.values["H_0xr_d"]:.3f}^{{+{upper_H:.3f}}}_{{{- inf_H:.3f}}}$')
+    print(f'BAO+RSD+PV & ${m.values["Omega_m"]:.3f}^{{+{upper_m:.3f}}}_{{{- inf_m:.3f}}}$ & ${m.values["W_0"]:.3f}^{{+{upper_0:.3f}}}_{{{- inf_0:.3f}}}$ & ${m.values["W_a"]:.3f}^{{+{upper_a:.3f}}}_{{{- inf_a:.3f}}}$ & ${m.values["sigma8"]:.3f}^{{+{upper_sigma:.3f}}}_{{{inf_sigma:.3f}}}$ & ${m.values["H_0xr_d"]:.3f}^{{+{upper_H:.3f}}}_{{{- inf_H:.3f}}}$ & {m.fval:.2f} & {m.ndof}')
     return m, pars_fit
 
 def plot_fit_DR1_DR2_noPV():
@@ -294,7 +294,7 @@ def plot_fit_DR1_DR2_noPV():
         'H_0xr_d': m.values['H_0xr_d']
         }
     
-    chi2_f = np.sum(((fsigma8_exp_noPV - DR1.fsigma8_th(z_noPV, m.values)) / sigma_fsigma8_noPV)**2)       
+    """chi2_f = np.sum(((fsigma8_exp_noPV - DR1.fsigma8_th(z_noPV, m.values)) / sigma_fsigma8_noPV)**2)       
     chi2_DM = np.sum(((DM_over_DH_exp - DR2.model_wrapper_DM_over_DH(z_DM, m.values['Omega_m'],
         m.values['W_0'], m.values['W_a'], m.values['H_0'], m.values['H_0xr_d'])) / sigma_DM_over_DH)**2)
     chi2_DV = np.sum(((DV_over_rd_exp - DR2.model_wrapper_Dv_over_rd(z_Dv, m.values['Omega_m'],
@@ -304,7 +304,7 @@ def plot_fit_DR1_DR2_noPV():
     print(f"  χ²_fsigma8 = {chi2_f:.2f}")
     print(f"  χ²_DM/DH = {chi2_DM:.2f}")
     print(f"  χ²_DV/rd = {chi2_DV:.2f}")
-    print(f"  Somme vérifiée = {chi2_DM + chi2_DV:.2f}")
+    print(f"  Somme vérifiée = {chi2_DM + chi2_DV:.2f}")"""
 
     fig, axs = plt.subplots(nrows=3, ncols=1, figsize= (8,8))
 
@@ -371,7 +371,7 @@ def plot_fit_DR1_DR2_noPV():
     upper_H = merrors_H.upper
     inf_H = - lower_H
 
-    print(f'BAO+RSD & ${m.values["Omega_m"]:.3f}^{{+{upper_m:.3f}}}_{{{- inf_m:.3f}}}$ & ${m.values["W_0"]:.3f}^{{+{upper_0:.3f}}}_{{{- inf_0:.3f}}}$ & ${m.values["W_a"]:.3f}^{{+{upper_a:.3f}}}_{{{- inf_a:.3f}}}$ & ${m.values["sigma8"]:.3f}^{{+{upper_sigma:.3f}}}_{{{inf_sigma:.3f}}}$ & ${m.values["H_0xr_d"]:.3f}^{{+{upper_H:.3f}}}_{{{- inf_H:.3f}}}$')
+    print(f'BAO+RSD & ${m.values["Omega_m"]:.3f}^{{+{upper_m:.3f}}}_{{{- inf_m:.3f}}}$ & ${m.values["W_0"]:.3f}^{{+{upper_0:.3f}}}_{{{- inf_0:.3f}}}$ & ${m.values["W_a"]:.3f}^{{+{upper_a:.3f}}}_{{{- inf_a:.3f}}}$ & ${m.values["sigma8"]:.3f}^{{+{upper_sigma:.3f}}}_{{{inf_sigma:.3f}}}$ & ${m.values["H_0xr_d"]:.3f}^{{+{upper_H:.3f}}}_{{{- inf_H:.3f}}}$ & {m.fval:.2f} & {m.ndof}')
     return m, pars_fit
 
 #wCDM - 
@@ -423,7 +423,7 @@ def plot_fit_DR1_DR2_PV_wCDM():
         'H_0xr_d': m.values['H_0xr_d']
         }
     
-    chi2_f = np.sum(((fsigma8_exp - DR1.fsigma8_th(z, m.values)) / sigma_fsigma8)**2)       
+    """chi2_f = np.sum(((fsigma8_exp - DR1.fsigma8_th(z, m.values)) / sigma_fsigma8)**2)       
     chi2_DM = np.sum(((DM_over_DH_exp - DR2.model_wrapper_DM_over_DH(z_DM, m.values['Omega_m'],
         m.values['W_0'], m.values['W_a'], m.values['H_0'], m.values['H_0xr_d'])) / sigma_DM_over_DH)**2)
     chi2_DV = np.sum(((DV_over_rd_exp - DR2.model_wrapper_Dv_over_rd(z_Dv, m.values['Omega_m'],
@@ -433,7 +433,7 @@ def plot_fit_DR1_DR2_PV_wCDM():
     print(f"  χ²_fsigma8 = {chi2_f:.2f}")
     print(f"  χ²_DM/DH = {chi2_DM:.2f}")
     print(f"  χ²_DV/rd = {chi2_DV:.2f}")
-    print(f"  Somme vérifiée = {chi2_DM + chi2_DV + chi2_f:.2f}")
+    print(f"  Somme vérifiée = {chi2_DM + chi2_DV + chi2_f:.2f}")"""
 
     fig, axs = plt.subplots(nrows=3, ncols=1, figsize= (8,8))
 
