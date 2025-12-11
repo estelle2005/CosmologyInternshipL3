@@ -187,21 +187,21 @@ def plot_fit_DR1_DR2_PV():
     param_line = plt.Line2D([0], [0], color='red', linewidth=2, label='Fit')
 
     z_plot = np.linspace(min(z)*0.9, max(z)*1.1, 200)
-    fsigma8_plot = np.array([DR1.fsigma8_th(z_val, pars_fit) for z_val in z_plot])
+    fsigma8_plot = np.array([fonctions.fsigma8_th(z_val, pars_fit) for z_val in z_plot])
     axs[0].errorbar(z, fsigma8_exp, yerr=sigma_fsigma8, fmt='o', capsize=5, color='darkblue')
     axs[0].plot(z_plot, fsigma8_plot, 'r-', linewidth=2)
     axs[0].set_ylabel(r'$f_{\sigma8}$')
     axs[0].grid(True, alpha=0.3)
     
     z_plot_DM = np.linspace(min(z_DM)*0.9, max(z_DM)*1.1, 200)
-    DM_plot = np.array([DR2.DM_over_DH(z_val, pars_fit) for z_val in z_plot_DM])
+    DM_plot = np.array([fonctions.DM_over_DH(z_val, pars_fit) for z_val in z_plot_DM])
     axs[1].errorbar(z_DM, DM_over_DH_exp, yerr=sigma_DM_over_DH, fmt='o', capsize=5, color='darkblue')
     axs[1].plot(z_plot_DM, DM_plot, 'r-', linewidth=2)
     axs[1].set_ylabel(r'$D_M / D_H$')
     axs[1].grid(True, alpha=0.3)
     
     z_plot_DV = np.linspace(min(z_Dv)*0.9, max(z_Dv)*1.1, 200)
-    DV_plot = np.array([DR2.Dv_over_rd(z_val, pars_fit) for z_val in z_plot_DV])
+    DV_plot = np.array([fonctions.Dv_over_rd(z_val, pars_fit) for z_val in z_plot_DV])
     axs[2].errorbar(z_Dv, DV_over_rd_exp, yerr=sigma_DV_over_rd, fmt='o', capsize=5, color='darkgreen')
     axs[2].plot(z_plot_DV, DV_plot, 'r-', linewidth=2)
     axs[2].set_xlabel('Redshift $z$')
@@ -311,21 +311,21 @@ def plot_fit_DR1_DR2_noPV():
     param_line = plt.Line2D([0], [0], color='red', linewidth=2, label='Fit')
 
     z_plot = np.linspace(min(z)*0.9, max(z)*1.1, 200)
-    fsigma8_plot = np.array([DR1.fsigma8_th(z_val, pars_fit) for z_val in z_plot])
+    fsigma8_plot = np.array([fonctions.fsigma8_th(z_val, pars_fit) for z_val in z_plot])
     axs[0].errorbar(z_noPV, fsigma8_exp_noPV, yerr=sigma_fsigma8_noPV, fmt='o', capsize=5, color='darkblue')
     axs[0].plot(z_plot, fsigma8_plot, 'r-', linewidth=2)
     axs[0].set_ylabel(r'$f_{\sigma8}$')
     axs[0].grid(True, alpha=0.3)
     
     z_plot_DM = np.linspace(min(z_DM)*0.9, max(z_DM)*1.1, 200)
-    DM_plot = np.array([DR2.DM_over_DH(z_val, pars_fit) for z_val in z_plot_DM])
+    DM_plot = np.array([fonctions.DM_over_DH(z_val, pars_fit) for z_val in z_plot_DM])
     axs[1].errorbar(z_DM, DM_over_DH_exp, yerr=sigma_DM_over_DH, fmt='o', capsize=5, color='darkblue')
     axs[1].plot(z_plot_DM, DM_plot, 'r-', linewidth=2)
     axs[1].set_ylabel(r'$D_M / D_H$')
     axs[1].grid(True, alpha=0.3)
     
     z_plot_DV = np.linspace(min(z_Dv)*0.9, max(z_Dv)*1.1, 200)
-    DV_plot = np.array([DR2.Dv_over_rd(z_val, pars_fit) for z_val in z_plot_DV])
+    DV_plot = np.array([fonctions.Dv_over_rd(z_val, pars_fit) for z_val in z_plot_DV])
     axs[2].errorbar(z_Dv, DV_over_rd_exp, yerr=sigma_DV_over_rd, fmt='o', capsize=5, color='darkgreen')
     axs[2].plot(z_plot_DV, DV_plot, 'r-', linewidth=2)
     axs[2].set_xlabel('Redshift $z$')
@@ -440,21 +440,21 @@ def plot_fit_DR1_DR2_PV_wCDM():
     param_line = plt.Line2D([0], [0], color='red', linewidth=2, label='Fit')
 
     z_plot = np.linspace(min(z)*0.9, max(z)*1.1, 200)
-    fsigma8_plot = np.array([DR1.fsigma8_th(z_val, pars_fit) for z_val in z_plot])
+    fsigma8_plot = np.array([fonctions.fsigma8_th(z_val, pars_fit) for z_val in z_plot])
     axs[0].errorbar(z, fsigma8_exp, yerr=sigma_fsigma8, fmt='o', capsize=5, color='darkblue')
     axs[0].plot(z_plot, fsigma8_plot, 'r-', linewidth=2)
     axs[0].set_ylabel(r'$f_{\sigma8}$')
     axs[0].grid(True, alpha=0.3)
     
     z_plot_DM = np.linspace(min(z_DM)*0.9, max(z_DM)*1.1, 200)
-    DM_plot = np.array([DR2.DM_over_DH(z_val, pars_fit) for z_val in z_plot_DM])
+    DM_plot = np.array([fonctions.DM_over_DH(z_val, pars_fit) for z_val in z_plot_DM])
     axs[1].errorbar(z_DM, DM_over_DH_exp, yerr=sigma_DM_over_DH, fmt='o', capsize=5, color='darkblue')
     axs[1].plot(z_plot_DM, DM_plot, 'r-', linewidth=2)
     axs[1].set_ylabel(r'$D_M / D_H$')
     axs[1].grid(True, alpha=0.3)
     
     z_plot_DV = np.linspace(min(z_Dv)*0.9, max(z_Dv)*1.1, 200)
-    DV_plot = np.array([DR2.Dv_over_rd(z_val, pars_fit) for z_val in z_plot_DV])
+    DV_plot = np.array([fonctions.Dv_over_rd(z_val, pars_fit) for z_val in z_plot_DV])
     axs[2].errorbar(z_Dv, DV_over_rd_exp, yerr=sigma_DV_over_rd, fmt='o', capsize=5, color='darkgreen')
     axs[2].plot(z_plot_DV, DV_plot, 'r-', linewidth=2)
     axs[2].set_xlabel('Redshift $z$')
@@ -557,7 +557,7 @@ def plot_fit_DR1_DR2_noPV_wCDM():
         'H_0xr_d': m.values['H_0xr_d']
         }
     
-    chi2_f = np.sum(((fsigma8_exp_noPV - DR1.fsigma8_th(z_noPV, m.values)) / sigma_fsigma8_noPV)**2)       
+    chi2_f = np.sum(((fsigma8_exp_noPV - fonctions.fsigma8_th(z_noPV, m.values)) / sigma_fsigma8_noPV)**2)       
     chi2_DM = np.sum(((DM_over_DH_exp - DR2.model_wrapper_DM_over_DH(z_DM, m.values['Omega_m'],
         m.values['W_0'], m.values['W_a'], m.values['H_0'], m.values['H_0xr_d'])) / sigma_DM_over_DH)**2)
     chi2_DV = np.sum(((DV_over_rd_exp - DR2.model_wrapper_Dv_over_rd(z_Dv, m.values['Omega_m'],
@@ -574,21 +574,21 @@ def plot_fit_DR1_DR2_noPV_wCDM():
     param_line = plt.Line2D([0], [0], color='red', linewidth=2, label='Fit')
 
     z_plot = np.linspace(min(z)*0.9, max(z)*1.1, 200)
-    fsigma8_plot = np.array([DR1.fsigma8_th(z_val, pars_fit) for z_val in z_plot])
+    fsigma8_plot = np.array([fonctions.fsigma8_th(z_val, pars_fit) for z_val in z_plot])
     axs[0].errorbar(z_noPV, fsigma8_exp_noPV, yerr=sigma_fsigma8_noPV, fmt='o', capsize=5, color='darkblue')
     axs[0].plot(z_plot, fsigma8_plot, 'r-', linewidth=2)
     axs[0].set_ylabel(r'$f_{\sigma8}$')
     axs[0].grid(True, alpha=0.3)
     
     z_plot_DM = np.linspace(min(z_DM)*0.9, max(z_DM)*1.1, 200)
-    DM_plot = np.array([DR2.DM_over_DH(z_val, pars_fit) for z_val in z_plot_DM])
+    DM_plot = np.array([fonctions.DM_over_DH(z_val, pars_fit) for z_val in z_plot_DM])
     axs[1].errorbar(z_DM, DM_over_DH_exp, yerr=sigma_DM_over_DH, fmt='o', capsize=5, color='darkblue')
     axs[1].plot(z_plot_DM, DM_plot, 'r-', linewidth=2)
     axs[1].set_ylabel(r'$D_M / D_H$')
     axs[1].grid(True, alpha=0.3)
     
     z_plot_DV = np.linspace(min(z_Dv)*0.9, max(z_Dv)*1.1, 200)
-    DV_plot = np.array([DR2.Dv_over_rd(z_val, pars_fit) for z_val in z_plot_DV])
+    DV_plot = np.array([fonctions.Dv_over_rd(z_val, pars_fit) for z_val in z_plot_DV])
     axs[2].errorbar(z_Dv, DV_over_rd_exp, yerr=sigma_DV_over_rd, fmt='o', capsize=5, color='darkgreen')
     axs[2].plot(z_plot_DV, DV_plot, 'r-', linewidth=2)
     axs[2].set_xlabel('Redshift $z$')
@@ -643,4 +643,4 @@ def plot_fit_DR1_DR2_noPV_wCDM():
 
     return m, pars_fit
 
-plot_fit_DR1_DR2_noPV_wCDM()
+plot_fit_DR1_DR2_PV()
