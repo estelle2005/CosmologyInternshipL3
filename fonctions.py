@@ -5,6 +5,8 @@ from scipy.integrate import odeint
 from scipy.integrate import quad
 
 
+c = 3 * 10**5 # en km
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s"
