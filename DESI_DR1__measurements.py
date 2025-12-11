@@ -157,4 +157,3 @@ def plot_fsigma8_lambdaCDM():
     #plt.tight_layout()"""
     plt.show()
     
-iminuit_fsigma8()
