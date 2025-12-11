@@ -143,8 +143,9 @@ def iminuit_DM_over_DH():
     plt.savefig('/home/etudiant15/Documents/STAGE CPPM/Figures/DM_over_DH_DESI_DR2.pdf', bbox_inches='tight')
     plt.show()
     return m, pars_fit
-#ON PEUT METTRE LES PARAMÈTRES DU FIT DANS UN DICTIONNAIRE ET FAIRE UN PLOT SÉPARÉ
 
+#ON PEUT METTRE LES PARAMÈTRES DU FIT DANS UN DICTIONNAIRE ET FAIRE UN PLOT SÉPARÉ
+#iminuit_DM_over_DH() NE MARCHE PAS
 """def chi_carré_Dv_over_rd(pars):
     sum = 0
     for i in range(len(z)):
