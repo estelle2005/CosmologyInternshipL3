@@ -23,18 +23,10 @@ sigma_DM_over_DH = tableau['DM_over_DH_err'].to_numpy()[1:]
  
 #pars = {'Omega_m': 0.3,'Omega_Lambda': 0.7,'W_0': -1, 'W_a': 0, 'H_0': 73.2}
 
-def Dv_over_rd(z_val, pars):
-    a = 1 / (1 + z_val)
-    D_A = fonctions.d_A(z_val, pars) * pars['H_0']
-    D_M = D_A * (1+z_val)
-    H_val = fonctions.H(a, pars) / pars['H_0']
-    D_H = c / H_val
-    Dv = (z_val * D_M**2 * D_H)**(1/3)
-    return Dv / pars['H_0xr_d']
 
 def model_wrapper_Dv_over_rd(z_val, Omega_m, W_0, W_a, H_0, H_0xr_d):
     pars = {'Omega_m': Omega_m,'Omega_Lambda': 1 - Omega_m,'W_0': W_0, 'W_a': W_a, 'H_0': H_0, 'H_0xr_d': H_0xr_d}
-    return np.array([Dv_over_rd(z_i, pars) for z_i in z_val])
+    return np.array([fonctions.Dv_over_rd(z_i, pars) for z_i in z_val])
 
 def iminuit_Dv_over_rd():
     cost = LeastSquares(z_Dv, DV_over_rd_exp, sigma_DV_over_rd, model_wrapper_Dv_over_rd)
@@ -70,7 +62,7 @@ def iminuit_Dv_over_rd():
         'H_0': m.values['H_0'],
         'H_0xr_d': m.values['H_0xr_d']}
     
-    DV_plot = np.array([Dv_over_rd(z_val, pars_fit) for z_val in z_plot])
+    DV_plot = np.array([fonctions.Dv_over_rd(z_val, pars_fit) for z_val in z_plot])
 
     plt.figure()
     plt.errorbar(z_Dv, DV_over_rd_exp, yerr=sigma_DV_over_rd, fmt='o', capsize=5,
@@ -85,15 +77,9 @@ def iminuit_Dv_over_rd():
     plt.show()
     return m, pars_fit
 
-def DM_over_DH(z_val, pars):
-    a = 1 / (1+z_val)
-    D_M = fonctions.d_A(z_val, pars) * (1+z_val)
-    D_H = c / fonctions.H(a, pars)
-    return D_M / D_H
-
 def model_wrapper_DM_over_DH(z_val, Omega_m, W_0, W_a, H_0, H_0xr_d):
     pars = {'Omega_m': Omega_m,'Omega_Lambda': 1 - Omega_m,'W_0': W_0, 'W_a': W_a, 'H_0': H_0, 'H_0xr_d': H_0xr_d}
-    return np.array([DM_over_DH(z_i, pars) for z_i in z_val])
+    return np.array([fonctions.DM_over_DH(z_i, pars) for z_i in z_val])
 
 def iminuit_DM_over_DH():
     cost = LeastSquares(z_DM, DM_over_DH_exp, sigma_DM_over_DH, model_wrapper_DM_over_DH)
@@ -129,7 +115,7 @@ def iminuit_DM_over_DH():
         'H_0': m.values['H_0'],
         'H_0xr_d': m.values['H_0xr_d']}
     
-    DM_plot = np.array([DM_over_DH(z_val, pars_fit) for z_val in z_plot])
+    DM_plot = np.array([fonctions.DM_over_DH(z_val, pars_fit) for z_val in z_plot])
 
     plt.figure()
     plt.errorbar(z_DM, DM_over_DH_exp, yerr=sigma_DM_over_DH, fmt='o', capsize=5,
@@ -163,7 +149,7 @@ def plot_Dv_over_rd_error_bar():
     plt.figure()
     pars = {'Omega_m': 0.3,'Omega_Lambda': 0.7,'W_0': -1, 'W_a': 0, 'H_0': 73.2}
     z_model = np.linspace(min(z_Dv)*0.9, max(z_Dv)*1.1, 200)
-    f = [Dv_over_rd(z_i, pars) for z_i in z_model]
+    f = [fonctions.Dv_over_rd(z_i, pars) for z_i in z_model]
     plt.plot(z_model, f)
     plt.errorbar(z_Dv, DV_over_rd_exp, yerr=sigma_DV_over_rd, color='black', 
              ecolor='red', fmt='o', label='BAO')
@@ -178,7 +164,7 @@ def plot_DM_over_DH_error_bar():
     plt.figure()
     pars = {'Omega_m': 0.3,'Omega_Lambda': 0.7,'W_0': -1, 'W_a': 0, 'H_0': 73.2}
     z_model = np.linspace(min(z_DM)*0.9, max(z_DM)*1.1, 200)
-    f = [DM_over_DH(z_i, pars) for z_i in z_model]
+    f = [fonctions.DM_over_DH(z_i, pars) for z_i in z_model]
     plt.plot(z_model, f)
     plt.errorbar(z_DM, DM_over_DH_exp, yerr=sigma_DM_over_DH, color ='black', 
              ecolor='red', fmt='o', label='BAO')
@@ -196,7 +182,7 @@ def plot_Dv_over_rd_th():
     fig, axs = plt.subplots(nrows=2, ncols=1)
     pars = {'Omega_m': 0.3,'Omega_Lambda': 0.7,'W_0': -1, 'W_a': 0, 'H_0': 73.2}
     z_model = np.linspace(min(z_Dv)*0.9, max(z_Dv)*1.1, 200)
-    f = [Dv_over_rd(z_i, pars) for z_i in z_model]
+    f = [fonctions.Dv_over_rd(z_i, pars) for z_i in z_model]
     axs[0].plot(z_model, f)
     axs[0].errorbar(z_Dv, DV_over_rd_exp, yerr=sigma_DV_over_rd, color='black', 
              ecolor='red', fmt='o', label='BAO')
@@ -204,7 +190,7 @@ def plot_Dv_over_rd_th():
     axs[0].set_ylabel(r'$D_V / r_d$')
     axs[0].grid(True)
     axs[0].legend()
-    f_residu = [Dv_over_rd(z_i, pars) for z_i in z_Dv]
+    f_residu = [fonctions.Dv_over_rd(z_i, pars) for z_i in z_Dv]
     residu = ((DV_over_rd_exp - f_residu)/sigma_DV_over_rd)
     axs[1].errorbar(z_Dv, residu, yerr=1, color='black', ecolor='red', fmt='o', label='BAO')
     axs[1].set_xlabel('$z$')
@@ -272,7 +258,7 @@ def plot_fit_Dv_over_rd_error_bar():
         'H_0': m.values['H_0'],
         'H_0xr_d': m.values['H_0xr_d']}
     
-    DV_plot = np.array([Dv_over_rd(z_val, pars_fit) for z_val in z_plot])
+    DV_plot = np.array([fonctions.Dv_over_rd(z_val, pars_fit) for z_val in z_plot])
 
     fig, axs = plt.subplots(nrows=2, ncols=1, figsize= (8,6))
     axs[0].errorbar(z_Dv, DV_over_rd_exp, yerr=sigma_DV_over_rd, fmt='o', capsize=5,
@@ -283,7 +269,7 @@ def plot_fit_Dv_over_rd_error_bar():
     #axs[0].legend()
     axs[0].grid(True, alpha=0.3)
     axs[0].legend()
-    f_residu = [Dv_over_rd(z_i, pars_fit) for z_i in z_Dv]
+    f_residu = [fonctions.Dv_over_rd(z_i, pars_fit) for z_i in z_Dv]
     residu = ((DV_over_rd_exp - f_residu)/sigma_DV_over_rd)
     axs[1].errorbar(z_Dv, residu, yerr=1, color='black', ecolor='red', fmt='o', capsize=5, label='BAO Data')
     axs[1].set_xlabel('$z$')
@@ -329,7 +315,7 @@ def plot_fit_DM_over_DH_error_bar():
         'H_0': m.values['H_0'],
         'H_0xr_d': m.values['H_0xr_d']}
     
-    DM_plot = np.array([DM_over_DH(z_val, pars_fit) for z_val in z_plot])
+    DM_plot = np.array([fonctions.DM_over_DH(z_val, pars_fit) for z_val in z_plot])
 
     fig, axs = plt.subplots(nrows=2, ncols=1, figsize= (8,6))
     axs[0].errorbar(z_DM, DM_over_DH_exp, yerr=sigma_DM_over_DH, fmt='o', capsize=5,
@@ -339,7 +325,7 @@ def plot_fit_DM_over_DH_error_bar():
     axs[0].set_ylabel(r'$D_M / D_H$')
     axs[0].grid(True, alpha=0.3)
     axs[0].legend()
-    f_residu = [DM_over_DH(z_i, pars_fit) for z_i in z_DM]
+    f_residu = [fonctions.DM_over_DH(z_i, pars_fit) for z_i in z_DM]
     residu = ((DM_over_DH_exp - f_residu)/sigma_DM_over_DH)
     axs[1].errorbar(z_DM, residu, yerr=1, color='black', ecolor='red', fmt='o', capsize=5, label='BAO Data')
     axs[1].set_xlabel('$z$')
@@ -401,7 +387,7 @@ def plot_fit_combined():
     fig, axs = plt.subplots(nrows=2, ncols=1, figsize= (8,6))
 
     z_plot_DM = np.linspace(min(z_DM)*0.9, max(z_DM)*1.1, 200)
-    DM_plot = np.array([DM_over_DH(z_val, pars_fit) for z_val in z_plot_DM])
+    DM_plot = np.array([fonctions.DM_over_DH(z_val, pars_fit) for z_val in z_plot_DM])
     axs[0].errorbar(z_DM, DM_over_DH_exp, yerr=sigma_DM_over_DH, fmt='o', capsize=5,
                 label='BAO Data', color='darkblue')
     axs[0].plot(z_plot_DM, DM_plot, 'r-', linewidth=2,
@@ -412,7 +398,7 @@ def plot_fit_combined():
     axs[0].legend()
 
     z_plot_DV = np.linspace(min(z_Dv)*0.9, max(z_Dv)*1.1, 200)
-    DV_plot = np.array([Dv_over_rd(z_val, pars_fit) for z_val in z_plot_DV])
+    DV_plot = np.array([fonctions.Dv_over_rd(z_val, pars_fit) for z_val in z_plot_DV])
     axs[1].errorbar(z_Dv, DV_over_rd_exp, yerr=sigma_DV_over_rd, fmt='o', capsize=5,
                 label='BAO Data', color='darkgreen')
     axs[1].plot(z_plot_DV, DV_plot, 'r-', linewidth=2,
@@ -482,7 +468,7 @@ def plot_fit_combined_error_bar():
     fig, axs = plt.subplots(nrows=4, ncols=1, figsize= (9,8))
 
     z_plot_DM = np.linspace(min(z_DM)*0.9, max(z_DM)*1.1, 200)
-    DM_plot = np.array([DM_over_DH(z_val, pars_fit) for z_val in z_plot_DM])
+    DM_plot = np.array([fonctions.DM_over_DH(z_val, pars_fit) for z_val in z_plot_DM])
     axs[0].errorbar(z_DM, DM_over_DH_exp, yerr=sigma_DM_over_DH, fmt='o', capsize=5,
                 label='BAO Data', color='darkblue')
     axs[0].plot(z_plot_DM, DM_plot, 'r-', linewidth=2,
@@ -492,7 +478,7 @@ def plot_fit_combined_error_bar():
     axs[0].grid(True, alpha=0.3)
     axs[0].legend()
 
-    f_residu_DM = [DM_over_DH(z_i, pars_fit) for z_i in z_DM]
+    f_residu_DM = [fonctions.DM_over_DH(z_i, pars_fit) for z_i in z_DM]
     residu = ((DM_over_DH_exp - f_residu_DM)/sigma_DM_over_DH)
     axs[1].errorbar(z_DM, residu, yerr=1, color='black', ecolor='red', fmt='o', capsize=5, label='BAO Data')
     axs[1].set_xlabel('$z$')
@@ -501,7 +487,7 @@ def plot_fit_combined_error_bar():
     axs[1].legend()
 
     z_plot_DV = np.linspace(min(z_Dv)*0.9, max(z_Dv)*1.1, 200)
-    DV_plot = np.array([Dv_over_rd(z_val, pars_fit) for z_val in z_plot_DV])
+    DV_plot = np.array([fonctions.Dv_over_rd(z_val, pars_fit) for z_val in z_plot_DV])
     axs[2].errorbar(z_Dv, DV_over_rd_exp, yerr=sigma_DV_over_rd, fmt='o', capsize=5,
                 label='BAO Data', color='darkgreen')
     axs[2].plot(z_plot_DV, DV_plot, 'r-', linewidth=2,
@@ -511,7 +497,7 @@ def plot_fit_combined_error_bar():
     axs[2].grid(True, alpha=0.3)
     axs[2].legend()
 
-    f_residu_DV = [Dv_over_rd(z_i, pars_fit) for z_i in z_Dv]
+    f_residu_DV = [fonctions.Dv_over_rd(z_i, pars_fit) for z_i in z_Dv]
     residu = ((DV_over_rd_exp - f_residu_DV)/sigma_DV_over_rd)
     axs[3].errorbar(z_Dv, residu, yerr=1, color='black', ecolor='red', fmt='o', capsize=5, label='BAO Data')
     axs[3].set_xlabel('$z$')
@@ -543,7 +529,7 @@ def plot_fit_combined_error_bar():
     inf_H = - lower_H
     #ON PEUT AUSSI FAIRE UN DICTIONNAIRE AVEC LES ERREURS DEDANS
 
-    print(f'BAO & ${m.values["Omega_m"]:.3f}^{{+{upper_m:.3f}}}_{{{- inf_m:.3f}}}$ & ${m.values["W_0"]:.3f}^{{+{upper_0:.3f}}}_{{{- inf_0:.3f}}}$ & ${m.values["W_a"]:.3f}^{{+{upper_a:.3f}}}_{{{- inf_a:.3f}}}$ & - & ${m.values["H_0xr_d"]:.3f}^{{+{upper_H:.3f}}}_{{{- inf_H:.3f}}}$ & {m.fval:.2f} & {m.ndof}')
+    print(f'BAO & ${m.values["Omega_m"]:.3f}^{{+{upper_m:.3f}}}_{{{- inf_m:.3f}}}$ & ${m.values["W_0"]:.3f}^{{+{upper_0:.3f}}}_{{{- inf_0:.3f}}}$ & ${m.values["W_a"]:.3f}^{{+{upper_a:.3f}}}_{{{- inf_a:.3f}}}$ & - & ${m.values["H_0xr_d"]:.3f}^{{+{upper_H:.3f}}}_{{{- inf_H:.3f}}}$ & {m.fval:.2f} & {m.ndof}$')
     return m, pars_fit
 
 #wCDM - w_a fixed, H_0 no fixed, no H_0r_d
@@ -597,7 +583,7 @@ def plot_fit_combined_wCDM():
     fig, axs = plt.subplots(nrows=2, ncols=1, figsize= (8,6))
 
     z_plot_DM = np.linspace(min(z_DM)*0.9, max(z_DM)*1.1, 200)
-    DM_plot = np.array([DM_over_DH(z_val, pars_fit) for z_val in z_plot_DM])
+    DM_plot = np.array([fonctions.DM_over_DH(z_val, pars_fit) for z_val in z_plot_DM])
     axs[0].errorbar(z_DM, DM_over_DH_exp, yerr=sigma_DM_over_DH, fmt='o', capsize=5,
                 label='BAO Data', color='darkblue')
     axs[0].plot(z_plot_DM, DM_plot, 'r-', linewidth=2,
@@ -608,7 +594,7 @@ def plot_fit_combined_wCDM():
     axs[0].legend()
 
     z_plot_DV = np.linspace(min(z_Dv)*0.9, max(z_Dv)*1.1, 200)
-    DV_plot = np.array([Dv_over_rd(z_val, pars_fit) for z_val in z_plot_DV])
+    DV_plot = np.array([fonctions.Dv_over_rd(z_val, pars_fit) for z_val in z_plot_DV])
     axs[1].errorbar(z_Dv, DV_over_rd_exp, yerr=sigma_DV_over_rd, fmt='o', capsize=5,
                 label='BAO Data', color='darkgreen')
     axs[1].plot(z_plot_DV, DV_plot, 'r-', linewidth=2,
@@ -687,7 +673,7 @@ def plot_fit_combined_error_bar_wCDM():
     fig, axs = plt.subplots(nrows=4, ncols=1, figsize= (9,8))
 
     z_plot_DM = np.linspace(min(z_DM)*0.9, max(z_DM)*1.1, 200)
-    DM_plot = np.array([DM_over_DH(z_val, pars_fit) for z_val in z_plot_DM])
+    DM_plot = np.array([fonctions.DM_over_DH(z_val, pars_fit) for z_val in z_plot_DM])
     axs[0].errorbar(z_DM, DM_over_DH_exp, yerr=sigma_DM_over_DH, fmt='o', capsize=5,
                 label='BAO Data', color='darkblue')
     axs[0].plot(z_plot_DM, DM_plot, 'r-', linewidth=2,
@@ -697,7 +683,7 @@ def plot_fit_combined_error_bar_wCDM():
     axs[0].grid(True, alpha=0.3)
     axs[0].legend()
 
-    f_residu_DM = [DM_over_DH(z_i, pars_fit) for z_i in z_DM]
+    f_residu_DM = [fonctions.DM_over_DH(z_i, pars_fit) for z_i in z_DM]
     residu = ((DM_over_DH_exp - f_residu_DM)/sigma_DM_over_DH)
     axs[1].errorbar(z_DM, residu, yerr=1, color='black', ecolor='red', fmt='o', capsize=5, label='BAO Data')
     axs[1].set_xlabel('$z$')
@@ -706,7 +692,7 @@ def plot_fit_combined_error_bar_wCDM():
     axs[1].legend()
 
     z_plot_DV = np.linspace(min(z_Dv)*0.9, max(z_Dv)*1.1, 200)
-    DV_plot = np.array([Dv_over_rd(z_val, pars_fit) for z_val in z_plot_DV])
+    DV_plot = np.array([fonctions.Dv_over_rd(z_val, pars_fit) for z_val in z_plot_DV])
     axs[2].errorbar(z_Dv, DV_over_rd_exp, yerr=sigma_DV_over_rd, fmt='o', capsize=5,
                 label='BAO Data', color='darkgreen')
     axs[2].plot(z_plot_DV, DV_plot, 'r-', linewidth=2,
@@ -716,7 +702,7 @@ def plot_fit_combined_error_bar_wCDM():
     axs[2].grid(True, alpha=0.3)
     axs[2].legend()
 
-    f_residu_DV = [Dv_over_rd(z_i, pars_fit) for z_i in z_Dv]
+    f_residu_DV = [fonctions.Dv_over_rd(z_i, pars_fit) for z_i in z_Dv]
     residu = ((DV_over_rd_exp - f_residu_DV)/sigma_DV_over_rd)
     axs[3].errorbar(z_Dv, residu, yerr=1, color='black', ecolor='red', fmt='o', capsize=5, label='BAO Data')
     axs[3].set_xlabel('$z$')
