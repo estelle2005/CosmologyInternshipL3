@@ -127,7 +127,7 @@ def growth_factor_D(z, pars):
         D = np.array([growth_factor_D(z_i, pars) for z_i in z])
     else:
         a_z = 1 / (1+z)
-        a = 10.**np.linspace(-2, np.log10(a_z), 1000)  #de 10**-2 à a qui dépend de z
+        a = 10.**np.linspace(-3, np.log10(a_z), 1000)  #de 10**-2 à a qui dépend de z
         ln_a = np.log(a)
 
         #On a besoin de f sur TOUT le domaine ln_a, pas juste f(z)
