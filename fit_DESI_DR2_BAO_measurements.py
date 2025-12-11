@@ -336,7 +336,6 @@ def plot_fit_DM_over_DH_error_bar():
     plt.show()
     return m, pars_fit
 
-
 #w_0w_aCDM
 def plot_fit_combined():
     cost_DM = LeastSquares(z_DM, DM_over_DH_exp, sigma_DM_over_DH, model_wrapper_DM_over_DH)
