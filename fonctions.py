@@ -20,7 +20,7 @@ logging.basicConfig(
 # pars = {'Omega_Lambda': Omega_Lambda, 'W_0': W_0_list[i], 'W_a': W_a_list[i]}
 
 
-
+"""
 def H(a, pars):
     Omega_m = pars["Omega_m"]
     W_0 = pars["W_0"]
@@ -28,8 +28,8 @@ def H(a, pars):
     H_0 = pars["H_0"]
     Omega_Lambda = 1 - Omega_m
     return H_0 * np.sqrt(Omega_m * a**-3 + Omega_Lambda * a ** (-3 * (1 + W_0 + W_a)) * np.exp(-3 * W_a * (1 - a)))
-
 """
+
 def H(a, pars):
     Omega_m = pars["Omega_m"]
     W_0 = pars["W_0"]
@@ -44,7 +44,7 @@ def H(a, pars):
             return 1e-10
         return H_0 * np.sqrt(inside_sqrt)
     except (OverflowError, FloatingPointError):
-        return np.inf"""
+        return np.inf
 
 
 def H_prime(a, pars):
