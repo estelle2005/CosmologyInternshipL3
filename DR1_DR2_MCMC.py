@@ -36,6 +36,8 @@ z_noPV = tableau_DR1_noPV["z_eff"].to_numpy()
 fsigma8_exp_noPV = tableau_DR1_noPV["fsigma8"].to_numpy()
 sigma_fsigma8_noPV = tableau_DR1_noPV["fsigma8_err"].to_numpy()
 
+para_names = ["Omega_m", "W_0", "W_a", "sigma8", "H_0xr_d"]
+
 
 def chi_carré_Dv_over_rd(pars):
     sum = 0
@@ -58,8 +60,14 @@ def chi_carré_DM_over_DH(pars):
 def chi_carré(pars):
     return chi_carré_DM_over_DH(pars) + chi_carré_Dv_over_rd(pars)
 
+def log_prior(p, limits):
+    for param in para_names:
+        if p[0] < limits[param][0] or p[0] > limits[param][1]:
+            return -np.inf
+    else : 
+        return 0
 
-def log_prob(p):
+def log_prob(p, limits):
     pars = {
         "Omega_m": p[0],
         #"Omega_Lambda": 1 - p[0],
@@ -69,20 +77,13 @@ def log_prob(p):
         "sigma8": p[3],
         "H_0xr_d": p[4],
     }
-    return -chi_carré(pars) / 2
+    return -chi_carré(pars) / 2 + log_prior(p, limits)
 
 
 def mcmc_BAO_RSD_PV_w0wa():
-    nwalkers = 4
-    para_names = [
-        "Omega_m",
-        "W_0",
-        "W_a",
-        #"H_0", #obligé de le mettre car intervient dans les fonctions?
-        "sigma8",
-        "H_0xr_d",
-    ]
+    nwalkers = 15
     ndim = len(para_names)
+
     limits = {}
     limits["Omega_m"] = (0.1, 1.0)
     limits["W_0"] = (-3.0, 1.0)
@@ -102,22 +103,16 @@ def mcmc_BAO_RSD_PV_w0wa():
         # print("pmax", pmax)
     p0 = pmin + np.random.rand(nwalkers, ndim) * (pmax - pmin)  # nwalkers entre 0 et 1
     # print("p0", p0)
-    sampler = emcee.EnsembleSampler(nwalkers, ndim, log_prob)
-    log_prob(p0[0])
-    # print(log_prob)
-    """state = sampler.run_mcmc(p0, 100)
-    sampler.reset()
+    sampler = emcee.EnsembleSampler(nwalkers, ndim, log_prob, args= limits)
+    log_prob(p0[0], limits)
+    # print(log_prob(p0[0]))
+    #state = sampler.run_mcmc(p0, 100)
+    """sampler.reset()
     sampler.run_mcmc(state, 10000)
-    samples = sampler.get_chain(flat=True)"""
-
-
-"""
+    samples = sampler.get_chain(flat=True)
     plt.hist(samples[:, 0], 100, color="k", histtype="step")
     plt.xlabel(r"$\theta_1$")
     plt.ylabel(r"$p(\theta_1)$")
-    plt.gca().set_yticks([]);
-"""
-mcmc_BAO_RSD_PV_w0wa()
-
+    plt.gca().set_yticks([]);"""
 
 # p defini avc paramètres dans l'ordre
