@@ -297,7 +297,7 @@ def plot_DM_over_DH_th():
     fig, axs = plt.subplots(nrows=2, ncols=1)
     pars = {"Omega_m": 0.3, "Omega_Lambda": 0.7, "W_0": -1, "W_a": 0, "H_0": 73.2}
     z_model = np.linspace(min(z_DM) * 0.9, max(z_DM) * 1.1, 200)
-    f = [DM_over_DH(z_i, pars) for z_i in z_model]
+    f = [fonctions.DM_over_DH(z_i, pars) for z_i in z_model]
     axs[0].plot(z_model, f)
     axs[0].errorbar(
         z_DM,
@@ -312,7 +312,7 @@ def plot_DM_over_DH_th():
     axs[0].set_ylabel(r"$D_M / D_H$")
     axs[0].grid(True)
     axs[0].legend()
-    f_residu = [DM_over_DH(z_i, pars) for z_i in z_DM]
+    f_residu = [fonctions.DM_over_DH(z_i, pars) for z_i in z_DM]
     residu = (DM_over_DH_exp - f_residu) / sigma_DM_over_DH
     axs[1].errorbar(
         z_DM, residu, yerr=1, color="black", ecolor="red", fmt="o", label="BAO"
