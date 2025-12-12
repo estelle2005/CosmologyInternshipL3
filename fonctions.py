@@ -20,16 +20,31 @@ logging.basicConfig(
 # pars = {'Omega_Lambda': Omega_Lambda, 'W_0': W_0_list[i], 'W_a': W_a_list[i]}
 
 
+
 def H(a, pars):
     Omega_m = pars["Omega_m"]
     W_0 = pars["W_0"]
     W_a = pars["W_a"]
     H_0 = pars["H_0"]
     Omega_Lambda = 1 - Omega_m
-    return H_0 * np.sqrt(
-        Omega_m * a**-3
-        + Omega_Lambda * a ** (-3 * (1 + W_0 + W_a)) * np.exp(-3 * W_a * (1 - a))
-    )
+    return H_0 * np.sqrt(Omega_m * a**-3 + Omega_Lambda * a ** (-3 * (1 + W_0 + W_a)) * np.exp(-3 * W_a * (1 - a)))
+
+"""
+def H(a, pars):
+    Omega_m = pars["Omega_m"]
+    W_0 = pars["W_0"]
+    W_a = pars["W_a"]
+    H_0 = pars["H_0"]
+    Omega_Lambda = 1 - Omega_m
+    if a <= 0:
+        return np.inf
+    try:
+        inside_sqrt = Omega_m * a**-3 + Omega_Lambda * a ** (-3 * (1 + W_0 + W_a)) * np.exp(-3 * W_a * (1 - a))
+        if inside_sqrt <= 0:
+            return 1e-10
+        return H_0 * np.sqrt(inside_sqrt)
+    except (OverflowError, FloatingPointError):
+        return np.inf"""
 
 
 def H_prime(a, pars):
@@ -544,9 +559,48 @@ def Dv_over_rd(z_val, pars):
     Dv = (z_val * D_M**2 * D_H) ** (1 / 3)
     return Dv / pars["H_0xr_d"]
 
+"""def Dv_over_rd(z_val, pars):
+    try:
+        a = 1 / (1 + z_val)
+        D_A = d_A(z_val, pars) * pars["H_0"]
+        D_M = D_A * (1 + z_val)
+        H_val = H(a, pars) / pars["H_0"]
+        
+        # Protection
+        if H_val <= 0:
+            return np.nan
+            
+        D_H = c / H_val
+        Dv = (z_val * D_M**2 * D_H) ** (1 / 3)
+        
+        if pars["H_0xr_d"] <= 0:
+            return np.nan
+            
+        return Dv / pars["H_0xr_d"]
+        
+    except:
+        return np.nan"""
+
 
 def DM_over_DH(z_val, pars):
     a = 1 / (1 + z_val)
     D_M = d_A(z_val, pars) * (1 + z_val)
     D_H = c / H(a, pars)
     return D_M / D_H
+
+
+"""def DM_over_DH(z_val, pars):
+    try:
+        a = 1 / (1 + z_val)
+        D_M = d_A(z_val, pars) * (1 + z_val)
+        H_val = H(a, pars)
+        
+        # Protection
+        if H_val <= 0:
+            return np.nan
+            
+        D_H = c / H_val
+        return D_M / D_H
+        
+    except:
+        return np.nan"""
