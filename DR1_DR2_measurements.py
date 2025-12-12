@@ -36,6 +36,8 @@ z_noPV = tableau_DR1_noPV['z_eff'].to_numpy()
 fsigma8_exp_noPV = tableau_DR1_noPV['fsigma8'].to_numpy()
 sigma_fsigma8_noPV = tableau_DR1_noPV['fsigma8_err'].to_numpy()
 
+
+#IMINUIT
 #H_0 fixé
 """def plot_fit_DR1_DR2():
     cost_f = LeastSquares(z, fsigma8_exp, sigma_fsigma8, DR1.model_wrapper_fsigma8) 
@@ -643,4 +645,3 @@ def plot_fit_DR1_DR2_noPV_wCDM():
 
     return m, pars_fit
 
-plot_fit_DR1_DR2_PV_wCDM()
