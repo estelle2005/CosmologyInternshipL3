@@ -36,7 +36,7 @@ tableau_DR1_noPV = tableau_DR1_noPV.sort_values("z_eff").reset_index(drop=True)
 z_noPV = tableau_DR1_noPV["z_eff"].to_numpy()
 fsigma8_exp_noPV = tableau_DR1_noPV["fsigma8"].to_numpy()
 sigma_fsigma8_noPV = tableau_DR1_noPV["fsigma8_err"].to_numpy()
-
+#----------------------------
 para_names_w0wa = ["Omega_m", "W_0", "W_a", "sigma8", "H_0xr_d"]
 para_names_wCDM = ["Omega_m", "W_0", "sigma8", "H_0xr_d"]
 ndim_w0wa = len(para_names_w0wa)
@@ -88,15 +88,28 @@ def chi_carré_DM_over_DH(pars):
         sum += ((exp_val - theo_val) ** 2) / (sigma ** 2)
     return sum
 
-def chi_carré_DM_over_DH(pars):
+def chi_carré_fsigma8(pars):
     sum = 0
-    for i in range(len(z_DM)):
-        theo_val = fonctions.DM_over_DH(z_DM[i], pars)
+    for i in range(len(z)):
+        theo_val = fonctions.fsigma8_th(z[i], pars)
         if np.isnan(theo_val) or np.isinf(theo_val):
             return np.inf
         
-        exp_val = DM_over_DH_exp[i]
-        sigma = (sigma_DM_over_DH[i])
+        exp_val = fsigma8_exp[i]
+        sigma = (sigma_fsigma8[i])
+
+        sum += ((exp_val - theo_val) ** 2) / (sigma ** 2)
+    return sum
+
+def chi_carré_fsigma8_noPV(pars):
+    sum = 0
+    for i in range(len(z_noPV)):
+        theo_val = fonctions.fsigma8_th(z_noPV[i], pars)
+        if np.isnan(theo_val) or np.isinf(theo_val):
+            return np.inf
+        
+        exp_val = fsigma8_exp_noPV[i]
+        sigma = (sigma_fsigma8_noPV[i])
 
         sum += ((exp_val - theo_val) ** 2) / (sigma ** 2)
     return sum
@@ -105,6 +118,13 @@ def chi_carré_DM_over_DH(pars):
 
 def chi_carré_BAO(pars):
     return chi_carré_DM_over_DH(pars) + chi_carré_Dv_over_rd(pars)
+
+def chi_carré_BAO_RSD_PV(pars):
+    return chi_carré_DM_over_DH(pars) + chi_carré_Dv_over_rd(pars) + chi_carré_fsigma8(pars)
+
+def chi_carré_BAO_RSD(pars):
+    return chi_carré_DM_over_DH(pars) + chi_carré_Dv_over_rd(pars) + chi_carré_fsigma8_noPV(pars)
+
 
 def log_prior_BAO_w0wa(p, limits):
     for i, param in enumerate(para_names_w0wa):
@@ -122,6 +142,8 @@ def log_prior_BAO_wCDM(p, limits):
     else:
         return 0
  
+
+# prior w0wa
 def log_prob_BAO_w0wa(p, limits):
     pars = {
         "Omega_m": p[0],
@@ -134,6 +156,29 @@ def log_prob_BAO_w0wa(p, limits):
     }
     return -chi_carré_BAO(pars) / 2 + log_prior_BAO_w0wa(p, limits)
 
+def log_prob_BAO_RSD_w0wa(p, limits):
+    pars = {
+        "Omega_m": p[0],
+        "W_0": p[1],
+        "W_a": p[2],
+        "H_0": 73.2,
+        "sigma8": p[3],
+        "H_0xr_d": p[4],
+    }
+    return -chi_carré_BAO_RSD(pars) / 2 + log_prior_BAO_w0wa(p, limits)
+
+def log_prob_BAO_RSD_PV_w0wa(p, limits):
+    pars = {
+        "Omega_m": p[0],
+        "W_0": p[1],
+        "W_a": p[2],
+        "H_0": 73.2,
+        "sigma8": p[3],
+        "H_0xr_d": p[4],
+    }
+    return -chi_carré_BAO_RSD_PV(pars) / 2 + log_prior_BAO_w0wa(p, limits)
+
+# prior wCDM
 def log_prob_BAO_wCDM(p, limits):
     pars = {
         "Omega_m": p[0],
@@ -146,7 +191,30 @@ def log_prob_BAO_wCDM(p, limits):
     }
     return -chi_carré_BAO(pars) / 2 + log_prior_BAO_wCDM(p, limits)
 
+def log_prob_BAO_RSD_wCDM(p, limits):
+    pars = {
+        "Omega_m": p[0],
+        "W_0": p[1],
+        "W_a": 0,
+        "H_0": 73.2,
+        "sigma8": p[2],
+        "H_0xr_d": p[3],
+    }
+    return -chi_carré_BAO_RSD(pars) / 2 + log_prior_BAO_wCDM(p, limits)
 
+def log_prob_BAO_RSD_PV_wCDM(p, limits):
+    pars = {
+        "Omega_m": p[0],
+        #"Omega_Lambda": 1 - p[0],
+        "W_0": p[1],
+        "W_a": 0,
+        "H_0": 73.2,
+        "sigma8": p[2],
+        "H_0xr_d": p[3],
+    }
+    return -chi_carré_BAO_RSD_PV(pars) / 2 + log_prior_BAO_wCDM(p, limits)
+
+# BAO
 def mcmc_BAO_w0wa():
     nwalkers = 10
     limits = {}
@@ -237,18 +305,152 @@ def mcmc_BAO_wCDM():
     samples = sampler.get_chain(flat=True)
     np.save('mes_chaines_BAO_wCDM.npy', samples)
 
-
 def plot_mcmc_BAO_wCDM():
     samples = np.load('mes_chaines_BAO_wCDM.npy')
     n_cols = samples.shape[1]
     fig = corner.corner(samples[:, :4], labels=para_names_w0wa, )
     plt.savefig(
-        "/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_BAO_wCDM.pdf",
-        bbox_inches="tight",
-    )
+        "/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_BAO_wCDM.pdf", bbox_inches="tight",)
     plt.tight_layout()
     plt.show()
-mcmc_BAO_wCDM()
 
+# BAO + RSD
+def mcmc_BAO_RSD_w0wa():
+    nwalkers = 10
+    limits = {}
+    limits["Omega_m"] = (0.1, 1.0)
+    limits["W_0"] = (-3.0, 1.0)
+    limits["W_a"] = (-3.0, 2.0)
+    limits["sigma8"] = (0.6, 1.0)
+    limits["H_0xr_d"] = (5000, 20000)
+    pmin = np.array([])
+    pmax = np.array([])
+    for param in para_names_w0wa:
+        pmin = np.append(pmin, limits[param][0])
+        pmax = np.append(pmax, limits[param][1])
+    p0 = pmin + np.random.rand(nwalkers, ndim_w0wa) * (pmax - pmin)  # nwalkers entre 0 et 1
+    for j in range(ndim_w0wa):
+        max = p0[:,j].max()
+        min = p0[:,j].min()
+    sampler = emcee.EnsembleSampler(nwalkers, ndim_w0wa, log_prob_BAO_RSD_w0wa, args=[limits])
+    #log_prob(p0[0], limits)
+    state = sampler.run_mcmc(p0, 10000)
+    sampler.run_mcmc(state, 100, progress=True)
+    samples = sampler.get_chain(flat=True)
+    np.save('mes_chaines_BAO_RSD_w0wa.npy', samples)
+    """sampler.reset()
+    sampler.run_mcmc(state, 10000)"""
+
+def plot_mcmc_BAO_RSD_w0wa():
+    samples = np.load('mes_chaines_BAO_RSD_w0wa.npy')
+    n_cols = samples.shape[1]
+    fig = corner.corner(samples[:, :5], labels=para_names_w0wa, )
+    plt.savefig(
+        "/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_BAO_RSD_w0waCDM.pdf", bbox_inches="tight",)
+    plt.tight_layout()
+    plt.show()
+
+
+def mcmc_BAO_RSD_wCDM():
+    nwalkers = 10
+    limits = {}
+    limits["Omega_m"] = (0.1, 1.0)
+    limits["W_0"] = (-3.0, 1.0)
+    limits["sigma8"] = (0.6, 1.0)
+    limits["H_0xr_d"] = (5000, 20000)
+    pmin = np.array([])
+    pmax = np.array([])
+    for param in para_names_wCDM:
+        pmin = np.append(pmin, limits[param][0])
+        pmax = np.append(pmax, limits[param][1])
+    p0 = pmin + np.random.rand(nwalkers, ndim_wCDM) * (pmax - pmin)  # nwalkers entre 0 et 1
+    for j in range(ndim_wCDM):
+        max = p0[:,j].max()
+        min = p0[:,j].min()
+    sampler = emcee.EnsembleSampler(nwalkers, ndim_wCDM, log_prob_BAO_RSD_wCDM, args=[limits])
+    #log_prob(p0[0], limits)
+    state = sampler.run_mcmc(p0, 10000)
+    sampler.run_mcmc(state, 100, progress=True)
+    samples = sampler.get_chain(flat=True)
+    np.save('mes_chaines_BAO_RSD_wCDM.npy', samples)
+
+
+def plot_mcmc_BAO_wCDM():
+    samples = np.load('mes_chaines_BAO_RSD_wCDM.npy')
+    n_cols = samples.shape[1]
+    fig = corner.corner(samples[:, :4], labels=para_names_w0wa, )
+    plt.savefig(
+        "/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_BAO_RSD_wCDM.pdf", bbox_inches="tight",)
+    plt.tight_layout()
+    plt.show()
+
+
+
+# BAO + RSD + PV
+def mcmc_BAO_RSD_PV_w0wa():
+    nwalkers = 10
+    limits = {}
+    limits["Omega_m"] = (0.1, 1.0)
+    limits["W_0"] = (-3.0, 1.0)
+    limits["W_a"] = (-3.0, 2.0)
+    limits["sigma8"] = (0.6, 1.0)
+    limits["H_0xr_d"] = (5000, 20000)
+    pmin = np.array([])
+    pmax = np.array([])
+    for param in para_names_w0wa:
+        pmin = np.append(pmin, limits[param][0])
+        pmax = np.append(pmax, limits[param][1])
+    p0 = pmin + np.random.rand(nwalkers, ndim_w0wa) * (pmax - pmin)  # nwalkers entre 0 et 1
+    for j in range(ndim_w0wa):
+        max = p0[:,j].max()
+        min = p0[:,j].min()
+    sampler = emcee.EnsembleSampler(nwalkers, ndim_w0wa, log_prob_BAO_RSD_PV_w0wa, args=[limits])
+    #log_prob(p0[0], limits)
+    state = sampler.run_mcmc(p0, 10000)
+    sampler.run_mcmc(state, 100, progress=True)
+    samples = sampler.get_chain(flat=True)
+    np.save('mes_chaines_BAO_RSD_PV_w0wa.npy', samples)
+
+def plot_mcmc_BAO_RSD_PV_w0wa():
+    samples = np.load('mes_chaines_BAO_RSD_PV_w0wa.npy')
+    n_cols = samples.shape[1]
+    fig = corner.corner(samples[:, :5], labels=para_names_w0wa, )
+    plt.savefig("/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_BAO_RSD_PV_w0waCDM.pdf", bbox_inches="tight",)
+    plt.tight_layout()
+    plt.show()
+
+
+def mcmc_BAO_RSD_PV_wCDM():
+    nwalkers = 10
+    limits = {}
+    limits["Omega_m"] = (0.1, 1.0)
+    limits["W_0"] = (-3.0, 1.0)
+    limits["sigma8"] = (0.6, 1.0)
+    limits["H_0xr_d"] = (5000, 20000)
+    pmin = np.array([])
+    pmax = np.array([])
+    for param in para_names_wCDM:
+        pmin = np.append(pmin, limits[param][0])
+        pmax = np.append(pmax, limits[param][1])
+    p0 = pmin + np.random.rand(nwalkers, ndim_wCDM) * (pmax - pmin)  # nwalkers entre 0 et 1
+    for j in range(ndim_wCDM):
+        max = p0[:,j].max()
+        min = p0[:,j].min()
+    sampler = emcee.EnsembleSampler(nwalkers, ndim_wCDM, log_prob_BAO_RSD_PV_wCDM, args=[limits])
+    #log_prob(p0[0], limits)
+    state = sampler.run_mcmc(p0, 10000)
+    sampler.run_mcmc(state, 100, progress=True)
+    samples = sampler.get_chain(flat=True)
+    np.save('mes_chaines_BAO_RSD_PV_wCDM.npy', samples)
+
+
+def plot_mcmc_BAO_wCDM():
+    samples = np.load('mes_chaines_BAO_RSD_PV_wCDM.npy')
+    n_cols = samples.shape[1]
+    fig = corner.corner(samples[:, :4], labels=para_names_w0wa, )
+    plt.savefig(
+        "/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_BAO_RSD_PV_wCDM.pdf", bbox_inches="tight",)
+    plt.tight_layout()
+    plt.show()
 # p defini avc paramètres dans l'ordre
 #faire apres avec DR1 avec avec et sans PV et w0waCDM et wCDM
