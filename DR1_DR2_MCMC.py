@@ -38,7 +38,6 @@ sigma_fsigma8_noPV = tableau_DR1_noPV["fsigma8_err"].to_numpy()
 
 para_names = ["Omega_m", "W_0", "W_a", "sigma8", "H_0xr_d"]
 
-
 def chi_carré_Dv_over_rd(pars):
     sum = 0
     for i in range(len(z_Dv)):
@@ -61,12 +60,13 @@ def chi_carré(pars):
     return chi_carré_DM_over_DH(pars) + chi_carré_Dv_over_rd(pars)
 
 def log_prior(p, limits):
-    for param in para_names:
-        if p[0] < limits[param][0] or p[0] > limits[param][1]:
+    for i, param in enumerate(para_names):
+        if p[i] < limits[param][0] or p[i] > limits[param][1]:
             return -np.inf
     else : 
         return 0
-
+ 
+    return 0
 def log_prob(p, limits):
     pars = {
         "Omega_m": p[0],
@@ -81,7 +81,7 @@ def log_prob(p, limits):
 
 
 def mcmc_BAO_RSD_PV_w0wa():
-    nwalkers = 15
+    nwalkers = 10
     ndim = len(para_names)
 
     limits = {}
@@ -102,11 +102,18 @@ def mcmc_BAO_RSD_PV_w0wa():
         # print("pmin:", pmin)
         # print("pmax", pmax)
     p0 = pmin + np.random.rand(nwalkers, ndim) * (pmax - pmin)  # nwalkers entre 0 et 1
-    # print("p0", p0)
-    sampler = emcee.EnsembleSampler(nwalkers, ndim, log_prob, args= limits)
-    log_prob(p0[0], limits)
-    # print(log_prob(p0[0]))
-    #state = sampler.run_mcmc(p0, 100)
+    for j in range(ndim):
+        max = p0[:,j].max()
+        min = p0[:,j].min()
+        print("Le max du paramètre", para_names[j], "est :", max)
+        print("Le min du paramètre", para_names[j], "est :", min)
+
+    #print("p0", p0.shape)
+    sampler = emcee.EnsembleSampler(nwalkers, ndim, log_prob, args=[limits])
+    #log_prob(p0[0], limits)
+    #print(log_prob(p0[0], limits))
+    state = sampler.run_mcmc(p0, 100)
+    sampler.run_mcmc(state, 10000)
     """sampler.reset()
     sampler.run_mcmc(state, 10000)
     samples = sampler.get_chain(flat=True)
@@ -115,4 +122,5 @@ def mcmc_BAO_RSD_PV_w0wa():
     plt.ylabel(r"$p(\theta_1)$")
     plt.gca().set_yticks([]);"""
 
+mcmc_BAO_RSD_PV_w0wa()
 # p defini avc paramètres dans l'ordre
