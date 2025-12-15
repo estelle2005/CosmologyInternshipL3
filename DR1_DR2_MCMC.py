@@ -41,12 +41,9 @@ sigma_fsigma8_noPV = tableau_DR1_noPV["fsigma8_err"].to_numpy()
 #----------------------------
 para_names_w0wa = ["Omega_m", "W_0", "W_a", "sigma8", "H_0xr_d"]
 para_names_wCDM = ["Omega_m", "W_0", "sigma8", "H_0xr_d"]
-para_names_BAO_w0wa = ["Omega_m", "W_0", "W_a", "sigma8", "H_0xr_d"]
-para_names_BAO_wCDM = ["Omega_m", "W_0", "sigma8", "H_0xr_d"]
-ndim__BAO_w0wa = len(para_names_BAO_w0wa)
-ndim_BAO_wCDM = len(para_names_BAO_wCDM)
-ndim_w0wa = len(para_names_w0wa)
-ndim_wCDM = len(para_names_wCDM)
+para_names_BAO_w0wa = ["Omega_m", "W_0", "W_a", "H_0xr_d"]
+para_names_BAO_wCDM = ["Omega_m", "W_0", "H_0xr_d"]
+
 
 """def chi_carré_Dv_over_rd(pars):
     sum = 0
@@ -171,8 +168,8 @@ def log_prob_BAO_w0wa(p, limits):
         "W_0": p[1],
         "W_a": p[2],
         "H_0": 73.2,
-        "sigma8": p[3],
-        "H_0xr_d": p[4],
+        "sigma8": 0.8,
+        "H_0xr_d": p[3],
     }
     return -chi_carré_BAO(pars) / 2 + log_prior_BAO_w0wa(p, limits)
 
@@ -206,8 +203,8 @@ def log_prob_BAO_wCDM(p, limits):
         "W_0": p[1],
         "W_a": 0,
         "H_0": 73.2,
-        "sigma8": p[2],
-        "H_0xr_d": p[3],
+        "sigma8": 0.8,
+        "H_0xr_d": p[2],
     }
     return -chi_carré_BAO(pars) / 2 + log_prior_BAO_wCDM(p, limits)
 
@@ -236,17 +233,18 @@ def log_prob_BAO_RSD_PV_wCDM(p, limits):
 
 # BAO
 def mcmc_BAO_w0wa():
+    param_names = para_names_BAO_w0wa
+    ndim = len(param_names)
     nwalkers = 10
     limits = {}
     limits["Omega_m"] = (0.1, 1.0)
     limits["W_0"] = (-3.0, 1.0)
     limits["W_a"] = (-3.0, 2.0)
     #limits["H_0"] = (73.2, 73.2) #on fixe H_0 à 73.2
-    limits["sigma8"] = (0.6, 1.0)
     limits["H_0xr_d"] = (5000, 20000)
     pmin = np.array([])
     pmax = np.array([])
-    for param in para_names_w0wa:
+    for param in param_names:
         # print(param)
         # print("limit paramètre 0:", limits[param][0])
         # print("limit paramètre 1:", limits[param][1])
@@ -254,22 +252,22 @@ def mcmc_BAO_w0wa():
         pmax = np.append(pmax, limits[param][1])
         # print("pmin:", pmin)
         # print("pmax", pmax)
-    p0 = pmin + np.random.rand(nwalkers, ndim_w0wa) * (pmax - pmin)  # nwalkers entre 0 et 1
-    for j in range(ndim_w0wa):
+    p0 = pmin + np.random.rand(nwalkers, ndim) * (pmax - pmin)  # nwalkers entre 0 et 1
+    for j in range(ndim):
         max = p0[:,j].max()
         min = p0[:,j].min()
         #print("Le max du paramètre", para_names[j], "est :", max)
         #print("Le min du paramètre", para_names[j], "est :", min)
 
     #print("p0", p0.shape)
-    sampler = emcee.EnsembleSampler(nwalkers, ndim_w0wa, log_prob_BAO_w0wa, args=[limits])
+    sampler = emcee.EnsembleSampler(nwalkers, ndim, log_prob_BAO_w0wa, args=[limits])
     #log_prob(p0[0], limits)
     #print(log_prob(p0[0], limits))
     state = sampler.run_mcmc(p0, 10000)
     sampler.run_mcmc(state, 100, progress=True)
     samples = sampler.get_chain(flat=True)
     np.save('mes_chaines_BAO_w0wa.npy', samples)
-mcmc_BAO_w0wa()
+
 """def plot_mcmc_BAO_w0wa():
     samples = np.load('mes_chaines_BAO_w0wa.npy')
     n_cols = samples.shape[1]
@@ -318,26 +316,27 @@ def plot_mcmc_BAO_w0wa():
         "/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_BAO_w0waCDM.pdf",
         bbox_inches="tight",)
     plt.show()
-#ok
+plot_mcmc_BAO_w0wa()
 
   
 def mcmc_BAO_wCDM():
+    param_names = para_names_BAO_wCDM
+    ndim = len(param_names)
     nwalkers = 10
     limits = {}
     limits["Omega_m"] = (0.1, 1.0)
     limits["W_0"] = (-3.0, 1.0)
-    limits["sigma8"] = (0.6, 1.0)
     limits["H_0xr_d"] = (5000, 20000)
     pmin = np.array([])
     pmax = np.array([])
-    for param in para_names_wCDM:
+    for param in param_names:
         pmin = np.append(pmin, limits[param][0])
         pmax = np.append(pmax, limits[param][1])
-    p0 = pmin + np.random.rand(nwalkers, ndim_wCDM) * (pmax - pmin)  # nwalkers entre 0 et 1
-    for j in range(ndim_wCDM):
+    p0 = pmin + np.random.rand(nwalkers, ndim) * (pmax - pmin)  # nwalkers entre 0 et 1
+    for j in range(ndim):
         max = p0[:,j].max()
         min = p0[:,j].min()
-    sampler = emcee.EnsembleSampler(nwalkers, ndim_wCDM, log_prob_BAO_wCDM, args=[limits])
+    sampler = emcee.EnsembleSampler(nwalkers, ndim, log_prob_BAO_wCDM, args=[limits])
     #log_prob(p0[0], limits)
     state = sampler.run_mcmc(p0, 10000)
     sampler.run_mcmc(state, 100, progress=True)
@@ -371,6 +370,8 @@ def plot_mcmc_BAO_wCDM():
 
 # BAO + RSD
 def mcmc_BAO_RSD_w0wa():
+    param_names = para_names_w0wa
+    ndim = len(param_names)
     nwalkers = 10
     limits = {}
     limits["Omega_m"] = (0.1, 1.0)
@@ -380,14 +381,14 @@ def mcmc_BAO_RSD_w0wa():
     limits["H_0xr_d"] = (5000, 20000)
     pmin = np.array([])
     pmax = np.array([])
-    for param in para_names_w0wa:
+    for param in param_names:
         pmin = np.append(pmin, limits[param][0])
         pmax = np.append(pmax, limits[param][1])
-    p0 = pmin + np.random.rand(nwalkers, ndim_w0wa) * (pmax - pmin)  # nwalkers entre 0 et 1
-    for j in range(ndim_w0wa):
+    p0 = pmin + np.random.rand(nwalkers, ndim) * (pmax - pmin)  # nwalkers entre 0 et 1
+    for j in range(ndim):
         max = p0[:,j].max()
         min = p0[:,j].min()
-    sampler = emcee.EnsembleSampler(nwalkers, ndim_w0wa, log_prob_BAO_RSD_w0wa, args=[limits])
+    sampler = emcee.EnsembleSampler(nwalkers, ndim, log_prob_BAO_RSD_w0wa, args=[limits])
     #log_prob(p0[0], limits)
     state = sampler.run_mcmc(p0, 1000)
     sampler.run_mcmc(state, 100, progress=True)
@@ -421,6 +422,8 @@ def plot_mcmc_BAO_RSD_w0wa():
 # pb ici plot_mcmc_BAO_RSD_w0wa()
 
 def mcmc_BAO_RSD_wCDM():
+    param_names = para_names_wCDM
+    ndim = len(param_names)
     nwalkers = 10
     limits = {}
     limits["Omega_m"] = (0.1, 1.0)
@@ -429,14 +432,14 @@ def mcmc_BAO_RSD_wCDM():
     limits["H_0xr_d"] = (5000, 20000)
     pmin = np.array([])
     pmax = np.array([])
-    for param in para_names_wCDM:
+    for param in param_names:
         pmin = np.append(pmin, limits[param][0])
         pmax = np.append(pmax, limits[param][1])
-    p0 = pmin + np.random.rand(nwalkers, ndim_wCDM) * (pmax - pmin)  # nwalkers entre 0 et 1
-    for j in range(ndim_wCDM):
+    p0 = pmin + np.random.rand(nwalkers, ndim) * (pmax - pmin)  # nwalkers entre 0 et 1
+    for j in range(ndim):
         max = p0[:,j].max()
         min = p0[:,j].min()
-    sampler = emcee.EnsembleSampler(nwalkers, ndim_wCDM, log_prob_BAO_RSD_wCDM, args=[limits])
+    sampler = emcee.EnsembleSampler(nwalkers, ndim, log_prob_BAO_RSD_wCDM, args=[limits])
     #log_prob(p0[0], limits)
     state = sampler.run_mcmc(p0, 1000)
     sampler.run_mcmc(state, 100, progress=True)
@@ -471,6 +474,8 @@ def plot_mcmc_BAO_RSD_wCDM():
 
 # BAO + RSD + PV
 def mcmc_BAO_RSD_PV_w0wa():
+    param_names = para_names_w0wa
+    ndim = len(param_names)
     nwalkers = 10
     limits = {}
     limits["Omega_m"] = (0.1, 1.0)
@@ -480,14 +485,14 @@ def mcmc_BAO_RSD_PV_w0wa():
     limits["H_0xr_d"] = (5000, 20000)
     pmin = np.array([])
     pmax = np.array([])
-    for param in para_names_w0wa:
+    for param in param_names:
         pmin = np.append(pmin, limits[param][0])
         pmax = np.append(pmax, limits[param][1])
-    p0 = pmin + np.random.rand(nwalkers, ndim_w0wa) * (pmax - pmin)  # nwalkers entre 0 et 1
-    for j in range(ndim_w0wa):
+    p0 = pmin + np.random.rand(nwalkers, ndim) * (pmax - pmin)  # nwalkers entre 0 et 1
+    for j in range(ndim):
         max = p0[:,j].max()
         min = p0[:,j].min()
-    sampler = emcee.EnsembleSampler(nwalkers, ndim_w0wa, log_prob_BAO_RSD_PV_w0wa, args=[limits])
+    sampler = emcee.EnsembleSampler(nwalkers, ndim, log_prob_BAO_RSD_PV_w0wa, args=[limits])
     #log_prob(p0[0], limits)
     state = sampler.run_mcmc(p0, 1000)
     sampler.run_mcmc(state, 100, progress=True)
@@ -520,6 +525,8 @@ def plot_mcmc_BAO_RSD_PV_w0wa():
 
 
 def mcmc_BAO_RSD_PV_wCDM():
+    param_names = para_names_wCDM
+    ndim = len(param_names)
     nwalkers = 10
     limits = {}
     limits["Omega_m"] = (0.1, 1.0)
@@ -528,14 +535,14 @@ def mcmc_BAO_RSD_PV_wCDM():
     limits["H_0xr_d"] = (5000, 20000)
     pmin = np.array([])
     pmax = np.array([])
-    for param in para_names_wCDM:
+    for param in param_names:
         pmin = np.append(pmin, limits[param][0])
         pmax = np.append(pmax, limits[param][1])
-    p0 = pmin + np.random.rand(nwalkers, ndim_wCDM) * (pmax - pmin)  # nwalkers entre 0 et 1
+    p0 = pmin + np.random.rand(nwalkers, ndim) * (pmax - pmin)  # nwalkers entre 0 et 1
     """for j in range(ndim_wCDM):
         max = p0[:,j].max()
         min = p0[:,j].min()"""
-    sampler = emcee.EnsembleSampler(nwalkers, ndim_wCDM, log_prob_BAO_RSD_PV_wCDM, args=[limits])
+    sampler = emcee.EnsembleSampler(nwalkers, ndim, log_prob_BAO_RSD_PV_wCDM, args=[limits])
     #log_prob(p0[0], limits)
     state = sampler.run_mcmc(p0, 1000)
     sampler.run_mcmc(state, 100, progress=True)
