@@ -6,6 +6,8 @@ from iminuit.cost import LeastSquares
 from matplotlib.lines import Line2D
 import emcee
 import corner
+import getdist
+from getdist import MCSamples, plots
 
 r_d = 147.05  # Mpc today
 c = 3 * 10**5  # en km
@@ -131,8 +133,7 @@ def log_prior_BAO_w0wa(p, limits):
         low, high = limits[param]
         if p[i] < low or p[i] > high:
             return -np.inf
-    else:
-        return 0
+    return 0.0
     
 def log_prior_BAO_wCDM(p, limits):
     for i, param in enumerate(para_names_wCDM):
@@ -249,10 +250,9 @@ def mcmc_BAO_w0wa():
     sampler.run_mcmc(state, 100, progress=True)
     samples = sampler.get_chain(flat=True)
     np.save('mes_chaines_BAO_w0wa.npy', samples)
-    """sampler.reset()
-    sampler.run_mcmc(state, 10000)"""
 
-def plot_mcmc_BAO_w0wa():
+#ok
+"""def plot_mcmc_BAO_w0wa():
     samples = np.load('mes_chaines_BAO_w0wa.npy')
     n_cols = samples.shape[1]
     #fig, axes = plt.subplots(5, figsize=(10, 10), sharex=True)
@@ -260,27 +260,49 @@ def plot_mcmc_BAO_w0wa():
     #print(f"Nombre d'échantillons: {len(samples)}")
     #print("n_cols:", n_cols)
     #print("ndim:", ndim)
-    """for i in range(ndim):
-        ax = axes[i]
-        ax.plot(samples[:, i], "k", alpha=0.3)
-        ax.set_xlim(0, len(samples))
-        ax.set_ylabel(para_names[i])
-        ax.yaxis.set_label_coords(-0.1, 0.5)
-    axes[-1].set_xlabel("step number")"""
+    #for i in range(ndim):
+    #    ax = axes[i]
+    #    ax.plot(samples[:, i], "k", alpha=0.3)
+    #    ax.set_xlim(0, len(samples))
+    #    ax.set_ylabel(para_names[i])
+    #    ax.yaxis.set_label_coords(-0.1, 0.5)
+    #axes[-1].set_xlabel("step number")
     fig = corner.corner(samples[:, :5], labels=para_names_w0wa, )
     plt.savefig(
         "/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_BAO_w0waCDM.pdf",
         bbox_inches="tight",
     )
     plt.tight_layout()
-    plt.show()
+    plt.show()"""
 
-""" fig = corner.corner(
-        samples[:, :5],  # Prend seulement les 5 premières colonnes
-        labels=para_names,
-        show_titles=True,
-        plot_datapoints=False
-    )"""
+def plot_mcmc_BAO_w0wa():
+    samples = np.load('mes_chaines_BAO_w0wa.npy')
+
+    if len(samples) > 50000:
+        samples = samples[::10]  # 1 point sur 5
+
+    param_names = para_names_w0wa
+    labels = para_names_w0wa
+    samples_getdist = MCSamples(
+        samples=samples,
+        names=param_names,
+        labels=labels,
+        sampler='mcmc',
+        settings={'fine_bins': 512})
+    
+    g = plots.get_subplot_plotter()
+    g.settings.axes_fontsize = 10
+    g.settings.title_limit_fontsize = 10
+    #g.settings.legend_fontsize = 12
+
+    g.triangle_plot([samples_getdist], filled=True, contour_colors=['blue'])
+    plt.savefig(
+        "/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_BAO_w0waCDM.pdf",
+        bbox_inches="tight",)
+    plt.show()
+    
+plot_mcmc_BAO_w0wa()
+
   
 def mcmc_BAO_wCDM():
     nwalkers = 10
@@ -304,7 +326,7 @@ def mcmc_BAO_wCDM():
     sampler.run_mcmc(state, 100, progress=True)
     samples = sampler.get_chain(flat=True)
     np.save('mes_chaines_BAO_wCDM.npy', samples)
-
+#ok
 def plot_mcmc_BAO_wCDM():
     samples = np.load('mes_chaines_BAO_wCDM.npy')
     n_cols = samples.shape[1]
@@ -334,13 +356,13 @@ def mcmc_BAO_RSD_w0wa():
         min = p0[:,j].min()
     sampler = emcee.EnsembleSampler(nwalkers, ndim_w0wa, log_prob_BAO_RSD_w0wa, args=[limits])
     #log_prob(p0[0], limits)
-    state = sampler.run_mcmc(p0, 10000)
+    state = sampler.run_mcmc(p0, 1000)
     sampler.run_mcmc(state, 100, progress=True)
     samples = sampler.get_chain(flat=True)
     np.save('mes_chaines_BAO_RSD_w0wa.npy', samples)
     """sampler.reset()
     sampler.run_mcmc(state, 10000)"""
-
+# ok
 def plot_mcmc_BAO_RSD_w0wa():
     samples = np.load('mes_chaines_BAO_RSD_w0wa.npy')
     n_cols = samples.shape[1]
@@ -369,13 +391,13 @@ def mcmc_BAO_RSD_wCDM():
         min = p0[:,j].min()
     sampler = emcee.EnsembleSampler(nwalkers, ndim_wCDM, log_prob_BAO_RSD_wCDM, args=[limits])
     #log_prob(p0[0], limits)
-    state = sampler.run_mcmc(p0, 10000)
+    state = sampler.run_mcmc(p0, 1000)
     sampler.run_mcmc(state, 100, progress=True)
     samples = sampler.get_chain(flat=True)
     np.save('mes_chaines_BAO_RSD_wCDM.npy', samples)
+# ok
 
-
-def plot_mcmc_BAO_wCDM():
+def plot_mcmc_BAO_RSD_wCDM():
     samples = np.load('mes_chaines_BAO_RSD_wCDM.npy')
     n_cols = samples.shape[1]
     fig = corner.corner(samples[:, :4], labels=para_names_w0wa, )
@@ -383,7 +405,6 @@ def plot_mcmc_BAO_wCDM():
         "/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_BAO_RSD_wCDM.pdf", bbox_inches="tight",)
     plt.tight_layout()
     plt.show()
-
 
 
 # BAO + RSD + PV
@@ -406,11 +427,11 @@ def mcmc_BAO_RSD_PV_w0wa():
         min = p0[:,j].min()
     sampler = emcee.EnsembleSampler(nwalkers, ndim_w0wa, log_prob_BAO_RSD_PV_w0wa, args=[limits])
     #log_prob(p0[0], limits)
-    state = sampler.run_mcmc(p0, 10000)
+    state = sampler.run_mcmc(p0, 1000)
     sampler.run_mcmc(state, 100, progress=True)
     samples = sampler.get_chain(flat=True)
     np.save('mes_chaines_BAO_RSD_PV_w0wa.npy', samples)
-
+# ok
 def plot_mcmc_BAO_RSD_PV_w0wa():
     samples = np.load('mes_chaines_BAO_RSD_PV_w0wa.npy')
     n_cols = samples.shape[1]
@@ -433,18 +454,18 @@ def mcmc_BAO_RSD_PV_wCDM():
         pmin = np.append(pmin, limits[param][0])
         pmax = np.append(pmax, limits[param][1])
     p0 = pmin + np.random.rand(nwalkers, ndim_wCDM) * (pmax - pmin)  # nwalkers entre 0 et 1
-    for j in range(ndim_wCDM):
+    """for j in range(ndim_wCDM):
         max = p0[:,j].max()
-        min = p0[:,j].min()
+        min = p0[:,j].min()"""
     sampler = emcee.EnsembleSampler(nwalkers, ndim_wCDM, log_prob_BAO_RSD_PV_wCDM, args=[limits])
     #log_prob(p0[0], limits)
-    state = sampler.run_mcmc(p0, 10000)
+    state = sampler.run_mcmc(p0, 1000)
     sampler.run_mcmc(state, 100, progress=True)
     samples = sampler.get_chain(flat=True)
     np.save('mes_chaines_BAO_RSD_PV_wCDM.npy', samples)
+# ok
 
-
-def plot_mcmc_BAO_wCDM():
+def plot_mcmc_BAO_RSD_PV_wCDM():
     samples = np.load('mes_chaines_BAO_RSD_PV_wCDM.npy')
     n_cols = samples.shape[1]
     fig = corner.corner(samples[:, :4], labels=para_names_w0wa, )
@@ -453,4 +474,3 @@ def plot_mcmc_BAO_wCDM():
     plt.tight_layout()
     plt.show()
 # p defini avc paramètres dans l'ordre
-#faire apres avec DR1 avec avec et sans PV et w0waCDM et wCDM
