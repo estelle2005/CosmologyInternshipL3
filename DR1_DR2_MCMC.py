@@ -297,8 +297,8 @@ def plot_mcmc_BAO_w0wa():
     if len(samples) > 50000:
         samples = samples[::10]  # 1 point sur 10
 
-    param_names = para_names_w0wa
-    labels = para_names_w0wa
+    param_names = para_names_BAO_w0wa
+    labels = para_names_BAO_w0wa
     samples_getdist = MCSamples(
         samples=samples,
         names=param_names,
@@ -316,7 +316,7 @@ def plot_mcmc_BAO_w0wa():
         "/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_BAO_w0waCDM.pdf",
         bbox_inches="tight",)
     plt.show()
-plot_mcmc_BAO_w0wa()
+# OK
 
   
 def mcmc_BAO_wCDM():
@@ -349,8 +349,8 @@ def plot_mcmc_BAO_wCDM():
     if len(samples) > 50000:
         samples = samples[::10]
 
-    param_names = para_names_wCDM
-    labels = para_names_wCDM
+    param_names = para_names_BAO_wCDM
+    labels = para_names_BAO_wCDM
     samples_getdist = MCSamples(
         samples=samples,
         names=param_names,
@@ -367,12 +367,14 @@ def plot_mcmc_BAO_wCDM():
     plt.savefig(
         "/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_BAO_wCDM.pdf", bbox_inches="tight",)
     plt.show()
+# OK
+
 
 # BAO + RSD
 def mcmc_BAO_RSD_w0wa():
     param_names = para_names_w0wa
     ndim = len(param_names)
-    nwalkers = 10
+    nwalkers = 100
     limits = {}
     limits["Omega_m"] = (0.1, 1.0)
     limits["W_0"] = (-3.0, 1.0)
@@ -385,13 +387,11 @@ def mcmc_BAO_RSD_w0wa():
         pmin = np.append(pmin, limits[param][0])
         pmax = np.append(pmax, limits[param][1])
     p0 = pmin + np.random.rand(nwalkers, ndim) * (pmax - pmin)  # nwalkers entre 0 et 1
-    for j in range(ndim):
-        max = p0[:,j].max()
-        min = p0[:,j].min()
+
     sampler = emcee.EnsembleSampler(nwalkers, ndim, log_prob_BAO_RSD_w0wa, args=[limits])
     #log_prob(p0[0], limits)
-    state = sampler.run_mcmc(p0, 1000)
-    sampler.run_mcmc(state, 100, progress=True)
+    state = sampler.run_mcmc(p0, 500)
+    sampler.run_mcmc(state, 5000, progress=True)
     samples = sampler.get_chain(flat=True)
     np.save('mes_chaines_BAO_RSD_w0wa.npy', samples)
 
@@ -399,7 +399,9 @@ def plot_mcmc_BAO_RSD_w0wa():
     samples = np.load('mes_chaines_BAO_RSD_w0wa.npy')
 
     if len(samples) > 50000:
-        samples = samples[::10]  # 1 point sur 10
+        samples = samples[::4]  # 1 point sur 10
+    elif len(samples) > 100000:
+        samples = samples[::2]
 
     param_names = para_names_w0wa
     labels = para_names_w0wa
@@ -408,7 +410,11 @@ def plot_mcmc_BAO_RSD_w0wa():
         names=param_names,
         labels=labels,
         sampler='mcmc',
-        settings={'fine_bins': 512})
+        settings={'fine_bins': 512,  # Augmenter le nombre de bins
+        'fine_bins_2D': 64,  # Augmenter pour les plots 2D
+        'smooth_scale_1D': 0.2,  # smoothing manuel
+        'smooth_scale_2D': 0.3,  # manuel
+        'num_bins': 20})  
     
     g = plots.get_subplot_plotter()
     g.settings.axes_fontsize = 10
@@ -419,7 +425,8 @@ def plot_mcmc_BAO_RSD_w0wa():
     plt.savefig(
         "/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_BAO_RSD_w0waCDM.pdf", bbox_inches="tight",)
     plt.show()
-# pb ici plot_mcmc_BAO_RSD_w0wa()
+# semble OK
+
 
 def mcmc_BAO_RSD_wCDM():
     param_names = para_names_wCDM
@@ -450,7 +457,10 @@ def plot_mcmc_BAO_RSD_wCDM():
     samples = np.load('mes_chaines_BAO_RSD_wCDM.npy')
 
     if len(samples) > 50000:
-        samples = samples[::10]  # 1 point sur 10
+        samples = samples[::4]  # 1 point sur 4
+    elif len(samples) > 100000:
+        samples = samples[::2]
+
 
     param_names = para_names_wCDM
     labels = para_names_wCDM
@@ -459,7 +469,10 @@ def plot_mcmc_BAO_RSD_wCDM():
         names=param_names,
         labels=labels,
         sampler='mcmc',
-        settings={'fine_bins': 512})
+        settings={'fine_bins': 512, 'fine_bins_2D': 64,  # Augmenter pour les plots 2D
+        'smooth_scale_1D': 0.2,  # smoothing manuel
+        'smooth_scale_2D': 0.3,  # manuel
+        'num_bins': 20})
     
     g = plots.get_subplot_plotter()
     g.settings.axes_fontsize = 10
@@ -470,7 +483,7 @@ def plot_mcmc_BAO_RSD_wCDM():
     plt.savefig(
         "/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_BAO_RSD_wCDM.pdf", bbox_inches="tight",)
     plt.show()
-
+# OK
 
 # BAO + RSD + PV
 def mcmc_BAO_RSD_PV_w0wa():
@@ -503,7 +516,9 @@ def plot_mcmc_BAO_RSD_PV_w0wa():
     samples = np.load('mes_chaines_BAO_RSD_PV_w0wa.npy')
 
     if len(samples) > 50000:
-        samples = samples[::10]  # 1 point sur 10
+        samples = samples[::4]  # 1 point sur 4
+    elif len(samples) > 100000:
+        samples = samples[::2]
 
     param_names = para_names_w0wa
     labels = para_names_w0wa
@@ -512,7 +527,11 @@ def plot_mcmc_BAO_RSD_PV_w0wa():
         names=param_names,
         labels=labels,
         sampler='mcmc',
-        settings={'fine_bins': 512})
+        settings={'fine_bins': 512, 
+                  'fine_bins_2D': 64,
+                  'smooth_scale_1D': 0.2,
+                  'smooth_scale_2D': 0.3,
+                  'num_bins': 20})
     
     g = plots.get_subplot_plotter()
     g.settings.axes_fontsize = 10
@@ -522,7 +541,7 @@ def plot_mcmc_BAO_RSD_PV_w0wa():
     g.triangle_plot([samples_getdist], filled=True, contour_colors=['blue'])
     plt.savefig("/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_BAO_RSD_PV_w0waCDM.pdf", bbox_inches="tight",)
     plt.show()
-
+# OK
 
 def mcmc_BAO_RSD_PV_wCDM():
     param_names = para_names_wCDM
@@ -553,7 +572,9 @@ def plot_mcmc_BAO_RSD_PV_wCDM():
     samples = np.load('mes_chaines_BAO_RSD_PV_wCDM.npy')
 
     if len(samples) > 50000:
-        samples = samples[::10]  # 1 point sur 10
+        samples = samples[::4]  # 1 point sur 4
+    elif len(samples) > 100000:
+        samples = samples[::2]
 
     param_names = para_names_wCDM
     labels = para_names_wCDM
@@ -562,7 +583,10 @@ def plot_mcmc_BAO_RSD_PV_wCDM():
         names=param_names,
         labels=labels,
         sampler='mcmc',
-        settings={'fine_bins': 512})
+        settings={'fine_bins': 512, 'fine_bins_2D': 64,  # Augmenter pour les plots 2D
+        'smooth_scale_1D': 0.2,  # smoothing manuel
+        'smooth_scale_2D': 0.3,  # manuel
+        'num_bins': 20})
     
     g = plots.get_subplot_plotter()
     g.settings.axes_fontsize = 10
