@@ -8,6 +8,7 @@ import emcee
 import corner
 import getdist
 from getdist import MCSamples, plots
+import os
 
 r_d = 147.05  # Mpc today
 c = 3 * 10**5  # en km
@@ -263,11 +264,12 @@ def mcmc_BAO_w0wa():
     sampler = emcee.EnsembleSampler(nwalkers, ndim, log_prob_BAO_w0wa, args=[limits])
     #log_prob(p0[0], limits)
     #print(log_prob(p0[0], limits))
-    state = sampler.run_mcmc(p0, 10000)
+
+    state = sampler.run_mcmc(p0, 1000)
     sampler.run_mcmc(state, 100, progress=True)
     samples = sampler.get_chain(flat=True)
     np.save('mes_chaines_BAO_w0wa.npy', samples)
-
+mcmc_BAO_w0wa()
 """def plot_mcmc_BAO_w0wa():
     samples = np.load('mes_chaines_BAO_w0wa.npy')
     n_cols = samples.shape[1]
@@ -295,7 +297,9 @@ def plot_mcmc_BAO_w0wa():
     samples = np.load('mes_chaines_BAO_w0wa.npy')
 
     if len(samples) > 50000:
-        samples = samples[::10]  # 1 point sur 10
+        samples = samples[::4]  # 1 point sur 4
+    elif len(samples) > 100000:
+        samples = samples[::2]
 
     param_names = para_names_BAO_w0wa
     labels = para_names_BAO_w0wa
@@ -304,7 +308,11 @@ def plot_mcmc_BAO_w0wa():
         names=param_names,
         labels=labels,
         sampler='mcmc',
-        settings={'fine_bins': 512})
+        settings={'fine_bins': 512,  # Augmenter le nombre de bins
+        'fine_bins_2D': 64,  # Augmenter pour les plots 2D
+        'smooth_scale_1D': 0.2,  # smoothing manuel
+        'smooth_scale_2D': 0.3,  # manuel
+        'num_bins': 20})
     
     g = plots.get_subplot_plotter()
     g.settings.axes_fontsize = 10
@@ -316,7 +324,7 @@ def plot_mcmc_BAO_w0wa():
         "/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_BAO_w0waCDM.pdf",
         bbox_inches="tight",)
     plt.show()
-# OK
+
 
   
 def mcmc_BAO_wCDM():
@@ -338,7 +346,7 @@ def mcmc_BAO_wCDM():
         min = p0[:,j].min()
     sampler = emcee.EnsembleSampler(nwalkers, ndim, log_prob_BAO_wCDM, args=[limits])
     #log_prob(p0[0], limits)
-    state = sampler.run_mcmc(p0, 10000)
+    state = sampler.run_mcmc(p0, 1000)
     sampler.run_mcmc(state, 100, progress=True)
     samples = sampler.get_chain(flat=True)
     np.save('mes_chaines_BAO_wCDM.npy', samples)
@@ -347,7 +355,9 @@ def plot_mcmc_BAO_wCDM():
     samples = np.load('mes_chaines_BAO_wCDM.npy')
 
     if len(samples) > 50000:
-        samples = samples[::10]
+        samples = samples[::4]  # 1 point sur 10
+    elif len(samples) > 100000:
+        samples = samples[::2]
 
     param_names = para_names_BAO_wCDM
     labels = para_names_BAO_wCDM
@@ -356,7 +366,11 @@ def plot_mcmc_BAO_wCDM():
         names=param_names,
         labels=labels,
         sampler='mcmc',
-        settings={'fine_bins': 512})
+        settings={'fine_bins': 512,  # Augmenter le nombre de bins
+        'fine_bins_2D': 64,  # Augmenter pour les plots 2D
+        'smooth_scale_1D': 0.2,  # smoothing manuel
+        'smooth_scale_2D': 0.3,  # manuel
+        'num_bins': 20})
     
     g = plots.get_subplot_plotter()
     g.settings.axes_fontsize = 10
@@ -367,7 +381,7 @@ def plot_mcmc_BAO_wCDM():
     plt.savefig(
         "/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_BAO_wCDM.pdf", bbox_inches="tight",)
     plt.show()
-# OK
+
 
 
 # BAO + RSD
@@ -421,11 +435,11 @@ def plot_mcmc_BAO_RSD_w0wa():
     g.settings.title_limit_fontsize = 10
     #g.settings.legend_fontsize = 12
 
-    g.triangle_plot([samples_getdist], filled=True, contour_colors=['blue'])
+    g.triangle_plot([samples_getdist], filled=True, contour_colors=['green'])
     plt.savefig(
         "/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_BAO_RSD_w0waCDM.pdf", bbox_inches="tight",)
     plt.show()
-# semble OK
+
 
 
 def mcmc_BAO_RSD_wCDM():
@@ -479,11 +493,11 @@ def plot_mcmc_BAO_RSD_wCDM():
     g.settings.title_limit_fontsize = 10
     #g.settings.legend_fontsize = 12
 
-    g.triangle_plot([samples_getdist], filled=True, contour_colors=['blue'])
+    g.triangle_plot([samples_getdist], filled=True, contour_colors=['green'])
     plt.savefig(
         "/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_BAO_RSD_wCDM.pdf", bbox_inches="tight",)
     plt.show()
-# OK
+
 
 # BAO + RSD + PV
 def mcmc_BAO_RSD_PV_w0wa():
@@ -538,10 +552,10 @@ def plot_mcmc_BAO_RSD_PV_w0wa():
     g.settings.title_limit_fontsize = 10
     #g.settings.legend_fontsize = 12
 
-    g.triangle_plot([samples_getdist], filled=True, contour_colors=['blue'])
+    g.triangle_plot([samples_getdist], filled=True, contour_colors=['red'])
     plt.savefig("/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_BAO_RSD_PV_w0waCDM.pdf", bbox_inches="tight",)
     plt.show()
-# OK
+
 
 def mcmc_BAO_RSD_PV_wCDM():
     param_names = para_names_wCDM
@@ -593,9 +607,123 @@ def plot_mcmc_BAO_RSD_PV_wCDM():
     g.settings.title_limit_fontsize = 10
     #g.settings.legend_fontsize = 12
 
-    g.triangle_plot([samples_getdist], filled=True, contour_colors=['blue'])
+    g.triangle_plot([samples_getdist], filled=True, contour_colors=['red'])
     plt.savefig(
         "/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_BAO_RSD_PV_wCDM.pdf", bbox_inches="tight",)
     plt.show()
 
 # p defini avc paramètres dans l'ordre
+
+def plot_mcmc_w0wa():
+    samples_BAO = np.load('mes_chaines_BAO_w0wa.npy')
+    samples_BAO_RSD = np.load('mes_chaines_BAO_RSD_w0wa.npy')
+    samples_BAO_RSD_PV = np.load('mes_chaines_BAO_RSD_PV_w0wa.npy')
+
+    samples_list = [samples_BAO, samples_BAO_RSD, samples_BAO_RSD_PV]
+
+    for i in range(len(samples_list)):
+        if len(samples_list[i]) > 100000:
+            samples_list[i] = samples_list[i][::4]
+        elif len(samples_list[i]) > 50000:
+            samples_list[i] = samples_list[i][::2]
+    
+
+    mcsamples_list = []
+    colors = ['blue', 'green', 'red']  # Couleurs différentes pour chaque dataset
+    legends = ['BAO only', 'BAO+RSD', 'BAO+RSD+PV']
+
+    labels_latex = [r'$w_0$', r'$w_a$', r'$\Omega_m$', r'$h$']
+    labels_latex_extended = [r'$w_0$', r'$w_a$', r'$\Omega_m$', r'$h$', r'$\sigma_8$']
+
+    for i, samples in enumerate(samples_list):
+        if i == 0 : 
+            param = para_names_BAO_w0wa
+            labels = labels_latex[:len(param)]
+        else : 
+            param = para_names_w0wa
+            labels = labels_latex_extended[:len(param)]
+
+        samples_mcsamples = MCSamples(
+            samples=samples,
+            names=param,
+            labels=param,
+            label=legends[i],
+            sampler='mcmc',
+            settings={'fine_bins': 512,
+                    'fine_bins_2D': 64,
+                    'smooth_scale_1D': 0.2,
+                    'smooth_scale_2D': 0.3,
+                    'num_bins': 20})
+        mcsamples_list.append(samples_mcsamples) 
+    
+    g = plots.get_subplot_plotter()
+    g.settings.axes_fontsize = 10
+    g.settings.title_limit_fontsize = 10
+    g.settings.legend_fontsize = 12
+    g.settings.legend_loc = 'upper right'
+
+    g.triangle_plot(mcsamples_list, filled=True, contour_colors=colors, legend_labels=legends, legend_loc='upper right')
+    plt.savefig(
+        "/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_w0waCDM.pdf", bbox_inches="tight",)
+    plt.show()
+
+def plot_mcmc_wCDM():
+    samples_BAO = np.load('mes_chaines_BAO_wCDM.npy')
+    samples_BAO_RSD = np.load('mes_chaines_BAO_RSD_wCDM.npy')
+    samples_BAO_RSD_PV = np.load('mes_chaines_BAO_RSD_PV_wCDM.npy')
+
+    samples_list = [samples_BAO, samples_BAO_RSD, samples_BAO_RSD_PV]
+
+    for i in range(len(samples_list)):
+        if len(samples_list[i]) > 100000:
+            samples_list[i] = samples_list[i][::4]
+        elif len(samples_list[i]) > 50000:
+            samples_list[i] = samples_list[i][::2]
+    
+
+    mcsamples_list = []
+    colors = ['blue', 'green', 'red']  # Couleurs différentes pour chaque dataset
+    legends = ['BAO only', 'BAO+RSD', 'BAO+RSD+PV']
+
+    labels_latex = [r'$w_0$', r'$\Omega_m$', r'$h$']
+    labels_latex_extended = [r'$w_0$', r'$\Omega_m$', r'$h$', r'$\sigma_8$']
+
+    for i, samples in enumerate(samples_list):
+        if i == 0 : 
+            param = para_names_BAO_wCDM
+            labels = labels_latex[:len(param)]
+        else : 
+            param = para_names_wCDM
+            labels = labels_latex_extended[:len(param)]
+
+        samples_mcsamples = MCSamples(
+            samples=samples,
+            names=param,
+            labels=param,
+            label=legends[i],
+            sampler='mcmc',
+            settings={'fine_bins': 512,
+                    'fine_bins_2D': 64,
+                    'smooth_scale_1D': 0.2,
+                    'smooth_scale_2D': 0.3,
+                    'num_bins': 20})
+        mcsamples_list.append(samples_mcsamples) 
+    
+    g = plots.get_subplot_plotter()
+    g.settings.axes_fontsize = 10
+    g.settings.title_limit_fontsize = 10
+    g.settings.legend_fontsize = 12
+    g.settings.legend_loc = 'upper right'
+
+    g.triangle_plot(mcsamples_list, filled=True, contour_colors=colors, legend_labels=legends, legend_loc='upper right')
+    plt.savefig(
+        "/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_wCDM.pdf", bbox_inches="tight",)
+    plt.show()
+
+a = np.load('mes_chaines_BAO_wCDM.npy')
+a_ = np.load('mes_chaines_BAO_w0wa.npy')
+b = np.load('mes_chaines_BAO_RSD_wCDM.npy')
+b_ = np.load('mes_chaines_BAO_RSD_w0wa.npy')
+c = np.load('mes_chaines_BAO_RSD_PV_wCDM.npy')
+c_ = np.load('mes_chaines_BAO_RSD_PV_w0wa.npy')
+print("longueur BAO wCDM:", len(a), "longueur BAO w0waCDM:",len(a_), len(b), len(b_), len(c), len(c_))
