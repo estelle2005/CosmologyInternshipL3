@@ -231,10 +231,9 @@ def log_prob_BAO_RSD_PV_wCDM(p, limits):
     return -chi_carré_BAO_RSD_PV(pars) / 2 + log_prior_wCDM(p, limits)
 
 # BAO
-def mcmc_BAO_w0wa(nsteps):
+def mcmc_BAO_w0wa(nsteps, nwalkers):
     param_names = para_names_BAO_w0wa
     ndim = len(param_names)
-    nwalkers = 10
     limits = {}
     limits["Omega_m"] = (0.1, 1.0)
     limits["W_0"] = (-3.0, 1.0)
@@ -267,8 +266,8 @@ def mcmc_BAO_w0wa(nsteps):
     #sampler.run_mcmc(state, 1000, progress=True)
     sampler.run_mcmc(p0, nsteps, progress=True)
     samples = sampler.get_chain(flat=True)
-    np.save(f'mes_chaines_BAO_w0wa_{nsteps}.npy', samples)
-
+    np.save(f'mes_chaines_BAO_w0wa_{nsteps}_{nwalkers}.npy', samples)
+mcmc_BAO_w0wa(1000, 10)
 """def plot_mcmc_BAO_w0wa():
     samples = np.load('mes_chaines_BAO_w0wa.npy')
     n_cols = samples.shape[1]
@@ -291,10 +290,11 @@ def mcmc_BAO_w0wa(nsteps):
     )
     plt.tight_layout()
     plt.show()"""
-mcmc_BAO_w0wa(1000)
 
-def plot_mcmc_BAO_w0wa(nsteps, burnin):
-    samples = np.load(f'mes_chaines_BAO_w0wa_{nsteps}.npy')
+
+def plot_mcmc_BAO_w0wa(nsteps, nwalkers, burnin):
+    samples = np.load(f'mes_chaines_BAO_w0wa_{nsteps}_{nwalkers}.npy')
+    samples = samples.reshape((nsteps, nwalkers))
     samples = samples[burnin:]
 
     """if len(samples) > 50000:
@@ -325,13 +325,18 @@ def plot_mcmc_BAO_w0wa(nsteps, burnin):
         "/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_BAO_w0waCDM.pdf",
         bbox_inches="tight",)
     plt.show()
-plot_mcmc_BAO_w0wa(1000, 500)
+plot_mcmc_BAO_w0wa(1000, 10, 500)
 
+"""samples = np.load(f'mes_chaines_BAO_w0wa_{1000}.npy')
+#samples.shape
+#plt.hist(samples[:,0].ravel(), bins=100, histtype='step')
+samples_0 = samples[:,0].reshape(())
+plt.plot(samples[:,0])
+plt.show() #ON VOIT QUE PLUSIEURS WALKEURS SONT SUPERPOSÉS"""
   
-def mcmc_BAO_wCDM(nsteps):
+def mcmc_BAO_wCDM(nsteps, nwalkers):
     param_names = para_names_BAO_wCDM
     ndim = len(param_names)
-    nwalkers = 10
     limits = {}
     limits["Omega_m"] = (0.1, 1.0)
     limits["W_0"] = (-3.0, 1.0)
@@ -347,10 +352,10 @@ def mcmc_BAO_wCDM(nsteps):
     #state = sampler.run_mcmc(p0, 500)
     sampler.run_mcmc(p0, nsteps, progress=True)
     samples = sampler.get_chain(flat=True)
-    np.save(f'mes_chaines_BAO_wCDM_{nsteps}.npy', samples)
+    np.save(f'mes_chaines_BAO_wCDM_{nsteps}_{nwalkers}.npy', samples)
 
-def plot_mcmc_BAO_wCDM(nsteps, burnin):
-    samples = np.load(f'mes_chaines_BAO_wCDM_{nsteps}.npy')
+def plot_mcmc_BAO_wCDM(nsteps, nwalkers, burnin):
+    samples = np.load(f'mes_chaines_BAO_wCDM_{nsteps}_{nwalkers}.npy')
     samples = samples[burnin:]
 
     """if len(samples) > 50000:
@@ -383,10 +388,9 @@ def plot_mcmc_BAO_wCDM(nsteps, burnin):
 
 
 # BAO + RSD
-def mcmc_BAO_RSD_w0wa(nsteps):
+def mcmc_BAO_RSD_w0wa(nsteps, nwalkers):
     param_names = para_names_w0wa
     ndim = len(param_names)
-    nwalkers = 10
     limits = {}
     limits["Omega_m"] = (0.1, 1.0)
     limits["W_0"] = (-3.0, 1.0)
@@ -405,10 +409,10 @@ def mcmc_BAO_RSD_w0wa(nsteps):
     #state = sampler.run_mcmc(p0, 500)
     sampler.run_mcmc(p0, nsteps, progress=True)
     samples = sampler.get_chain(flat=True)
-    np.save(f'mes_chaines_BAO_RSD_w0wa_{nsteps}.npy', samples)
+    np.save(f'mes_chaines_BAO_RSD_w0wa_{nsteps}_{nwalkers}.npy', samples)
 
-def plot_mcmc_BAO_RSD_w0wa(nsteps, burnin):
-    samples = np.load(f'mes_chaines_BAO_RSD_w0wa_{nsteps}.npy')
+def plot_mcmc_BAO_RSD_w0wa(nsteps, nwalkers, burnin):
+    samples = np.load(f'mes_chaines_BAO_RSD_w0wa_{nsteps}_{nwalkers}.npy')
     samples = samples[burnin:]
 
     """if len(samples) > 50000:
@@ -440,11 +444,9 @@ def plot_mcmc_BAO_RSD_w0wa(nsteps, burnin):
     plt.show()
 
 
-
-def mcmc_BAO_RSD_wCDM(nsteps):
+def mcmc_BAO_RSD_wCDM(nsteps, nwalkers):
     param_names = para_names_wCDM
     ndim = len(param_names)
-    nwalkers = 10
     limits = {}
     limits["Omega_m"] = (0.1, 1.0)
     limits["W_0"] = (-3.0, 1.0)
@@ -464,10 +466,10 @@ def mcmc_BAO_RSD_wCDM(nsteps):
     #state = sampler.run_mcmc(p0, 500)
     sampler.run_mcmc(p0, nsteps, progress=True)
     samples = sampler.get_chain(flat=True)
-    np.save(f'mes_chaines_BAO_RSD_wCDM_{nsteps}.npy', samples)
+    np.save(f'mes_chaines_BAO_RSD_wCDM_{nsteps}_{nwalkers}.npy', samples)
 
-def plot_mcmc_BAO_RSD_wCDM(nsteps, burnin):
-    samples = np.load(f'mes_chaines_BAO_RSD_wCDM_{nsteps}.npy')
+def plot_mcmc_BAO_RSD_wCDM(nsteps, nwalkers, burnin):
+    samples = np.load(f'mes_chaines_BAO_RSD_wCDM_{nsteps}_{nwalkers}.npy')
     samples = samples[burnin:]
 
     """if len(samples) > 50000:
@@ -499,10 +501,9 @@ def plot_mcmc_BAO_RSD_wCDM(nsteps, burnin):
 
 
 # BAO + RSD + PV
-def mcmc_BAO_RSD_PV_w0wa(nsteps):
+def mcmc_BAO_RSD_PV_w0wa(nsteps, nwalkers):
     param_names = para_names_w0wa
     ndim = len(param_names)
-    nwalkers = 10
     limits = {}
     limits["Omega_m"] = (0.1, 1.0)
     limits["W_0"] = (-3.0, 1.0)
@@ -523,10 +524,10 @@ def mcmc_BAO_RSD_PV_w0wa(nsteps):
     #state = sampler.run_mcmc(p0, 500)
     sampler.run_mcmc(p0, nsteps, progress=True)
     samples = sampler.get_chain(flat=True)
-    np.save(f'mes_chaines_BAO_RSD_PV_w0wa_{nsteps}.npy', samples)
+    np.save(f'mes_chaines_BAO_RSD_PV_w0wa_{nsteps}_{nwalkers}.npy', samples)
 
-def plot_mcmc_BAO_RSD_PV_w0wa(nsteps, burnin):
-    samples = np.load(f'mes_chaines_BAO_RSD_PV_w0wa_{nsteps}.npy')
+def plot_mcmc_BAO_RSD_PV_w0wa(nsteps, nwalkers, burnin):
+    samples = np.load(f'mes_chaines_BAO_RSD_PV_w0wa_{nsteps}_{nwalkers}.npy')
     samples = samples[burnin:]
 
     """if len(samples) > 50000:
@@ -557,10 +558,9 @@ def plot_mcmc_BAO_RSD_PV_w0wa(nsteps, burnin):
     plt.show()
 
 
-def mcmc_BAO_RSD_PV_wCDM(nsteps):
+def mcmc_BAO_RSD_PV_wCDM(nsteps, nwalkers):
     param_names = para_names_wCDM
     ndim = len(param_names)
-    nwalkers = 10
     limits = {}
     limits["Omega_m"] = (0.1, 1.0)
     limits["W_0"] = (-3.0, 1.0)
@@ -580,10 +580,10 @@ def mcmc_BAO_RSD_PV_wCDM(nsteps):
     #state = sampler.run_mcmc(p0, 500)
     sampler.run_mcmc(p0, nsteps, progress=True)
     samples = sampler.get_chain(flat=True)
-    np.save('mes_chaines_BAO_RSD_PV_wCDM_{nsteps}.npy', samples)
+    np.save(f'mes_chaines_BAO_RSD_PV_wCDM_{nsteps}_{nwalkers}.npy', samples)
 
-def plot_mcmc_BAO_RSD_PV_wCDM(nsteps, burnin):
-    samples = np.load(f'mes_chaines_BAO_RSD_PV_wCDM_{nsteps}.npy')
+def plot_mcmc_BAO_RSD_PV_wCDM(nsteps, nwalkers, burnin):
+    samples = np.load(f'mes_chaines_BAO_RSD_PV_wCDM_{nsteps}_{nwalkers}.npy')
     samples = samples[burnin:]
 
     """if len(samples) > 50000:
@@ -615,10 +615,10 @@ def plot_mcmc_BAO_RSD_PV_wCDM(nsteps, burnin):
 
 # p defini avc paramètres dans l'ordre
 
-def plot_mcmc_w0wa(nstepsBAO, nstepsBAO_RSD, nstepsBAO_RSD_PV, burnin):#BURNIN COMMUN OU PAS ?
-    samples_BAO = np.load(f'mes_chaines_BAO_w0wa_{nstepsBAO}.npy')
-    samples_BAO_RSD = np.load(f'mes_chaines_BAO_RSD_w0wa_{nstepsBAO_RSD}.npy')
-    samples_BAO_RSD_PV = np.load(f'mes_chaines_BAO_RSD_PV_w0wa_{nstepsBAO_RSD_PV}.npy')
+def plot_mcmc_w0wa(nstepsBAO, nstepsBAO_RSD, nstepsBAO_RSD_PV, nwalkers, burnin):#BURNIN COMMUN OU PAS ?
+    samples_BAO = np.load(f'mes_chaines_BAO_w0wa_{nstepsBAO}_{nwalkers}.npy')
+    samples_BAO_RSD = np.load(f'mes_chaines_BAO_RSD_w0wa_{nstepsBAO_RSD}_{nwalkers}.npy')
+    samples_BAO_RSD_PV = np.load(f'mes_chaines_BAO_RSD_PV_w0wa_{nstepsBAO_RSD_PV}_{nwalkers}.npy')
 
     samples_BAO = samples_BAO[burnin:]
     samples_BAO_RSD = samples_BAO_RSD[burnin:]
@@ -672,10 +672,10 @@ def plot_mcmc_w0wa(nstepsBAO, nstepsBAO_RSD, nstepsBAO_RSD_PV, burnin):#BURNIN C
         "/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_w0waCDM.pdf", bbox_inches="tight",)
     plt.show()
 
-def plot_mcmc_wCDM(nstepsBAO, nstepsBAO_RSD, nstepsBAO_RSD_PV, burnin):
-    samples_BAO = np.load(f'mes_chaines_BAO_wCDM_{nstepsBAO}.npy')
-    samples_BAO_RSD = np.load(f'mes_chaines_BAO_RSD_wCDM_{nstepsBAO_RSD}.npy')
-    samples_BAO_RSD_PV = np.load(f'mes_chaines_BAO_RSD_PV_wCDM_{nstepsBAO_RSD_PV}.npy')
+def plot_mcmc_wCDM(nstepsBAO, nstepsBAO_RSD, nstepsBAO_RSD_PV, nwalkers, burnin):
+    samples_BAO = np.load(f'mes_chaines_BAO_wCDM_{nstepsBAO}_{nwalkers}.npy')
+    samples_BAO_RSD = np.load(f'mes_chaines_BAO_RSD_wCDM_{nstepsBAO_RSD}_{nwalkers}.npy')
+    samples_BAO_RSD_PV = np.load(f'mes_chaines_BAO_RSD_PV_wCDM_{nstepsBAO_RSD_PV}_{nwalkers}.npy')
 
     samples_BAO = samples_BAO[burnin:]
     samples_BAO_RSD = samples_BAO_RSD[burnin:]
@@ -729,10 +729,10 @@ def plot_mcmc_wCDM(nstepsBAO, nstepsBAO_RSD, nstepsBAO_RSD_PV, burnin):
         "/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_wCDM.pdf", bbox_inches="tight",)
     plt.show()
 
-a = np.load('mes_chaines_BAO_wCDM.npy')
+"""a = np.load('mes_chaines_BAO_wCDM.npy')
 a_ = np.load('mes_chaines_BAO_w0wa.npy')
 b = np.load('mes_chaines_BAO_RSD_wCDM.npy')
 b_ = np.load('mes_chaines_BAO_RSD_w0wa.npy')
 c = np.load('mes_chaines_BAO_RSD_PV_wCDM.npy')
 c_ = np.load('mes_chaines_BAO_RSD_PV_w0wa.npy')
-print("longueur BAO wCDM:", len(a), "longueur BAO w0waCDM:",len(a_), len(b), len(b_), len(c), len(c_))
+print("longueur BAO wCDM:", len(a), "longueur BAO w0waCDM:",len(a_), len(b), len(b_), len(c), len(c_))"""
