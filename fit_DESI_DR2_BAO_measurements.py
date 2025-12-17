@@ -998,8 +998,8 @@ def plot_fit_combined_error_bar_wCDM():
         ),
         size=300,
     )
-    plt.xlim(0.1, 0.5)
-    plt.ylim(-2.0, 0.0)
+    plt.xlim(0.2, 0.4)
+    plt.ylim(-1.25, -0.5)
     plt.axhline(-1, color="black", ls=":")
     plt.savefig(
         "/home/etudiant15/Documents/STAGE CPPM/Figures/mncontour_DR2_wCDM.pdf",
