@@ -295,14 +295,12 @@ def mcmc_BAO_w0wa(nsteps, nwalkers):
     plt.tight_layout()
     plt.show()"""
 
-
 def plot_mcmc_BAO_w0wa(nsteps, nwalkers, burnin):
     param_names = para_names_BAO_w0wa
     samples = np.load(f'mes_chaines_BAO_w0wa_{nsteps}_{nwalkers}.npy')
     samples = samples.reshape((nsteps, nwalkers, n_parameters_BAO_w0wa))
     samples_cut = samples[burnin:, :, :]
     samples_cut_flat = samples_cut.reshape((-1, n_parameters_BAO_w0wa))
-
 
     """if len(samples) > 50000:
         samples = samples[::4]  # 1 point sur 4
@@ -331,14 +329,21 @@ def plot_mcmc_BAO_w0wa(nsteps, nwalkers, burnin):
         "/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_BAO_w0waCDM.pdf",
         bbox_inches="tight",)
     plt.show()
-#plot_mcmc_BAO_w0wa(1000, 10, 500)
+#plot_mcmc_BAO_w0wa(1500, 10, 400)
 
-"""samples = np.load(f'mes_chaines_BAO_w0wa_{1000}.npy')
+"""samples = np.load(f'mes_chaines_BAO_w0wa_{1000}_{10}.npy')
 #samples.shape
 #plt.hist(samples[:,0].ravel(), bins=100, histtype='step')
-samples_0 = samples[:,0].reshape(())
-plt.plot(samples[:,0])
+samples_0 = samples.reshape((1000, 10, n_parameters_BAO_w0wa))
+print(samples_0.shape)
+plt.plot(samples_0[:, :, 2])
+#plt.plot(samples[:,0])
 plt.show() #ON VOIT QUE PLUSIEURS WALKEURS SONT SUPERPOSÉS"""
+"""samples = samples.reshape((1000, 10, n_parameters_BAO_w0wa))
+plt.plot(samples)"""
+
+"""    samples_cut = samples[burnin:, :, :]
+    samples_cut_flat = samples_cut.reshape((-1, n_parameters_BAO_w0wa))"""
   
 def mcmc_BAO_wCDM(nsteps, nwalkers):
     param_names = para_names_BAO_wCDM
@@ -363,7 +368,10 @@ def mcmc_BAO_wCDM(nsteps, nwalkers):
 def plot_mcmc_BAO_wCDM(nsteps, nwalkers, burnin):
     param_names = para_names_BAO_wCDM
     samples = np.load(f'mes_chaines_BAO_wCDM_{nsteps}_{nwalkers}.npy')
-    samples = samples[burnin:]
+    samples = samples.reshape((nsteps, nwalkers, n_parameters_BAO_wCDM))
+    samples_cut = samples[burnin:, :, :]
+    samples_cut_flat = samples_cut.reshape((-1, n_parameters_BAO_wCDM))
+
 
     """if len(samples) > 50000:
         samples = samples[::4]  # 1 point sur 10
@@ -372,7 +380,7 @@ def plot_mcmc_BAO_wCDM(nsteps, nwalkers, burnin):
 
     labels = para_names_BAO_wCDM
     samples_getdist = MCSamples(
-        samples=samples,
+        samples=samples_cut_flat,
         names=param_names,
         labels=labels,
         sampler='mcmc',
@@ -416,11 +424,14 @@ def mcmc_BAO_RSD_w0wa(nsteps, nwalkers):
     sampler.run_mcmc(p0, nsteps, progress=True)
     samples = sampler.get_chain(flat=True)
     np.save(f'mes_chaines_BAO_RSD_w0wa_{nsteps}_{nwalkers}.npy', samples)
-mcmc_BAO_RSD_w0wa(1000, 10)
+
 def plot_mcmc_BAO_RSD_w0wa(nsteps, nwalkers, burnin):
     param_names = para_names_w0wa
     samples = np.load(f'mes_chaines_BAO_RSD_w0wa_{nsteps}_{nwalkers}.npy')
-    samples = samples[burnin:]
+    samples = samples.reshape((nsteps, nwalkers, n_parameters_w0wa))
+    samples_cut = samples[burnin:, :, :]
+    samples_cut_flat = samples_cut.reshape((-1, n_parameters_w0wa))
+
 
     """if len(samples) > 50000:
         samples = samples[::4]  # 1 point sur 4
@@ -429,7 +440,7 @@ def plot_mcmc_BAO_RSD_w0wa(nsteps, nwalkers, burnin):
 
     labels = para_names_w0wa
     samples_getdist = MCSamples(
-        samples=samples,
+        samples=samples_cut_flat,
         names=param_names,
         labels=labels,
         sampler='mcmc',
@@ -477,7 +488,10 @@ def mcmc_BAO_RSD_wCDM(nsteps, nwalkers):
 def plot_mcmc_BAO_RSD_wCDM(nsteps, nwalkers, burnin):
     param_names = para_names_wCDM
     samples = np.load(f'mes_chaines_BAO_RSD_wCDM_{nsteps}_{nwalkers}.npy')
-    samples = samples[burnin:]
+    samples = samples.reshape((nsteps, nwalkers, n_parameters_wCDM))
+    samples_cut = samples[burnin:, :, :]
+    samples_cut_flat = samples_cut.reshape((-1, n_parameters_wCDM))
+
 
     """if len(samples) > 50000:
         samples = samples[::4]  # 1 point sur 4
@@ -486,7 +500,7 @@ def plot_mcmc_BAO_RSD_wCDM(nsteps, nwalkers, burnin):
 
     labels = para_names_wCDM
     samples_getdist = MCSamples(
-        samples=samples,
+        samples=samples_cut_flat,
         names=param_names,
         labels=labels,
         sampler='mcmc',
@@ -522,9 +536,6 @@ def mcmc_BAO_RSD_PV_w0wa(nsteps, nwalkers):
         pmin = np.append(pmin, limits[param][0])
         pmax = np.append(pmax, limits[param][1])
     p0 = pmin + np.random.rand(nwalkers, ndim) * (pmax - pmin)  # nwalkers entre 0 et 1
-    for j in range(ndim):
-        max = p0[:,j].max()
-        min = p0[:,j].min()
     sampler = emcee.EnsembleSampler(nwalkers, ndim, log_prob_BAO_RSD_PV_w0wa, args=[limits])
     #log_prob(p0[0], limits)
     #state = sampler.run_mcmc(p0, 500)
@@ -535,7 +546,9 @@ def mcmc_BAO_RSD_PV_w0wa(nsteps, nwalkers):
 def plot_mcmc_BAO_RSD_PV_w0wa(nsteps, nwalkers, burnin):
     param_names = para_names_w0wa
     samples = np.load(f'mes_chaines_BAO_RSD_PV_w0wa_{nsteps}_{nwalkers}.npy')
-    samples = samples[burnin:]
+    samples = samples.reshape((nsteps, nwalkers, n_parameters_w0wa))
+    samples_cut = samples[burnin:, :, :]
+    samples_cut_flat = samples_cut.reshape((-1, n_parameters_w0wa))
 
     """if len(samples) > 50000:
         samples = samples[::4]  # 1 point sur 4
@@ -544,7 +557,7 @@ def plot_mcmc_BAO_RSD_PV_w0wa(nsteps, nwalkers, burnin):
 
     labels = para_names_w0wa
     samples_getdist = MCSamples(
-        samples=samples,
+        samples=samples_cut_flat,
         names=param_names,
         labels=labels,
         sampler='mcmc',
@@ -578,9 +591,6 @@ def mcmc_BAO_RSD_PV_wCDM(nsteps, nwalkers):
         pmin = np.append(pmin, limits[param][0])
         pmax = np.append(pmax, limits[param][1])
     p0 = pmin + np.random.rand(nwalkers, ndim) * (pmax - pmin)  # nwalkers entre 0 et 1
-    """for j in range(ndim_wCDM):
-        max = p0[:,j].max()
-        min = p0[:,j].min()"""
     sampler = emcee.EnsembleSampler(nwalkers, ndim, log_prob_BAO_RSD_PV_wCDM, args=[limits])
     #log_prob(p0[0], limits)
     #state = sampler.run_mcmc(p0, 500)
@@ -591,7 +601,9 @@ def mcmc_BAO_RSD_PV_wCDM(nsteps, nwalkers):
 def plot_mcmc_BAO_RSD_PV_wCDM(nsteps, nwalkers, burnin):
     param_names = para_names_wCDM
     samples = np.load(f'mes_chaines_BAO_RSD_PV_wCDM_{nsteps}_{nwalkers}.npy')
-    samples = samples[burnin:]
+    samples = samples.reshape((nsteps, nwalkers, n_parameters_wCDM))
+    samples_cut = samples[burnin:, :, :]
+    samples_cut_flat = samples_cut.reshape((-1, n_parameters_wCDM))
 
     """if len(samples) > 50000:
         samples = samples[::4]  # 1 point sur 4
@@ -600,7 +612,7 @@ def plot_mcmc_BAO_RSD_PV_wCDM(nsteps, nwalkers, burnin):
 
     labels = para_names_wCDM
     samples_getdist = MCSamples(
-        samples=samples,
+        samples=samples_cut_flat,
         names=param_names,
         labels=labels,
         sampler='mcmc',
@@ -626,18 +638,25 @@ def plot_mcmc_w0wa(nstepsBAO, nstepsBAO_RSD, nstepsBAO_RSD_PV, nwalkers, burnin)
     samples_BAO_RSD = np.load(f'mes_chaines_BAO_RSD_w0wa_{nstepsBAO_RSD}_{nwalkers}.npy')
     samples_BAO_RSD_PV = np.load(f'mes_chaines_BAO_RSD_PV_w0wa_{nstepsBAO_RSD_PV}_{nwalkers}.npy')
 
-    samples_BAO = samples_BAO[burnin:]
-    samples_BAO_RSD = samples_BAO_RSD[burnin:]
-    samples_BAO_RSD_PV = samples_BAO_RSD_PV[burnin:]
+    samples_BAO = samples_BAO.reshape((nstepsBAO, nwalkers, n_parameters_BAO_w0wa))
+    samples_cut_BAO = samples_BAO[burnin:, :, :]
+    samples_cut_flat_BAO = samples_cut_BAO.reshape((-1, n_parameters_BAO_w0wa))
 
-    samples_list = [samples_BAO, samples_BAO_RSD, samples_BAO_RSD_PV]
+    samples_BAO_RSD = samples_BAO_RSD.reshape((nstepsBAO_RSD, nwalkers, n_parameters_w0wa))
+    samples_cut_BAO_RSD = samples_BAO_RSD[burnin:, :, :]
+    samples_cut_flat_BAO_RSD = samples_cut_BAO_RSD.reshape((-1, n_parameters_w0wa))
 
-    for i in range(len(samples_list)):
+    samples_BAO_RSD_PV = samples_BAO_RSD_PV.reshape((nstepsBAO_RSD_PV, nwalkers, n_parameters_w0wa))
+    samples_cut_BAO_RSD_PV = samples_BAO_RSD_PV[burnin:, :, :]
+    samples_cut_flat_BAO_RSD_PV = samples_cut_BAO_RSD_PV.reshape((-1, n_parameters_w0wa))
+
+    samples_list = [samples_cut_flat_BAO, samples_cut_flat_BAO_RSD, samples_cut_flat_BAO_RSD_PV]
+
+    """for i in range(len(samples_list)):
         if len(samples_list[i]) > 100000:
             samples_list[i] = samples_list[i][::4]
         elif len(samples_list[i]) > 50000:
-            samples_list[i] = samples_list[i][::2]
-    
+            samples_list[i] = samples_list[i][::2]"""
 
     mcsamples_list = []
     colors = ['blue', 'green', 'red']  # Couleurs différentes pour chaque dataset
@@ -683,18 +702,25 @@ def plot_mcmc_wCDM(nstepsBAO, nstepsBAO_RSD, nstepsBAO_RSD_PV, nwalkers, burnin)
     samples_BAO_RSD = np.load(f'mes_chaines_BAO_RSD_wCDM_{nstepsBAO_RSD}_{nwalkers}.npy')
     samples_BAO_RSD_PV = np.load(f'mes_chaines_BAO_RSD_PV_wCDM_{nstepsBAO_RSD_PV}_{nwalkers}.npy')
 
-    samples_BAO = samples_BAO[burnin:]
-    samples_BAO_RSD = samples_BAO_RSD[burnin:]
-    samples_BAO_RSD_PV = samples_BAO_RSD_PV[burnin:]
+    samples_BAO = samples_BAO.reshape((nstepsBAO, nwalkers, n_parameters_BAO_wCDM))
+    samples_cut_BAO = samples_BAO[burnin:, :, :]
+    samples_cut_flat_BAO = samples_cut_BAO.reshape((-1, n_parameters_BAO_wCDM))
 
-    samples_list = [samples_BAO, samples_BAO_RSD, samples_BAO_RSD_PV]
+    samples_BAO_RSD = samples_BAO_RSD.reshape((nstepsBAO_RSD, nwalkers, n_parameters_wCDM))
+    samples_cut_BAO_RSD = samples_BAO_RSD[burnin:, :, :]
+    samples_cut_flat_BAO_RSD = samples_cut_BAO_RSD.reshape((-1, n_parameters_wCDM))
 
-    for i in range(len(samples_list)):
+    samples_BAO_RSD_PV = samples_BAO_RSD_PV.reshape((nstepsBAO_RSD_PV, nwalkers, n_parameters_wCDM))
+    samples_cut_BAO_RSD_PV = samples_BAO_RSD_PV[burnin:, :, :]
+    samples_cut_flat_BAO_RSD_PV = samples_cut_BAO_RSD_PV.reshape((-1, n_parameters_wCDM))
+
+    samples_list = [samples_cut_flat_BAO, samples_cut_flat_BAO_RSD, samples_cut_flat_BAO_RSD_PV]
+    
+    """for i in range(len(samples_list)):
         if len(samples_list[i]) > 100000:
             samples_list[i] = samples_list[i][::4]
         elif len(samples_list[i]) > 50000:
-            samples_list[i] = samples_list[i][::2]
-    
+            samples_list[i] = samples_list[i][::2]"""
 
     mcsamples_list = []
     colors = ['blue', 'green', 'red']  # Couleurs différentes pour chaque dataset
