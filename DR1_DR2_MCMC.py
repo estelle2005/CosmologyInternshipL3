@@ -552,7 +552,7 @@ def mcmc_BAO_RSD_PV_w0wa(nsteps, nwalkers):
     sampler.run_mcmc(p0, nsteps, progress=True)
     samples = sampler.get_chain(flat=True)
     np.save(f'mes_chaines_BAO_RSD_PV_w0wa_{nsteps}_{nwalkers}.npy', samples)
-#mcmc_BAO_RSD_PV_w0wa(1000,10) 11min
+#mcmc_BAO_RSD_PV_w0wa(1500,10) 14min
 def plot_mcmc_BAO_RSD_PV_w0wa(nsteps, nwalkers, burnin):
     param_names = para_names_w0wa
     samples = np.load(f'mes_chaines_BAO_RSD_PV_w0wa_{nsteps}_{nwalkers}.npy')
@@ -585,11 +585,11 @@ def plot_mcmc_BAO_RSD_PV_w0wa(nsteps, nwalkers, burnin):
     g.triangle_plot([samples_getdist], filled=True, contour_colors=['red'])
     plt.savefig("/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_BAO_RSD_PV_w0waCDM.pdf", bbox_inches="tight",)
     plt.show()
-#plot_mcmc_BAO_RSD_PV_w0wa(1000, 10, 300)
+#plot_mcmc_BAO_RSD_PV_w0wa(1500, 10, 300)
 
-"""samples = np.load(f'mes_chaines_BAO_RSD_PV_w0wa_{1000}_{10}.npy')
-samples_0 = samples.reshape((1000, 10, n_parameters_w0wa))
-plt.plot(samples_0[:, :, 2])
+"""samples = np.load(f'mes_chaines_BAO_RSD_PV_w0wa_{1500}_{10}.npy')
+samples_0 = samples.reshape((1500, 10, n_parameters_w0wa))
+plt.plot(samples_0[:, :, 3])
 plt.show()"""
 
 
@@ -613,7 +613,7 @@ def mcmc_BAO_RSD_PV_wCDM(nsteps, nwalkers):
     sampler.run_mcmc(p0, nsteps, progress=True)
     samples = sampler.get_chain(flat=True)
     np.save(f'mes_chaines_BAO_RSD_PV_wCDM_{nsteps}_{nwalkers}.npy', samples)
-#mcmc_BAO_RSD_PV_wCDM(1000,10)
+#mcmc_BAO_RSD_PV_wCDM(1500,10) 15min42
 def plot_mcmc_BAO_RSD_PV_wCDM(nsteps, nwalkers, burnin):
     param_names = para_names_wCDM
     samples = np.load(f'mes_chaines_BAO_RSD_PV_wCDM_{nsteps}_{nwalkers}.npy')
@@ -646,12 +646,13 @@ def plot_mcmc_BAO_RSD_PV_wCDM(nsteps, nwalkers, burnin):
     plt.savefig(
         "/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_BAO_RSD_PV_wCDM.pdf", bbox_inches="tight",)
     plt.show()
-#plot_mcmc_BAO_RSD_PV_wCDM(1000, 10, 200)
+#plot_mcmc_BAO_RSD_PV_wCDM(1500, 10, 200)
 
-"""samples = np.load(f'mes_chaines_BAO_RSD_PV_wCDM_{1000}_{10}.npy')
-samples_0 = samples.reshape((1000, 10, n_parameters_wCDM))
-plt.plot(samples_0[:, :, 2])
+"""samples = np.load(f'mes_chaines_BAO_RSD_PV_wCDM_{1500}_{10}.npy')
+samples_0 = samples.reshape((1500, 10, n_parameters_wCDM))
+plt.plot(samples_0[:, :, 3])
 plt.show()"""
+
 # p defini avc paramètres dans l'ordre
 
 def plot_mcmc_w0wa(nstepsBAO, nstepsBAO_RSD, nstepsBAO_RSD_PV, nwalkers, burninBAO, burninBAO_RSD, burninBAO_RSD_PV):#BURNIN COMMUN OU PAS ?
@@ -718,8 +719,8 @@ def plot_mcmc_w0wa(nstepsBAO, nstepsBAO_RSD, nstepsBAO_RSD_PV, nwalkers, burninB
         "/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_w0waCDM.pdf", bbox_inches="tight",)
     plt.show()
 
+#plot_mcmc_w0wa(10000, 1500, 1500, 10, 650, 200, 300)
 
-#plot_mcmc_w0wa(10000, 1500, 1000, 10, 650, 200, 300)
 def plot_mcmc_wCDM(nstepsBAO, nstepsBAO_RSD, nstepsBAO_RSD_PV, nwalkers, burninBAO, burninBAO_RSD, burninBAO_RSD_PV):
     samples_BAO = np.load(f'mes_chaines_BAO_wCDM_{nstepsBAO}_{nwalkers}.npy')
     samples_BAO_RSD = np.load(f'mes_chaines_BAO_RSD_wCDM_{nstepsBAO_RSD}_{nwalkers}.npy')
@@ -784,7 +785,7 @@ def plot_mcmc_wCDM(nstepsBAO, nstepsBAO_RSD, nstepsBAO_RSD_PV, nwalkers, burninB
         "/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_wCDM.pdf", bbox_inches="tight",)
     plt.show()
 
-#plot_mcmc_wCDM(10000, 1500, 1000, 10, 600, 300, 200)
+#plot_mcmc_wCDM(10000, 1500, 1500, 10, 600, 300, 200)
 
 """a = np.load('mes_chaines_BAO_wCDM.npy')
 a_ = np.load('mes_chaines_BAO_w0wa.npy')
