@@ -327,6 +327,16 @@ def plot_mcmc_BAO_w0wa(nsteps, nwalkers, burnin):
     plt.savefig(
         "/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_BAO_w0waCDM.pdf",
         bbox_inches="tight",)
+    median={}
+    sigma_lower={}
+    sigma_upper={}
+    for i, name in enumerate(param_names):
+        median[f"{name}"] = np.median(samples_cut_flat[:,i])
+        sigma_upper[f"{name}"] = np.percentile(samples_cut_flat[:,i], 84) - np.percentile(samples_cut_flat[:,i], 50)
+        sigma_lower[f"{name}"] = np.percentile(samples_cut_flat[:,i], 50) - np.percentile(samples_cut_flat[:,i], 16)
+    print(
+        f'BAO & ${median["Omega_m"]:.3f}^{{+{sigma_upper["Omega_m"]:.3f}}}_{{{sigma_lower["Omega_m"]:.3f}}}$ & ${median["W_0"]:.3f}^{{+{sigma_upper["W_0"]:.3f}}}_{{{- sigma_lower["W_0"]:.3f}}}$ & ${median["W_a"]:.3f}^{{+{sigma_upper["W_a"]:.3f}}}_{{{- sigma_lower["W_a"]:.3f}}}$ & - & ${median["H_0xr_d"]:.3f}^{{+{sigma_upper["H_0xr_d"]:.3f}}}_{{{- sigma_lower["H_0xr_d"]:.3f}}}$ & - & - '
+    )
     plt.show()
 #plot_mcmc_BAO_w0wa(10000, 10, 650)
 
@@ -391,6 +401,17 @@ def plot_mcmc_BAO_wCDM(nsteps, nwalkers, burnin):
 
     g.triangle_plot([samples_getdist], filled=True, contour_colors=['blue'])
     
+    median={}
+    sigma_lower={}
+    sigma_upper={}
+    for i, name in enumerate(param_names):
+        median[f"{name}"] = np.median(samples_cut_flat[:,i])
+        sigma_upper[f"{name}"] = np.percentile(samples_cut_flat[:,i], 84) - np.percentile(samples_cut_flat[:,i], 50)
+        sigma_lower[f"{name}"] = np.percentile(samples_cut_flat[:,i], 50) - np.percentile(samples_cut_flat[:,i], 16)
+    print(
+        f'BAO & ${median["Omega_m"]:.3f}^{{+{sigma_upper["Omega_m"]:.3f}}}_{{{sigma_lower["Omega_m"]:.3f}}}$ & ${median["W_0"]:.3f}^{{+{sigma_upper["W_0"]:.3f}}}_{{{- sigma_lower["W_0"]:.3f}}}$ & 0 & ${median["sigma8"]:.3f}^{{+{sigma_upper["sigma8"]:.3f}}}_{{{sigma_lower["sigma8"]:.3f}}}$ & ${median["H_0xr_d"]:.3f}^{{+{sigma_upper["H_0xr_d"]:.3f}}}_{{{- sigma_lower["H_0xr_d"]:.3f}}}$ & - & - '
+    )
+
     plt.savefig(
         "/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_BAO_wCDM.pdf", bbox_inches="tight",)
     plt.show()
@@ -458,6 +479,17 @@ def plot_mcmc_BAO_RSD_w0wa(nsteps, nwalkers, burnin):
     g.triangle_plot([samples_getdist], filled=True, contour_colors=['green'])
     plt.savefig(
         "/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_BAO_RSD_w0waCDM.pdf", bbox_inches="tight",)
+    
+    median={}
+    sigma_lower={}
+    sigma_upper={}
+    for i, name in enumerate(param_names):
+        median[f"{name}"] = np.median(samples_cut_flat[:,i])
+        sigma_upper[f"{name}"] = np.percentile(samples_cut_flat[:,i], 84) - np.percentile(samples_cut_flat[:,i], 50)
+        sigma_lower[f"{name}"] = np.percentile(samples_cut_flat[:,i], 50) - np.percentile(samples_cut_flat[:,i], 16)
+    print(
+        f'BAO+RSD & ${median["Omega_m"]:.3f}^{{+{sigma_upper["Omega_m"]:.3f}}}_{{{sigma_lower["Omega_m"]:.3f}}}$ & ${median["W_0"]:.3f}^{{+{sigma_upper["W_0"]:.3f}}}_{{{- sigma_lower["W_0"]:.3f}}}$ & ${median["W_a"]:.3f}^{{+{sigma_upper["W_a"]:.3f}}}_{{{- sigma_lower["W_a"]:.3f}}}$ & ${median["sigma8"]:.3f}^{{+{sigma_upper["sigma8"]:.3f}}}_{{{sigma_lower["sigma8"]:.3f}}}$ & ${median["H_0xr_d"]:.3f}^{{+{sigma_upper["H_0xr_d"]:.3f}}}_{{{- sigma_lower["H_0xr_d"]:.3f}}}$ & - & - '
+    )
     plt.show()
 #plot_mcmc_BAO_RSD_w0wa(1500, 10, 200)
 
@@ -522,6 +554,16 @@ def plot_mcmc_BAO_RSD_wCDM(nsteps, nwalkers, burnin):
     g.triangle_plot([samples_getdist], filled=True, contour_colors=['green'])
     plt.savefig(
         "/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_BAO_RSD_wCDM.pdf", bbox_inches="tight",)
+    median={}
+    sigma_lower={}
+    sigma_upper={}
+    for i, name in enumerate(param_names):
+        median[f"{name}"] = np.median(samples_cut_flat[:,i])
+        sigma_upper[f"{name}"] = np.percentile(samples_cut_flat[:,i], 84) - np.percentile(samples_cut_flat[:,i], 50)
+        sigma_lower[f"{name}"] = np.percentile(samples_cut_flat[:,i], 50) - np.percentile(samples_cut_flat[:,i], 16)
+    print(
+        f'BAO+RSD & ${median["Omega_m"]:.3f}^{{+{sigma_upper["Omega_m"]:.3f}}}_{{{sigma_lower["Omega_m"]:.3f}}}$ & ${median["W_0"]:.3f}^{{+{sigma_upper["W_0"]:.3f}}}_{{{- sigma_lower["W_0"]:.3f}}}$ & 0 & ${median["sigma8"]:.3f}^{{+{sigma_upper["sigma8"]:.3f}}}_{{{sigma_lower["sigma8"]:.3f}}}$ & ${median["H_0xr_d"]:.3f}^{{+{sigma_upper["H_0xr_d"]:.3f}}}_{{{- sigma_lower["H_0xr_d"]:.3f}}}$ & - & - '
+    )
     plt.show()
 #plot_mcmc_BAO_RSD_wCDM(1500,10,300)
 
@@ -552,7 +594,7 @@ def mcmc_BAO_RSD_PV_w0wa(nsteps, nwalkers):
     sampler.run_mcmc(p0, nsteps, progress=True)
     samples = sampler.get_chain(flat=True)
     np.save(f'mes_chaines_BAO_RSD_PV_w0wa_{nsteps}_{nwalkers}.npy', samples)
-#mcmc_BAO_RSD_PV_w0wa(1500,10) 14min
+#mcmc_BAO_RSD_PV_w0wa(1500,10)
 def plot_mcmc_BAO_RSD_PV_w0wa(nsteps, nwalkers, burnin):
     param_names = para_names_w0wa
     samples = np.load(f'mes_chaines_BAO_RSD_PV_w0wa_{nsteps}_{nwalkers}.npy')
@@ -584,6 +626,17 @@ def plot_mcmc_BAO_RSD_PV_w0wa(nsteps, nwalkers, burnin):
 
     g.triangle_plot([samples_getdist], filled=True, contour_colors=['red'])
     plt.savefig("/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_BAO_RSD_PV_w0waCDM.pdf", bbox_inches="tight",)
+    median={}
+    sigma_lower={}
+    sigma_upper={}
+    for i, name in enumerate(param_names):
+        median[f"{name}"] = np.median(samples_cut_flat[:,i])
+        sigma_upper[f"{name}"] = np.percentile(samples_cut_flat[:,i], 84) - np.percentile(samples_cut_flat[:,i], 50)
+        sigma_lower[f"{name}"] = np.percentile(samples_cut_flat[:,i], 50) - np.percentile(samples_cut_flat[:,i], 16)
+    print(
+        f'BAO+RSD+PV & ${median["Omega_m"]:.3f}^{{+{sigma_upper["Omega_m"]:.3f}}}_{{{sigma_lower["Omega_m"]:.3f}}}$ & ${median["W_0"]:.3f}^{{+{sigma_upper["W_0"]:.3f}}}_{{{- sigma_lower["W_0"]:.3f}}}$ & ${median["W_a"]:.3f}^{{+{sigma_upper["W_a"]:.3f}}}_{{{- sigma_lower["W_a"]:.3f}}}$ & ${median["sigma8"]:.3f}^{{+{sigma_upper["sigma8"]:.3f}}}_{{{sigma_lower["sigma8"]:.3f}}}$ & ${median["H_0xr_d"]:.3f}^{{+{sigma_upper["H_0xr_d"]:.3f}}}_{{{- sigma_lower["H_0xr_d"]:.3f}}}$ & - & - '
+    )
+    
     plt.show()
 #plot_mcmc_BAO_RSD_PV_w0wa(1500, 10, 300)
 
@@ -645,6 +698,16 @@ def plot_mcmc_BAO_RSD_PV_wCDM(nsteps, nwalkers, burnin):
     g.triangle_plot([samples_getdist], filled=True, contour_colors=['red'])
     plt.savefig(
         "/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_BAO_RSD_PV_wCDM.pdf", bbox_inches="tight",)
+    median={}
+    sigma_lower={}
+    sigma_upper={}
+    for i, name in enumerate(param_names):
+        median[f"{name}"] = np.median(samples_cut_flat[:,i])
+        sigma_upper[f"{name}"] = np.percentile(samples_cut_flat[:,i], 84) - np.percentile(samples_cut_flat[:,i], 50)
+        sigma_lower[f"{name}"] = np.percentile(samples_cut_flat[:,i], 50) - np.percentile(samples_cut_flat[:,i], 16)
+    print(
+        f'BAO+RSD+PV & ${median["Omega_m"]:.3f}^{{+{sigma_upper["Omega_m"]:.3f}}}_{{{sigma_lower["Omega_m"]:.3f}}}$ & ${median["W_0"]:.3f}^{{+{sigma_upper["W_0"]:.3f}}}_{{{- sigma_lower["W_0"]:.3f}}}$ & 0 & ${median["sigma8"]:.3f}^{{+{sigma_upper["sigma8"]:.3f}}}_{{{sigma_lower["sigma8"]:.3f}}}$ & ${median["H_0xr_d"]:.3f}^{{+{sigma_upper["H_0xr_d"]:.3f}}}_{{{- sigma_lower["H_0xr_d"]:.3f}}}$ & - & - '
+    )    
     plt.show()
 #plot_mcmc_BAO_RSD_PV_wCDM(1500, 10, 200)
 
@@ -715,6 +778,27 @@ def plot_mcmc_w0wa(nstepsBAO, nstepsBAO_RSD, nstepsBAO_RSD_PV, nwalkers, burninB
     g.settings.legend_loc = 'upper right'
 
     g.triangle_plot(mcsamples_list, filled=True, contour_colors=colors, legend_labels=legends, legend_loc='upper right')
+    
+    axes = g.fig.axes
+    #x_limits = [[0.1, 1.0],[-3.0, 1.0], [-3.0, 2.0], [0.6, 1.0], [5000, 20000]] 
+
+
+    # Ta figure a 4 paramètres, donc 4x4 = 16 sous-graphiques
+  
+    axes[4].axvline(x=-1.0, color='dimgrey', linestyle='--', linewidth=1.5)
+    axes[5].axvline(x=-1.0, color='dimgrey', linestyle='--', linewidth=1.5)
+    #axes[6].axvline(x=-1.0, color='dimgrey', linestyle='--', linewidth=1.5)
+
+    axes[1].axhline(y=0.0, color='dimgrey', linestyle='--', linewidth=1.5)
+    axes[5].axhline(y=0.0, color='dimgrey', linestyle='--', linewidth=1.5)
+
+    axes[2].axhline(y=-1.0, color='dimgrey', linestyle='--', linewidth=1.5)
+
+    axes[7].axvline(x=0.0, color='dimgrey', linestyle='--', linewidth=1.5)
+    #axes[8].axvline(x=0.0, color='dimgrey', linestyle='--', linewidth=1.5)
+
+    
+
     plt.savefig(
         "/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_w0waCDM.pdf", bbox_inches="tight",)
     plt.show()
@@ -771,7 +855,9 @@ def plot_mcmc_wCDM(nstepsBAO, nstepsBAO_RSD, nstepsBAO_RSD_PV, nwalkers, burninB
                     'fine_bins_2D': 64,
                     'smooth_scale_1D': 0.2,
                     'smooth_scale_2D': 0.3,
-                    'num_bins': 20})
+                    'num_bins': 20},
+                    param_limits=limits
+                    )
         mcsamples_list.append(samples_mcsamples) 
     
     g = plots.get_subplot_plotter()
@@ -781,6 +867,13 @@ def plot_mcmc_wCDM(nstepsBAO, nstepsBAO_RSD, nstepsBAO_RSD_PV, nwalkers, burninB
     g.settings.legend_loc = 'upper right'
 
     g.triangle_plot(mcsamples_list, filled=True, contour_colors=colors, legend_labels=legends, legend_loc='upper right')
+    
+    axes = g.fig.axes
+    axes[3].axvline(x=-1.0, color='dimgrey', linestyle='--', linewidth=1.5)
+    #axes[4].axvline(x=-1.0, color='dimgrey', linestyle='--', linewidth=1.5)
+    axes[1].axhline(y=-1.0, color='dimgrey', linestyle='--', linewidth=1.5)
+    #axes[4].axhline(y=-1.0, color='dimgrey', linestyle='--', linewidth=1.5)
+    
     plt.savefig(
         "/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_wCDM.pdf", bbox_inches="tight",)
     plt.show()
