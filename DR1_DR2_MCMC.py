@@ -335,7 +335,7 @@ def plot_mcmc_BAO_w0wa(nsteps, nwalkers, burnin):
         sigma_upper[f"{name}"] = np.percentile(samples_cut_flat[:,i], 84) - np.percentile(samples_cut_flat[:,i], 50)
         sigma_lower[f"{name}"] = np.percentile(samples_cut_flat[:,i], 50) - np.percentile(samples_cut_flat[:,i], 16)
     print(
-        f'BAO & ${median["Omega_m"]:.3f}^{{+{sigma_upper["Omega_m"]:.3f}}}_{{{sigma_lower["Omega_m"]:.3f}}}$ & ${median["W_0"]:.3f}^{{+{sigma_upper["W_0"]:.3f}}}_{{{- sigma_lower["W_0"]:.3f}}}$ & ${median["W_a"]:.3f}^{{+{sigma_upper["W_a"]:.3f}}}_{{{- sigma_lower["W_a"]:.3f}}}$ & - & ${median["H_0xr_d"]:.3f}^{{+{sigma_upper["H_0xr_d"]:.3f}}}_{{{- sigma_lower["H_0xr_d"]:.3f}}}$ & - & - '
+        f'BAO & ${median["Omega_m"]:.3f}^{{+{sigma_upper["Omega_m"]:.3f}}}_{{{-sigma_lower["Omega_m"]:.3f}}}$ & ${median["W_0"]:.3f}^{{+{sigma_upper["W_0"]:.3f}}}_{{{- sigma_lower["W_0"]:.3f}}}$ & ${median["W_a"]:.3f}^{{+{sigma_upper["W_a"]:.3f}}}_{{{- sigma_lower["W_a"]:.3f}}}$ & - & ${median["H_0xr_d"]:.3f}^{{+{sigma_upper["H_0xr_d"]:.3f}}}_{{{- sigma_lower["H_0xr_d"]:.3f}}}$ & - & - '
     )
     plt.show()
 #plot_mcmc_BAO_w0wa(10000, 10, 650)
@@ -409,7 +409,7 @@ def plot_mcmc_BAO_wCDM(nsteps, nwalkers, burnin):
         sigma_upper[f"{name}"] = np.percentile(samples_cut_flat[:,i], 84) - np.percentile(samples_cut_flat[:,i], 50)
         sigma_lower[f"{name}"] = np.percentile(samples_cut_flat[:,i], 50) - np.percentile(samples_cut_flat[:,i], 16)
     print(
-        f'BAO & ${median["Omega_m"]:.3f}^{{+{sigma_upper["Omega_m"]:.3f}}}_{{{sigma_lower["Omega_m"]:.3f}}}$ & ${median["W_0"]:.3f}^{{+{sigma_upper["W_0"]:.3f}}}_{{{- sigma_lower["W_0"]:.3f}}}$ & 0 & ${median["sigma8"]:.3f}^{{+{sigma_upper["sigma8"]:.3f}}}_{{{sigma_lower["sigma8"]:.3f}}}$ & ${median["H_0xr_d"]:.3f}^{{+{sigma_upper["H_0xr_d"]:.3f}}}_{{{- sigma_lower["H_0xr_d"]:.3f}}}$ & - & - '
+        f'BAO & ${median["Omega_m"]:.3f}^{{+{sigma_upper["Omega_m"]:.3f}}}_{{{- sigma_lower["Omega_m"]:.3f}}}$ & ${median["W_0"]:.3f}^{{+{sigma_upper["W_0"]:.3f}}}_{{{- sigma_lower["W_0"]:.3f}}}$ & 0 & - & ${median["H_0xr_d"]:.3f}^{{+{sigma_upper["H_0xr_d"]:.3f}}}_{{{- sigma_lower["H_0xr_d"]:.3f}}}$ & - & - '
     )
 
     plt.savefig(
@@ -488,7 +488,7 @@ def plot_mcmc_BAO_RSD_w0wa(nsteps, nwalkers, burnin):
         sigma_upper[f"{name}"] = np.percentile(samples_cut_flat[:,i], 84) - np.percentile(samples_cut_flat[:,i], 50)
         sigma_lower[f"{name}"] = np.percentile(samples_cut_flat[:,i], 50) - np.percentile(samples_cut_flat[:,i], 16)
     print(
-        f'BAO+RSD & ${median["Omega_m"]:.3f}^{{+{sigma_upper["Omega_m"]:.3f}}}_{{{sigma_lower["Omega_m"]:.3f}}}$ & ${median["W_0"]:.3f}^{{+{sigma_upper["W_0"]:.3f}}}_{{{- sigma_lower["W_0"]:.3f}}}$ & ${median["W_a"]:.3f}^{{+{sigma_upper["W_a"]:.3f}}}_{{{- sigma_lower["W_a"]:.3f}}}$ & ${median["sigma8"]:.3f}^{{+{sigma_upper["sigma8"]:.3f}}}_{{{sigma_lower["sigma8"]:.3f}}}$ & ${median["H_0xr_d"]:.3f}^{{+{sigma_upper["H_0xr_d"]:.3f}}}_{{{- sigma_lower["H_0xr_d"]:.3f}}}$ & - & - '
+        f'BAO+RSD & ${median["Omega_m"]:.3f}^{{+{sigma_upper["Omega_m"]:.3f}}}_{{{- sigma_lower["Omega_m"]:.3f}}}$ & ${median["W_0"]:.3f}^{{+{sigma_upper["W_0"]:.3f}}}_{{{- sigma_lower["W_0"]:.3f}}}$ & ${median["W_a"]:.3f}^{{+{sigma_upper["W_a"]:.3f}}}_{{{- sigma_lower["W_a"]:.3f}}}$ & ${median["sigma8"]:.3f}^{{+{sigma_upper["sigma8"]:.3f}}}_{{{- sigma_lower["sigma8"]:.3f}}}$ & ${median["H_0xr_d"]:.3f}^{{+{sigma_upper["H_0xr_d"]:.3f}}}_{{{- sigma_lower["H_0xr_d"]:.3f}}}$ & - & - '
     )
     plt.show()
 #plot_mcmc_BAO_RSD_w0wa(1500, 10, 200)
@@ -562,7 +562,7 @@ def plot_mcmc_BAO_RSD_wCDM(nsteps, nwalkers, burnin):
         sigma_upper[f"{name}"] = np.percentile(samples_cut_flat[:,i], 84) - np.percentile(samples_cut_flat[:,i], 50)
         sigma_lower[f"{name}"] = np.percentile(samples_cut_flat[:,i], 50) - np.percentile(samples_cut_flat[:,i], 16)
     print(
-        f'BAO+RSD & ${median["Omega_m"]:.3f}^{{+{sigma_upper["Omega_m"]:.3f}}}_{{{sigma_lower["Omega_m"]:.3f}}}$ & ${median["W_0"]:.3f}^{{+{sigma_upper["W_0"]:.3f}}}_{{{- sigma_lower["W_0"]:.3f}}}$ & 0 & ${median["sigma8"]:.3f}^{{+{sigma_upper["sigma8"]:.3f}}}_{{{sigma_lower["sigma8"]:.3f}}}$ & ${median["H_0xr_d"]:.3f}^{{+{sigma_upper["H_0xr_d"]:.3f}}}_{{{- sigma_lower["H_0xr_d"]:.3f}}}$ & - & - '
+        f'BAO+RSD & ${median["Omega_m"]:.3f}^{{+{sigma_upper["Omega_m"]:.3f}}}_{{{- sigma_lower["Omega_m"]:.3f}}}$ & ${median["W_0"]:.3f}^{{+{sigma_upper["W_0"]:.3f}}}_{{{- sigma_lower["W_0"]:.3f}}}$ & 0 & ${median["sigma8"]:.3f}^{{+{sigma_upper["sigma8"]:.3f}}}_{{{- sigma_lower["sigma8"]:.3f}}}$ & ${median["H_0xr_d"]:.3f}^{{+{sigma_upper["H_0xr_d"]:.3f}}}_{{{- sigma_lower["H_0xr_d"]:.3f}}}$ & - & - '
     )
     plt.show()
 #plot_mcmc_BAO_RSD_wCDM(1500,10,300)
@@ -634,7 +634,7 @@ def plot_mcmc_BAO_RSD_PV_w0wa(nsteps, nwalkers, burnin):
         sigma_upper[f"{name}"] = np.percentile(samples_cut_flat[:,i], 84) - np.percentile(samples_cut_flat[:,i], 50)
         sigma_lower[f"{name}"] = np.percentile(samples_cut_flat[:,i], 50) - np.percentile(samples_cut_flat[:,i], 16)
     print(
-        f'BAO+RSD+PV & ${median["Omega_m"]:.3f}^{{+{sigma_upper["Omega_m"]:.3f}}}_{{{sigma_lower["Omega_m"]:.3f}}}$ & ${median["W_0"]:.3f}^{{+{sigma_upper["W_0"]:.3f}}}_{{{- sigma_lower["W_0"]:.3f}}}$ & ${median["W_a"]:.3f}^{{+{sigma_upper["W_a"]:.3f}}}_{{{- sigma_lower["W_a"]:.3f}}}$ & ${median["sigma8"]:.3f}^{{+{sigma_upper["sigma8"]:.3f}}}_{{{sigma_lower["sigma8"]:.3f}}}$ & ${median["H_0xr_d"]:.3f}^{{+{sigma_upper["H_0xr_d"]:.3f}}}_{{{- sigma_lower["H_0xr_d"]:.3f}}}$ & - & - '
+        f'BAO+RSD+PV & ${median["Omega_m"]:.3f}^{{+{sigma_upper["Omega_m"]:.3f}}}_{{{- sigma_lower["Omega_m"]:.3f}}}$ & ${median["W_0"]:.3f}^{{+{sigma_upper["W_0"]:.3f}}}_{{{- sigma_lower["W_0"]:.3f}}}$ & ${median["W_a"]:.3f}^{{+{sigma_upper["W_a"]:.3f}}}_{{{- sigma_lower["W_a"]:.3f}}}$ & ${median["sigma8"]:.3f}^{{+{sigma_upper["sigma8"]:.3f}}}_{{{- sigma_lower["sigma8"]:.3f}}}$ & ${median["H_0xr_d"]:.3f}^{{+{sigma_upper["H_0xr_d"]:.3f}}}_{{{- sigma_lower["H_0xr_d"]:.3f}}}$ & - & - '
     )
     
     plt.show()
@@ -642,7 +642,7 @@ def plot_mcmc_BAO_RSD_PV_w0wa(nsteps, nwalkers, burnin):
 
 """samples = np.load(f'mes_chaines_BAO_RSD_PV_w0wa_{1500}_{10}.npy')
 samples_0 = samples.reshape((1500, 10, n_parameters_w0wa))
-plt.plot(samples_0[:, :, 3])
+plt.plot(samples_0[:, :, 1])
 plt.show()"""
 
 
@@ -706,7 +706,7 @@ def plot_mcmc_BAO_RSD_PV_wCDM(nsteps, nwalkers, burnin):
         sigma_upper[f"{name}"] = np.percentile(samples_cut_flat[:,i], 84) - np.percentile(samples_cut_flat[:,i], 50)
         sigma_lower[f"{name}"] = np.percentile(samples_cut_flat[:,i], 50) - np.percentile(samples_cut_flat[:,i], 16)
     print(
-        f'BAO+RSD+PV & ${median["Omega_m"]:.3f}^{{+{sigma_upper["Omega_m"]:.3f}}}_{{{sigma_lower["Omega_m"]:.3f}}}$ & ${median["W_0"]:.3f}^{{+{sigma_upper["W_0"]:.3f}}}_{{{- sigma_lower["W_0"]:.3f}}}$ & 0 & ${median["sigma8"]:.3f}^{{+{sigma_upper["sigma8"]:.3f}}}_{{{sigma_lower["sigma8"]:.3f}}}$ & ${median["H_0xr_d"]:.3f}^{{+{sigma_upper["H_0xr_d"]:.3f}}}_{{{- sigma_lower["H_0xr_d"]:.3f}}}$ & - & - '
+        f'BAO+RSD+PV & ${median["Omega_m"]:.3f}^{{+{sigma_upper["Omega_m"]:.3f}}}_{{{- sigma_lower["Omega_m"]:.3f}}}$ & ${median["W_0"]:.3f}^{{+{sigma_upper["W_0"]:.3f}}}_{{{- sigma_lower["W_0"]:.3f}}}$ & 0 & ${median["sigma8"]:.3f}^{{+{sigma_upper["sigma8"]:.3f}}}_{{{- sigma_lower["sigma8"]:.3f}}}$ & ${median["H_0xr_d"]:.3f}^{{+{sigma_upper["H_0xr_d"]:.3f}}}_{{{- sigma_lower["H_0xr_d"]:.3f}}}$ & - & - '
     )    
     plt.show()
 #plot_mcmc_BAO_RSD_PV_wCDM(1500, 10, 200)
