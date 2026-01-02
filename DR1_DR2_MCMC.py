@@ -306,7 +306,15 @@ def plot_mcmc_BAO_w0wa(nsteps, nwalkers, burnin):
     elif len(samples) > 100000:
         samples = samples[::2]"""
 
-    labels = para_names_BAO_w0wa
+    latex_labels = {
+        "Omega_m": r"\Omega_m",
+        "W_0": r"w_0",
+        "W_a": r"w_a",
+        "H_0xr_d": r"H_0 r_d"
+    }
+    labels = [latex_labels.get(name, name) for name in param_names]  # remplacement
+
+
     samples_getdist = MCSamples(
         samples=samples_cut_flat,
         names=param_names,
@@ -382,8 +390,13 @@ def plot_mcmc_BAO_wCDM(nsteps, nwalkers, burnin):
         samples = samples[::4]  # 1 point sur 10
     elif len(samples) > 100000:
         samples = samples[::2]"""
+    latex_labels = {
+            "Omega_m": r"\Omega_m",
+            "W_0": r"w_0",
+            "H_0xr_d": r"H_0 r_d"
+        }
+    labels = [latex_labels.get(name, name) for name in param_names]  # remplacement
 
-    labels = para_names_BAO_wCDM
     samples_getdist = MCSamples(
         samples=samples_cut_flat,
         names=param_names,
@@ -458,8 +471,15 @@ def plot_mcmc_BAO_RSD_w0wa(nsteps, nwalkers, burnin):
         samples = samples[::4]  # 1 point sur 4
     elif len(samples) > 100000:
         samples = samples[::2]"""
+    latex_labels = {
+            "Omega_m": r"\Omega_m",
+            "W_0": r"w_0",
+            "W_a": r"w_a",
+            "sigma8": r"\sigma_8",
+            "H_0xr_d": r"H_0 r_d"
+        }
+    labels = [latex_labels.get(name, name) for name in param_names]  # remplacement
 
-    labels = para_names_w0wa
     samples_getdist = MCSamples(
         samples=samples_cut_flat,
         names=param_names,
@@ -534,8 +554,14 @@ def plot_mcmc_BAO_RSD_wCDM(nsteps, nwalkers, burnin):
         samples = samples[::4]  # 1 point sur 4
     elif len(samples) > 100000:
         samples = samples[::2]"""
+    latex_labels = {
+                "Omega_m": r"\Omega_m",
+                "W_0": r"w_0",
+                "sigma8": r"\sigma_8",
+                "H_0xr_d": r"H_0 r_d"
+            }
+    labels = [latex_labels.get(name, name) for name in param_names]  # remplacement
 
-    labels = para_names_wCDM
     samples_getdist = MCSamples(
         samples=samples_cut_flat,
         names=param_names,
@@ -607,7 +633,15 @@ def plot_mcmc_BAO_RSD_PV_w0wa(nsteps, nwalkers, burnin):
     elif len(samples) > 100000:
         samples = samples[::2]"""
 
-    labels = para_names_w0wa
+    latex_labels = {
+            "Omega_m": r"\Omega_m",
+            "W_0": r"w_0",
+            "W_a": r"w_a",
+            "sigma8": r"\sigma_8",
+            "H_0xr_d": r"H_0 r_d"
+        }
+    labels = [latex_labels.get(name, name) for name in param_names]  # remplacement
+
     samples_getdist = MCSamples(
         samples=samples_cut_flat,
         names=param_names,
@@ -679,7 +713,14 @@ def plot_mcmc_BAO_RSD_PV_wCDM(nsteps, nwalkers, burnin):
     elif len(samples) > 100000:
         samples = samples[::2]"""
 
-    labels = para_names_wCDM
+    latex_labels = {
+            "Omega_m": r"\Omega_m",
+            "W_0": r"w_0",
+            "sigma8": r"\sigma_8",
+            "H_0xr_d": r"H_0 r_d"
+        }
+    labels = [latex_labels.get(name, name) for name in param_names]  # remplacement
+
     samples_getdist = MCSamples(
         samples=samples_cut_flat,
         names=param_names,
@@ -747,21 +788,39 @@ def plot_mcmc_w0wa(nstepsBAO, nstepsBAO_RSD, nstepsBAO_RSD_PV, nwalkers, burninB
     colors = ['blue', 'green', 'red']  # Couleurs différentes pour chaque dataset
     legends = ['BAO only', 'BAO+RSD', 'BAO+RSD+PV']
 
-    labels_latex = [r'$w_0$', r'$w_a$', r'$\Omega_m$', r'$h$']
-    labels_latex_extended = [r'$w_0$', r'$w_a$', r'$\Omega_m$', r'$h$', r'$\sigma_8$']
+    #labels_latex = [r'$w_0$', r'$w_a$', r'$\Omega_m$', r'$h$']
+    #labels_latex_extended = [r'$w_0$', r'$w_a$', r'$\Omega_m$', r'$h$', r'$\sigma_8$']
+
 
     for i, samples in enumerate(samples_list):
         if i == 0 : 
             param = para_names_BAO_w0wa
-            labels = labels_latex[:len(param)]
+            #labels = labels_latex[:len(param)]
+            latex_labels = {
+            "Omega_m": r"\Omega_m",
+            "W_0": r"w_0",
+            "W_a": r"w_a",
+            "sigma8": r"\sigma_8",
+            "H_0xr_d": r"H_0 r_d"
+        }
+            labels = [latex_labels.get(name, name) for name in param]  # remplacement
+
         else : 
             param = para_names_w0wa
-            labels = labels_latex_extended[:len(param)]
+            #labels = labels_latex_extended[:len(param)]
+            latex_labels = {
+            "Omega_m": r"\Omega_m",
+            "W_0": r"w_0",
+            "W_a": r"w_a",
+            "sigma8": r"\sigma_8",
+            "H_0xr_d": r"H_0 r_d"}
+            labels = [latex_labels.get(name, name) for name in param]  # remplacement
+
     
         samples_mcsamples = MCSamples(
             samples=samples,
             names=param,
-            labels=param,
+            labels=labels,
             label=legends[i],
             sampler='mcmc',
             settings={'fine_bins': 512,
@@ -834,21 +893,33 @@ def plot_mcmc_wCDM(nstepsBAO, nstepsBAO_RSD, nstepsBAO_RSD_PV, nwalkers, burninB
     colors = ['blue', 'green', 'red']  # Couleurs différentes pour chaque dataset
     legends = ['BAO only', 'BAO+RSD', 'BAO+RSD+PV']
 
-    labels_latex = [r'$w_0$', r'$\Omega_m$', r'$h$']
-    labels_latex_extended = [r'$w_0$', r'$\Omega_m$', r'$h$', r'$\sigma_8$']
+    #labels_latex = [r'$w_0$', r'$\Omega_m$', r'$h$']
+    #labels_latex_extended = [r'$w_0$', r'$\Omega_m$', r'$h$', r'$\sigma_8$']
+
+    latex_labels = {
+            "Omega_m": r"\Omega_m",
+            "W_0": r"w_0",
+            "W_a": r"w_a",
+            "sigma8": r"\sigma_8",
+            "H_0xr_d": r"H_0 r_d"
+        }
+
+
 
     for i, samples in enumerate(samples_list):
         if i == 0 : 
             param = para_names_BAO_wCDM
-            labels = labels_latex[:len(param)]
+            #labels = labels_latex[:len(param)]
+            labels = [latex_labels.get(name, name) for name in param]
         else : 
             param = para_names_wCDM
-            labels = labels_latex_extended[:len(param)]
+            #labels = labels_latex_extended[:len(param)]
+            labels = [latex_labels.get(name, name) for name in param]
 
         samples_mcsamples = MCSamples(
             samples=samples,
             names=param,
-            labels=param,
+            labels=labels,
             label=legends[i],
             sampler='mcmc',
             settings={'fine_bins': 512,
@@ -856,7 +927,6 @@ def plot_mcmc_wCDM(nstepsBAO, nstepsBAO_RSD, nstepsBAO_RSD_PV, nwalkers, burninB
                     'smooth_scale_1D': 0.2,
                     'smooth_scale_2D': 0.3,
                     'num_bins': 20},
-                    param_limits=limits
                     )
         mcsamples_list.append(samples_mcsamples) 
     
@@ -878,7 +948,7 @@ def plot_mcmc_wCDM(nstepsBAO, nstepsBAO_RSD, nstepsBAO_RSD_PV, nwalkers, burninB
         "/home/etudiant15/Documents/STAGE CPPM/Figures/MCMC_wCDM.pdf", bbox_inches="tight",)
     plt.show()
 
-#plot_mcmc_wCDM(10000, 1500, 1500, 10, 600, 300, 200)
+plot_mcmc_wCDM(10000, 1500, 1500, 10, 600, 300, 200)
 
 """a = np.load('mes_chaines_BAO_wCDM.npy')
 a_ = np.load('mes_chaines_BAO_w0wa.npy')
