@@ -260,6 +260,7 @@ def plot_f():  # f pour différentes valeurs de w_0 et w_a, en fonction de z, po
 def plot_H_z_times_1plusz():  # derivée de a pour différentes valeurs de w_0 et w_a, Omega_Lambda fixé, en fonction de z
     a = 10.0 ** np.linspace(-2, 0, 100)  # de 10**-2 à 10**0
     z = 1 / a - 1
+    H_vec = np.vectorize(H)
     plt.figure()
     W_0_list = [-1, -0.8, -0.6, -0.4, -0.2]
     W_a_list = [0, -0.6, -1.2, -1.8, -2.4]
@@ -269,7 +270,7 @@ def plot_H_z_times_1plusz():  # derivée de a pour différentes valeurs de w_0 e
         pars = {"Omega_m": Omega_m, "W_0": W_0_list[i], "W_a": W_a_list[i], "H_0": 73.2}
         plt.plot(
             z,
-            H(a, pars) * a,
+            H_vec(a, pars) * a,
             linestyle="-",
             color=f"C{i}",
             linewidth=2,
@@ -288,7 +289,7 @@ def plot_H_z_times_1plusz():  # derivée de a pour différentes valeurs de w_0 e
         bbox_inches="tight",
     )
     plt.show()
-
+ 
 
 def plot_D_over_a():  # D/a pour différentes valeurs de W et Omega_Lambda, en fonction de a
     a = 10.0 ** np.linspace(-2, 0, 1000)  # de 10**-2 à 10**0
